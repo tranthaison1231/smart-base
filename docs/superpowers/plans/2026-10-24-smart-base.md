@@ -137,17 +137,17 @@
 - Create: `.codex/AGENT.md`, `.codex/project-state.md`, `.codex/README.md`
 - Create: `.agents/skills/feature-development/SKILL.md`
 - Create: `docs/architecture.md`, `docs/ui-components.md`, `docs/api.md`, `docs/ai-service.md`, `docs/codex.md`, `docs/testing.md`
-- Modify: root `README.md`
+- Modify: root `README.md`, `apps/web/package.json`, `pnpm-lock.yaml`
 
 **Interfaces:**
 - Root `AGENTS.md` is the durable repository entry point and links to the docs and focused skill.
 - `.codex/AGENT.md` owns implementation workflow details; `.codex/project-state.md` describes the blank-domain starter state.
 - The feature-development skill triggers only when adding a product feature to this starter.
 
-- [ ] **Step 1: Write the root README and architecture guide** with quick start, exact commands, FSD layer ownership, and the rule to add packages only when shared code exists.
-- [ ] **Step 2: Document UI, API, and AI patterns** with imports and short examples that match the implemented interfaces; explicitly state the server-only and auth/rate-limit requirements before exposing AI.
-- [ ] **Step 3: Add Codex files and one concise skill**. Keep model, approval, and sandbox choices user-owned; do not add an empty config or plugin marketplace.
-- [ ] **Step 4: Review all Markdown links, paths, commands, and examples** against the final tree; run `git diff --check`.
+- [x] **Step 1: Write the root README and architecture guide** with quick start, exact commands, FSD layer ownership, and the rule to add packages only when shared code exists.
+- [x] **Step 2: Document UI, API, and AI patterns** with imports and short examples that match the implemented interfaces; explicitly state the server-only and auth/rate-limit requirements before exposing AI.
+- [x] **Step 3: Add Codex files and one concise skill**. Keep model, approval, and sandbox choices user-owned; do not add an empty config or plugin marketplace.
+- [x] **Step 4: Review all Markdown links, paths, commands, and examples** against the final tree; run `git diff --check`.
 
 ## Task 7: Add a browser smoke test and verify the complete base
 
