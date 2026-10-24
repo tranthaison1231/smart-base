@@ -1,30 +1,45 @@
-# Kiến trúc
+# Architecture
 
-Smart Base dùng Next.js App Router cùng Feature-Sliced Design (FSD). Route là composition root mỏng; domain và luồng người dùng được đặt tại layer riêng để dễ thay đổi và kiểm thử.
+Smart Base uses the Next.js App Router with Feature-Sliced Design (FSD). Routes are thin composition roots; domains and user workflows live in separate layers so they are easier to change and test.
 
-## Layer và quyền sở hữu
+## Layers and Ownership
 
-| Layer | Đặt gì ở đây | Ví dụ hiện tại |
+| Layer | What belongs here | Current example |
 |---|---|---|
-| `app/` | Route, metadata, root layout và kết nối page với URL | `apps/web/src/app` |
-| `_app/` | Provider và logic composition cấp ứng dụng | Tạo khi app có provider riêng |
-| `_pages/` | Nội dung màn hình theo route, kết hợp widget/feature/entity | Tạo theo page sản phẩm đầu tiên |
-| `_widgets/` | Khối giao diện lớn, kết hợp nhiều layer thấp hơn | Tạo khi có composition cần tái sử dụng |
-| `_features/` | Hành động/luồng người dùng có thể diễn đạt bằng động từ | Tạo theo nhu cầu sản phẩm |
-| `_entities/` | Model, schema và thao tác dữ liệu gắn với domain | `apps/web/src/_entities/ai` |
-| `_shared/` | UI, API client, lib không biết domain | `apps/web/src/_shared` |
+| `app/` | Routes, metadata, root layout, and connections between pages and URLs | `apps/web/src/app` |
+| `_app/` | App-level providers and composition logic | Create when the app has its own providers |
+| `_pages/` | Route-level screen content composed from widgets, features, and entities | Create for the first product page |
+| `_widgets/` | Large UI blocks that compose lower-level layers | Create when composition needs reuse |
+| `_features/` | User actions/workflows that can be expressed as verbs | Create as product needs arise |
+| `_entities/` | Domain-related models, schemas, and data operations | `apps/web/src/_entities/ai` |
+| `_shared/` | Domain-independent UI, API clients, and libraries | `apps/web/src/_shared` |
 
-Layer cao được phép import layer thấp hơn: `app → _pages → _widgets → _features → _entities → _shared`. Không import ngược hoặc đi ngang giữa các feature/entity. ESLint kiểm tra các ranh giới layer. `app/` là ngoại lệ thuộc Next.js và chỉ nên giữ kết nối route/layout.
+Higher layers may import lower layers: `app → _pages → _widgets → _features → _entities → _shared`. Do not import in the reverse direction or across sibling features/entities. ESLint checks these layer boundaries. `app/` is a Next.js-specific exception and should only contain route/layout wiring.
 
-Không tạo layer/package cho đến khi có mã dùng chung thật sự. Một module chỉ dùng ở một nơi có thể ở nơi sở hữu nó. Tên folder `_app`, `_pages`... giúp tránh va chạm với quy ước route của Next.js.
+Do not create a layer or package until there is code that is genuinely shared. A module used in one place can stay with its owner. The `_app`, `_pages`, and similar folder names avoid collisions with Next.js route conventions.
 
-## Thêm feature
+## Workspace Layout
 
-1. Route trong `app/` gọi page tương ứng; route không chứa truy vấn hay nghiệp vụ.
-2. Page kết hợp widgets, features và entities, nhưng không sở hữu chúng.
-3. Đặt hành động người dùng trong feature. Đặt schema/model/dữ liệu theo domain trong entity.
-4. Tách code dùng chung sang `_shared` chỉ khi nó độc lập với domain.
-5. Đặt test sát module. Test API/AI qua dependency injection hoặc mock; unit test không gọi dịch vụ thật.
+FSD applies to the Next.js app under `apps/web/src/`. The monorepo also has separate deployment and infrastructure areas:
 
-Ví dụ một màn danh sách sản phẩm có thể có `app/products/page.tsx`, `_pages/products/ui/products-page.tsx`, `_widgets/product-list/`, `_features/search-products/`, `_entities/product/`, và dùng `_shared/ui/table`. Đây là ví dụ cấu trúc, chưa có nghiệp vụ này trong starter.
+| Path | Ownership |
+|---|---|
+| `apps/web/` | Next.js routes, UI, and product FSD slices |
+| `apps/workers/<name>/` | One independently deployed Cloudflare Worker package per real background workload; see [`apps/workers/README.md`](../apps/workers/README.md) |
+| `packages/database/` | Shared server-only PostgreSQL connection and Drizzle schema entry point |
+| `packages/<name>/` | Code with real consumers in more than one app |
+| `drizzle/` | Generated SQL migrations and Drizzle snapshots |
+
+The database package contains infrastructure only. Add product tables to `packages/database/src/schema/` when the copied app defines its domain, then generate and review a migration. Do not put worker jobs or product workflows in shared packages.
+
+## Adding a Feature
+
+1. A route in `app/` calls the corresponding page; routes contain no queries or business logic.
+2. A page composes widgets, features, and entities without owning them.
+3. Put user actions in features. Put domain schemas, models, and data in entities.
+4. Move reusable code to `_shared` only when it is independent of the domain.
+5. Keep tests close to their modules. Test API/AI behavior through dependency injection or mocks; unit tests must not call real services.
+6. Keep persistence schemas in `packages/database`; keep repositories and domain behavior in their owning FSD slices. Keep background jobs in their own `apps/workers/<name>/` workspace.
+
+A product list screen might use `app/products/page.tsx`, `_pages/products/ui/products-page.tsx`, `_widgets/product-list/`, `_features/search-products/`, `_entities/product/`, and `_shared/ui/table`. This is a structural example; the starter does not include this product behavior.
 

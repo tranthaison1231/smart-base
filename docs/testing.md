@@ -1,35 +1,38 @@
-# Kiểm tra chất lượng
+# Quality Checks
 
-## Lệnh hiện có
+## Available Commands
 
 ```bash
-pnpm lint       # ESLint, gồm FSD import boundaries
-pnpm typecheck  # TypeScript strict, không emit
+pnpm lint       # ESLint, including FSD import boundaries
+pnpm typecheck  # Strict TypeScript check, no emit
 pnpm test       # Vitest unit/component tests
-pnpm test:e2e   # Playwright browser smoke test trên Chromium
+pnpm test:e2e   # Playwright browser smoke test on Chromium
 pnpm build      # Next.js production build
+pnpm db:generate # Generate Drizzle SQL from local schema files; no database required
+pnpm db:migrate  # Apply generated SQL to DATABASE_URL
 ```
 
-Để chạy một file khi phát triển:
+To run one test file during development:
 
 ```bash
 pnpm --filter @smart-base/web exec vitest run src/_shared/api/fetch-json.test.ts
 ```
 
-Unit test dùng Vitest, Testing Library và jsdom. Inject `fetchImpl`/AI model khi cần; không phụ thuộc mạng, secret, database hay provider thật. Test UI theo hành vi người dùng và semantics/accessibility thay vì chi tiết implementation.
+Unit tests use Vitest, Testing Library, and jsdom. The database package uses Vitest in Node. Inject `fetchImpl`/an AI model when needed; tests do not depend on the network, secrets, a live database, or a real provider. Test UI behavior and semantics/accessibility rather than implementation details.
 
-Playwright tự khởi động Next dev server ở port `3100` và kiểm tra route `/`. Nếu Chromium chưa được cài trên máy, cài một lần:
+Playwright starts the Next dev server on port `3100` and checks route `/`. If Chromium is not installed on the machine, install it once:
 
 ```bash
 pnpm --filter @smart-base/web exec playwright install chromium
 ```
 
-## Khi thêm code
+## When Adding Code
 
-- Với thay đổi hành vi: thêm test hồi quy trước, quan sát test đỏ, rồi triển khai và chạy lại.
-- Với component: kiểm tra tương tác chính, keyboard/accessibility và trạng thái rỗng hoặc lỗi nếu component sở hữu những trạng thái đó.
-- Với ranh giới dữ liệu: test response hợp lệ và dữ liệu lỗi; không để lỗi lộ response nhạy cảm.
-- Trước khi hoàn tất một feature: chạy lint, typecheck, unit test và production build.
+- For behavior changes: add a regression test first, confirm it fails, then implement the change and run the test again.
+- For components: check the primary interactions, keyboard/accessibility behavior, and empty or error states when the component owns them.
+- At data boundaries: test valid and invalid responses; errors must not expose sensitive response data.
+- For database changes: test schema/repository behavior without a live database, generate and review the migration, and apply it only to an explicitly selected environment.
+- Before completing a feature: run lint, typecheck, unit tests, and the production build.
 
-Browser smoke test chỉ bao phủ app shell mặc định; feature mới cần thêm kịch bản browser tương ứng khi có tương tác quan trọng.
+The browser smoke test covers only the default app shell. Add browser scenarios for new features when they have important interactions.
 

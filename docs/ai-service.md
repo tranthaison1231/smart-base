@@ -1,27 +1,27 @@
 # AI text service
 
-AI service là server-only tại `apps/web/src/_entities/ai`. Không import từ Client Component. Chỉ cần cấu hình env khi khởi tạo service; chạy dev/test/build không bắt buộc API key.
+The AI service is server-only and lives in `apps/web/src/_entities/ai`. Do not import it from a Client Component. Environment variables are needed only when creating the service; the API key is not required for dev, test, or build commands.
 
 ```dotenv
 AI_API_KEY=...
 AI_MODEL=...
-# Tùy chọn: HTTPS, hoặc HTTP chỉ cho localhost/loopback.
+# Optional: HTTPS, or HTTP for localhost/loopback only.
 # AI_BASE_URL=https://api.openai.com/v1
 ```
 
-`AI_API_KEY` và `AI_MODEL` bắt buộc khi tạo service. `AI_BASE_URL` chỉ nhận HTTPS hoặc HTTP loopback, từ chối URL có credential. Lỗi cấu hình không in giá trị secret.
+`AI_API_KEY` and `AI_MODEL` are required when creating the service. `AI_BASE_URL` accepts HTTPS or loopback HTTP only, and rejects URLs containing credentials. Configuration errors never print secret values.
 
 ```ts
 import { createConfiguredAiTextService } from "@/_entities/ai/index.server"
 
 const ai = createConfiguredAiTextService()
 const text = await ai.generateText({
-  systemPrompt: "Trả lời ngắn gọn.",
-  userPrompt: "Giải thích kết quả này.",
+  systemPrompt: "Answer briefly.",
+  userPrompt: "Explain this result.",
 })
 ```
 
-`generateText` nhận system/user prompt và `AbortSignal` tùy chọn (Route Handler có thể truyền `request.signal`); service áp timeout 25 giây, không retry, và chỉ trả nội dung dạng text. Có thể dùng `createAiTextService` với `AiTextModel` giả trong unit test. Không gọi provider thật từ test.
+`generateText` accepts system/user prompts and an optional `AbortSignal` (a Route Handler can pass `request.signal`). The service applies a 25-second timeout, does not retry, and returns text only. Use `createAiTextService` with a fake `AiTextModel` in unit tests. Never call a real provider from tests.
 
-Starter chưa có AI API route. Trước khi đưa AI ra endpoint công khai, bổ sung authentication/authorization, rate limiting, giới hạn ngân sách và kiểm soát dữ liệu đầu vào/đầu ra ở server. Giữ API key ở server, không chuyển vào props, response hay biến `NEXT_PUBLIC_*`.
+The starter does not include an AI API route. Before exposing AI through a public endpoint, add server-side authentication/authorization, rate limiting, budget limits, and input/output controls. Keep the API key on the server; never pass it through props, responses, or `NEXT_PUBLIC_*` variables.
 

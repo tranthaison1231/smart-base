@@ -40,7 +40,7 @@
 - `apps/web/src/_shared/api/`: typed `fetchJson` helper and focused tests.
 - `apps/web/src/_entities/ai/`: server-only env config and injectable AI text service.
 - `AGENTS.md`, `.codex/`, `.agents/skills/`: repository guidance, current template state, and one feature-development skill.
-- `docs/`: Vietnamese architecture, UI, API, AI, Codex, and testing guides.
+- `docs/`: English architecture, UI, API, AI, Codex, and testing guides.
 
 ## Task 1: Create the workspace and minimal Next.js app
 
@@ -131,7 +131,7 @@
 - [x] **Step 5: Add placeholder variable names to `.env.example`** and document that no key is required for build or tests.
 - [x] **Step 6: Run focused AI tests, lint, and typecheck**; expected result: all pass with fake models and no provider request.
 
-## Task 6: Add Codex guidance and Vietnamese documentation
+## Task 6: Add Codex guidance and English documentation
 
 **Files:**
 - Create: `AGENTS.md`

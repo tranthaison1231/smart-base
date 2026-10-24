@@ -1,6 +1,6 @@
 # API client
 
-`fetchJson` ở `apps/web/src/_shared/api/fetch-json.ts` là helper phía client/server để gọi HTTP JSON, kiểm tra response bằng `schema.parse` và chuyển lỗi HTTP/JSON/schema thành thông báo caller cung cấp.
+`fetchJson` in `apps/web/src/_shared/api/fetch-json.ts` is a client/server helper for HTTP JSON requests. It validates responses with `schema.parse` and maps HTTP, JSON, and schema errors to a caller-provided message.
 
 ```ts
 import { fetchJson } from "@/_shared/api/fetch-json"
@@ -11,14 +11,14 @@ const UserSchema = z.object({ id: z.string(), name: z.string() })
 const user = await fetchJson({
   url: "/api/users/123",
   schema: UserSchema,
-  errorMessage: "Không thể tải người dùng",
+  errorMessage: "Could not load user",
 })
-// user được suy ra là { id: string; name: string }
+// user is inferred as { id: string; name: string }
 ```
 
-Options: `method` (`GET` mặc định, `POST`, `PUT`), `body`, `fetchImpl` (inject khi test), `signal`, `cache`, và `acceptResponse` cho status đặc biệt mà endpoint chủ ý trả JSON. Body tự được JSON.stringify và thêm content-type. Helper mặc định áp dụng timeout 5 giây; nếu có `signal`, timeout được kết hợp với tín hiệu hủy của caller.
+Options: `method` (defaults to `GET`; also supports `POST` and `PUT`), `body`, `fetchImpl` (inject for tests), `signal`, `cache`, and `acceptResponse` for special statuses where the endpoint intentionally returns JSON. The body is JSON-serialized and a content type is added automatically. The helper applies a 5-second timeout by default; when a `signal` is provided, the timeout is combined with the caller's abort signal.
 
-Non-2xx, JSON sai định dạng hoặc schema không hợp lệ đều ném `Error(errorMessage)` để không làm lộ payload upstream. Lỗi mạng/abort từ `fetch` được giữ nguyên. Endpoint xử lý status hợp lệ khác 2xx cần khai báo `acceptResponse` rõ ràng.
+Non-2xx responses, malformed JSON, and schema failures all throw `Error(errorMessage)` so upstream payloads are not exposed. Network and abort errors from `fetch` are preserved. Endpoints that accept a valid status other than 2xx must declare it through `acceptResponse`.
 
-Đặt schema gần contract sở hữu nó; validate ở ranh giới nhận dữ liệu. Không dùng type assertion để thay cho kiểm tra runtime. Route xử lý secret hoặc dữ liệu nhạy cảm phải kiểm tra quyền ở server; helper này không tự thêm authentication, retry hay logging.
+Keep schemas near the contract that owns them and validate data at the point of entry. Do not use type assertions as a substitute for runtime checks. Routes that handle secrets or sensitive data must enforce authorization on the server; this helper does not add authentication, retries, or logging.
 

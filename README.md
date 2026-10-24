@@ -1,19 +1,19 @@
 # Smart Base
 
-Starter Next.js để copy thành sản phẩm mới. Base giữ lại cấu trúc Feature-Sliced Design (FSD), UI dùng chung, API client có kiểm tra schema, AI text service chỉ chạy server, cùng lint, typecheck và unit test. Không có nghiệp vụ Smart Stock, Smart Idea hay Smart Shop.
+A Next.js starter to copy when creating a new product. It includes a Feature-Sliced Design (FSD) structure, shared UI, a schema-checked API client, a server-only AI text service, a lazy PostgreSQL/Drizzle package, and lint, typecheck, and test tooling. It contains no Smart Stock, Smart Idea, or Smart Shop product logic.
 
-## Bắt đầu
+## Getting Started
 
-Yêu cầu Node.js `>=22.22.2` và pnpm `10.32.1` (đã khóa trong `packageManager`).
+Requires Node.js `>=22.22.2` and pnpm `10.32.1` (pinned in `packageManager`).
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Mở `http://localhost:3000`. Không cần API key để chạy app, build hay test.
+Open `http://localhost:3000`. No API key is required to run the app, build, or tests.
 
-## Quality gates
+## Quality Gates
 
 ```bash
 pnpm lint
@@ -23,31 +23,42 @@ pnpm test:e2e
 pnpm build
 ```
 
-`pnpm test:e2e` chạy browser smoke test bằng Chromium và tự khởi động app tại port `3100`. Nếu Chromium chưa được cài, chạy `pnpm --filter @smart-base/web exec playwright install chromium`.
+`pnpm test:e2e` runs a browser smoke test with Chromium and starts the app on port `3100`. If Chromium is not installed, run `pnpm --filter @smart-base/web exec playwright install chromium`.
 
-## Bắt đầu thêm sản phẩm
+## Database
 
-1. Đọc [hướng dẫn kiến trúc](docs/architecture.md) rồi xác định route, page, widget, feature hoặc entity.
-2. Đọc [Codex workflow](docs/codex.md) và skill [feature-development](.agents/skills/feature-development/SKILL.md).
-3. Tạo domain model đầu tiên dưới `_entities`; không thêm domain giả vào starter.
-4. Xem [UI components](docs/ui-components.md), [API](docs/api.md), [AI service](docs/ai-service.md), và [testing](docs/testing.md) trước khi thêm lớp tương ứng.
+`@smart-base/database` creates a PostgreSQL connection only when `getDb()` is called. Add product tables under `packages/database/src/schema/`, generate and review migrations with `pnpm db:generate`, then apply them explicitly with `DATABASE_URL=... pnpm db:migrate`. See the [database guide](docs/database.md).
 
-## Cấu trúc
+## Building a Product
+
+1. Read the [architecture guide](docs/architecture.md) and identify the owning route, page, widget, feature, or entity.
+2. Read the [Codex workflow](docs/codex.md) and the [feature-development](.agents/skills/feature-development/SKILL.md) skill.
+3. Add the first domain model under `_entities`; do not add a placeholder domain to the starter.
+4. Review [UI components](docs/ui-components.md), [API](docs/api.md), [AI service](docs/ai-service.md), [database](docs/database.md), and [testing](docs/testing.md) before adding the corresponding layer.
+5. Put independent background workloads under [`apps/workers/`](apps/workers/README.md); add a worker package only when a real job needs one.
+
+## Structure
 
 ```text
-apps/web/src/
-├── app/          # Next.js App Router, metadata, root layout, routes
-├── _app/         # app providers và cấu hình cấp ứng dụng
-├── _pages/       # màn hình gắn với route
-├── _widgets/     # khối giao diện lớn kết hợp nhiều feature/entity
-├── _features/    # hành động và luồng sử dụng của người dùng
-├── _entities/    # model và dữ liệu thuộc domain; hiện có AI text service
-└── _shared/      # UI, API client và tiện ích không phụ thuộc domain
+apps/
+├── web/                    # Next.js app with FSD layers under src/
+└── workers/                # One independent worker package per real workload
+packages/
+└── database/               # Shared server-only PostgreSQL/Drizzle connection
+drizzle/                    # Generated SQL migrations and Drizzle metadata
 ```
 
-Các layer được ESLint kiểm tra chiều import. Xem [architecture.md](docs/architecture.md) để biết ranh giới và ví dụ.
+The web app's FSD layers live under `apps/web/src/`:
+
+```text
+app/ → _pages/ → _widgets/ → _features/ → _entities/ → _shared/
+```
+
+ESLint checks import direction between layers. See [architecture.md](docs/architecture.md) for boundaries and examples.
+
+See [apps/workers/README.md](apps/workers/README.md) for worker placement and [packages/README.md](packages/README.md) for shared-package ownership.
 
 ## Codex
 
-`AGENTS.md` là entry point cho agent. `.codex/` chứa hướng dẫn làm việc và trạng thái starter; `.agents/skills/feature-development/` mô tả quy trình phát triển feature. Các thiết lập model, quyền duyệt và sandbox vẫn do người dùng quản lý.
+`AGENTS.md` is the agent entry point. `.codex/` contains workflow guidance and the starter's current state; `.agents/skills/feature-development/` describes the feature-development process. Model, approval, and sandbox settings remain user-managed.
 

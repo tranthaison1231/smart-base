@@ -1,13 +1,15 @@
-# Hướng dẫn cho agent
+# Agent Instructions
 
-Smart Base là starter trung lập, chưa có domain sản phẩm. Đọc [trạng thái dự án](.codex/project-state.md) và [tài liệu Codex](docs/codex.md) trước thay đổi lớn.
+Smart Base is a product-neutral starter with no product domain yet. Read [project state](.codex/project-state.md) and the [Codex documentation](docs/codex.md) before making major changes.
 
-- Giữ đúng chiều phụ thuộc FSD: layer cao chỉ import layer thấp hơn. `app/` chỉ điều phối route và layout; không đặt nghiệp vụ tại đây.
-- Thêm UI dùng chung vào `apps/web/src/_shared/ui` chỉ khi nó không phụ thuộc domain. Kiểm tra component hiện có trước khi tạo cái mới.
-- Gọi API ngoài từ server-side code; kiểm tra response ở trust boundary bằng schema. Không đưa credential vào client.
-- AI service là server-only. Trước khi tạo route công khai cần có authentication, rate limiting và giới hạn ngân sách.
-- Khi thêm hành vi, viết test hồi quy; trước khi hoàn tất chạy `pnpm lint`, `pnpm typecheck`, `pnpm test` và `pnpm build` phù hợp với phạm vi.
-- Không thêm nghiệp vụ, env var, dependency hay abstraction “để sau” nếu feature hiện tại chưa cần.
-- Nếu repo có `.codegraph/`, dùng CodeGraph để lần theo symbol/call path trước khi grep hoặc đọc nhiều file. Không tự khởi tạo index.
-- Đọc skill [feature-development](.agents/skills/feature-development/SKILL.md) khi thêm luồng sản phẩm mới.
+- Preserve FSD dependency direction: higher layers may import lower layers only. `app/` handles route and layout wiring; do not put business logic there.
+- Add shared UI to `apps/web/src/_shared/ui` only when it is domain-independent. Check for an existing component before creating another one.
+- Call external APIs from server-side code and validate responses at trust boundaries with schemas. Never expose credentials to the client.
+- The AI service is server-only. Add authentication, rate limiting, and budget limits before creating a public route.
+- Keep PostgreSQL connections and credentials in `packages/database` server-side. Review generated Drizzle SQL before applying it; never run migrations against production as part of setup or tests.
+- Put each real background workload in its own package under `apps/workers/`; do not add placeholder jobs.
+- For behavior changes, write a regression test. Before finishing, run the relevant checks: `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Do not add product logic, environment variables, dependencies, or abstractions "for later" when the current feature does not need them.
+- If the repository has `.codegraph/`, use CodeGraph to trace symbols/call paths before using grep or reading many files. Do not initialize an index yourself.
+- Read the [feature-development](.agents/skills/feature-development/SKILL.md) skill when adding a new product workflow.
 

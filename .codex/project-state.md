@@ -1,21 +1,23 @@
-# Trạng thái dự án
+# Project State
 
-## Mục tiêu
+## Goal
 
-Smart Base là starter repo dùng để copy thành ứng dụng mới. Repo cung cấp Next.js, FSD, UI primitives, API JSON client, AI text service server-only và các quality gate cơ bản.
+Smart Base is a starter repository to copy when creating a new application. It provides Next.js, FSD, UI primitives, a JSON API client, a server-only AI text service, lazy PostgreSQL/Drizzle infrastructure, and baseline quality gates.
 
 ## Domain
 
-Chưa có domain sản phẩm. Không mang logic hoặc dữ liệu từ Smart Stock, Smart Idea hay Smart Shop vào starter. Entity `ai` hiện tại là hạ tầng tích hợp, không phải domain sản phẩm.
+There is no product domain yet. Do not bring product logic or data from Smart Stock, Smart Idea, or Smart Shop into the starter. The current `ai` entity and `packages/database` are integration infrastructure, not product domains. No database tables or worker jobs are included.
 
-## Runtime và kiểm tra
+## Runtime and Checks
 
-- Monorepo pnpm/Turborepo; web app tại `apps/web`.
+- pnpm/Turborepo monorepo; web app at `apps/web`, future independent worker packages under `apps/workers/*`, and shared infrastructure under `packages/*`.
 - Node.js `>=22.22.2`, pnpm `10.32.1`.
-- `pnpm dev`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
-- AI cần `AI_API_KEY` và `AI_MODEL` khi gọi provider; không cần cho build/test.
+- `pnpm dev`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
+- `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
+- Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.
+- AI requires `AI_API_KEY` and `AI_MODEL` when calling a provider; they are not needed for build or tests.
 
-## Quyết định khi copy
+## Decisions When Copying
 
-Đổi tên repo/package theo sản phẩm mới, thêm domain model và trạng thái sản phẩm vào file này, rồi cập nhật README và docs domain. Chỉ thêm package/workspace khi có code hoặc nhu cầu dùng chung thực sự.
+Rename the repository and package for the new product, add its domain model and product state to this file, then update the README and domain documentation. Add a worker package only for a real background workload and other shared packages only when they have a real consumer.
 

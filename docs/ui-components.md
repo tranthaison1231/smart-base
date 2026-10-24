@@ -1,12 +1,12 @@
 # UI components
 
-Primitive UI dùng chung nằm ở `apps/web/src/_shared/ui`. Dùng lại các component này trước khi viết markup tương tự trong page hoặc feature.
+Shared UI primitives live in `apps/web/src/_shared/ui`. Reuse these components before writing similar markup in a page or feature.
 
-## Thành phần hiện có
+## Available Components
 
 `Avatar`, `Badge`, `Button`, `Calendar`, `Card`, `ChartContainer`/`ChartConfig`, `Dialog`, `DropdownMenu`, `Field`, `Input`, `Label`, `Popover`, `Separator`, `Sheet`, `Sidebar`, `Skeleton`, `Toaster`, `Spinner`, `Table`, `ThemeProvider`, `Toggle`, `ToggleGroup`, `Tooltip`.
 
-Import trực tiếp từ module để giữ API rõ ràng:
+Import components directly from their modules to keep their APIs explicit:
 
 ```tsx
 import { Button } from "@/_shared/ui/button"
@@ -15,23 +15,23 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 export function Example() {
   return (
     <>
-      <Button type="button">Lưu</Button>
+      <Button type="button">Save</Button>
       <Table>
-        <TableHeader><TableRow><TableHead>Tên</TableHead></TableRow></TableHeader>
-        <TableBody><TableRow><TableCell>Sản phẩm</TableCell></TableRow></TableBody>
+        <TableHeader><TableRow><TableHead>Name</TableHead></TableRow></TableHeader>
+        <TableBody><TableRow><TableCell>Product</TableCell></TableRow></TableBody>
       </Table>
     </>
   )
 }
 ```
 
-Dialog có thể dùng các primitive được export từ cùng module:
+Dialogs can use the primitives exported from the same module:
 
 ```tsx
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/_shared/ui/dialog"
 ```
 
-`RootLayout` đã mount `ThemeProvider`, `TooltipProvider` và `Toaster`. Không mount thêm một bản khác trong từng page. Theme token CSS nằm trong `apps/web/src/app/globals.css`; dùng token ngữ nghĩa thay vì hardcode màu khi tạo component mới. `cn` (`@/_shared/lib/cn`) gộp class Tailwind; `useIsMobile` nằm trong `@/_shared/lib/hooks/use-mobile`.
+`RootLayout` already mounts `ThemeProvider`, `TooltipProvider`, and `Toaster`. Do not mount another instance in individual pages. CSS theme tokens live in `apps/web/src/app/globals.css`; use semantic tokens instead of hardcoded colors when creating components. `cn` (`@/_shared/lib/cn`) combines Tailwind classes; `useIsMobile` lives in `@/_shared/lib/hooks/use-mobile`.
 
-Các wrapper theo phong cách shadcn/Base UI đã có test tương tác cơ bản cho button, dialog và table. Component mới cần giữ keyboard interaction, accessible name và state disabled/loading khi phù hợp; mở rộng test theo hành vi đó.
+The shadcn/Base UI-style wrappers have basic interaction tests for buttons, dialogs, and tables. New components should preserve keyboard interactions, accessible names, and disabled/loading states where appropriate; extend tests to cover that behavior.
 

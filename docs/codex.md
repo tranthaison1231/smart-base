@@ -1,15 +1,17 @@
-# Codex và agent workflow
+# Codex and Agent Workflow
 
-Codex đọc hướng dẫn theo thứ tự:
+Codex reads repository guidance in this order:
 
-1. [`AGENTS.md`](../AGENTS.md): quy tắc bền vững của repository.
-2. [`.codex/AGENT.md`](../.codex/AGENT.md): cách thực hiện thay đổi trong starter.
-3. [`.codex/project-state.md`](../.codex/project-state.md): domain và trạng thái hiện tại.
-4. [`.agents/skills/feature-development/SKILL.md`](../.agents/skills/feature-development/SKILL.md): quy trình khi thêm feature sản phẩm.
+1. [`AGENTS.md`](../AGENTS.md): durable repository rules.
+2. [`.codex/AGENT.md`](../.codex/AGENT.md): how to make changes in the starter.
+3. [`.codex/project-state.md`](../.codex/project-state.md): current domain and project state.
+4. [`.agents/skills/feature-development/SKILL.md`](../.agents/skills/feature-development/SKILL.md): workflow for adding product features.
 
-Trước một thay đổi, xác định layer sở hữu code, đọc module cùng test liên quan, ghi test trước cho hành vi mới, rồi chạy lint/typecheck/test/build phù hợp. Sau thay đổi cập nhật tài liệu nếu contract hoặc cấu trúc thay đổi. Xem thêm [testing](testing.md).
+Before making a change, identify the layer that owns the code, read the relevant module and tests, write a test first for new behavior, then run the appropriate lint/typecheck/test/build commands. Afterward, update documentation if a contract or structure changed. See [testing](testing.md).
 
-Repo cố ý không đặt model mặc định, approval policy, sandbox hoặc plugin marketplace. Những lựa chọn đó thuộc môi trường/user; không commit credential hoặc cấu hình cá nhân vào starter.
+For persisted features, use [`database.md`](database.md) and keep schema/migration work separate from repository/business logic. For background work, follow the per-worker workspace convention in [`apps/workers/README.md`](../apps/workers/README.md).
 
-Khi copy starter cho sản phẩm mới, cập nhật `project-state.md`, `README.md` và domain docs trước khi yêu cầu agent làm feature đầu tiên.
+The repository intentionally does not set a default model, approval policy, sandbox, or plugin marketplace. Those choices belong to each user's environment; do not commit credentials or personal configuration to the starter.
+
+When copying the starter for a new product, update `project-state.md`, `README.md`, and the domain documentation before asking an agent to build the first feature.
 
