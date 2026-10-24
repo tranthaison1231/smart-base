@@ -48,22 +48,23 @@
 - Create: `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.json`, `.gitignore`, `pnpm-lock.yaml`
 - Create: `apps/web/package.json`, `apps/web/next.config.ts`, `apps/web/tsconfig.json`, `apps/web/postcss.config.mjs`
 - Create: `apps/web/src/app/layout.tsx`, `apps/web/src/app/page.tsx`, `apps/web/src/app/globals.css`
-- Create: `apps/web/src/app/page.test.tsx`
+- Create: `apps/web/vitest.config.mts`, `apps/web/src/test/setup.ts`, `apps/web/src/app/page.test.tsx`
 
 **Interfaces:**
-- Root scripts: `dev`, `build`, `start`, `lint`, `typecheck`, `test`, and `test:e2e` delegate to `@smart-base/web` or Turborepo.
+- Root scripts: `dev`, `build`, `start`, `lint`, `typecheck`, and `test` delegate to `@smart-base/web` or Turborepo. Add `test:e2e` with the Playwright task.
 - Workspace app name: `@smart-base/web`.
 
-- [ ] **Step 1: Add the root and web manifests** with the pinned framework versions from the spec, workspace globs `apps/*` and `packages/*`, and Turborepo tasks for build, lint, typecheck, test, and dev.
-- [ ] **Step 2: Write the starter page test** for a `main` landmark and an `h1` named “Smart Base”.
-- [ ] **Step 3: Install and lock dependencies** with `pnpm install`; verify the lockfile can be reused with `pnpm install --frozen-lockfile`.
-- [ ] **Step 4: Add the minimal App Router shell** with a neutral “Smart Base” heading, metadata, and Tailwind 4 PostCSS setup. Do not add product navigation or sample business data.
-- [ ] **Step 5: Verify the shell** with `pnpm --filter @smart-base/web build`; expected result: successful Next.js production build without environment secrets.
+- [ ] **Step 1: Add the root and web manifests** with the pinned framework and unit-test versions from the spec, workspace globs `apps/*` and `packages/*`, and Turborepo tasks for build, lint, typecheck, test, and dev.
+- [ ] **Step 2: Install and lock dependencies** with `pnpm install`; verify the lockfile can be reused with `pnpm install --frozen-lockfile`.
+- [ ] **Step 3: Configure Vitest and Testing Library**, then write the starter page test for a `main` landmark and an `h1` named “Smart Base”.
+- [ ] **Step 4: Run `pnpm --filter @smart-base/web exec vitest run src/app/page.test.tsx`**; confirm the test fails because the page is missing.
+- [ ] **Step 5: Add the minimal App Router shell** with a neutral “Smart Base” heading, metadata, and Tailwind 4 PostCSS setup. Do not add product navigation or sample business data.
+- [ ] **Step 6: Verify the page test and shell** with the focused Vitest command and `pnpm --filter @smart-base/web build`; expected result: both succeed without environment secrets.
 
-## Task 2: Add quality gates, FSD boundaries, and the fast test runner
+## Task 2: Add quality gates and FSD boundaries
 
 **Files:**
-- Create: `apps/web/eslint.config.mjs`, `apps/web/vitest.config.mts`, `apps/web/src/test/setup.ts`
+- Create: `apps/web/eslint.config.mjs`
 - Modify: root and web `package.json`, `turbo.json`, `apps/web/tsconfig.json`
 
 **Interfaces:**
@@ -71,8 +72,8 @@
 - `apps/web` uses strict TypeScript and Vitest with jsdom and Testing Library.
 - ESLint blocks imports from lower FSD layers into higher layers.
 
-- [ ] **Step 1: Add ESLint, strict typecheck, Vitest, Testing Library, and FSD import rules** to the web configuration. Keep global ignores limited to generated and dependency directories.
-- [ ] **Step 2: Run the page test and quality commands** with `pnpm --filter @smart-base/web exec vitest run src/app/page.test.tsx`, `pnpm lint`, `pnpm typecheck`, and `pnpm test`.
+- [ ] **Step 1: Add ESLint, strict typecheck, and FSD import rules** to the web configuration. Keep global ignores limited to generated and dependency directories.
+- [ ] **Step 2: Run `pnpm lint`, `pnpm typecheck`, and `pnpm test`**; expected result: the starter test and quality gates pass.
 - [ ] **Step 3: Probe the FSD boundary** by linting a temporary shared-layer source that imports `@/_features/example`; expect ESLint's explicit boundary rule to reject it, then remove the probe.
 
 ## Task 3: Add reusable UI components
