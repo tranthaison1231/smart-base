@@ -11,7 +11,7 @@ Chưa có domain sản phẩm. Không mang logic hoặc dữ liệu từ Smart S
 ## Runtime và kiểm tra
 
 - Monorepo pnpm/Turborepo; web app tại `apps/web`.
-- Node.js `>=20.18`, pnpm `10.32.1`.
+- Node.js `>=22.22.2`, pnpm `10.32.1`.
 - `pnpm dev`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`.
 - AI cần `AI_API_KEY` và `AI_MODEL` khi gọi provider; không cần cho build/test.
 

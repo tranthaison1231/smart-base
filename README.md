@@ -4,7 +4,7 @@ Starter Next.js để copy thành sản phẩm mới. Base giữ lại cấu tr�
 
 ## Bắt đầu
 
-Yêu cầu Node.js `>=20.18` và pnpm `10.32.1` (đã khóa trong `packageManager`).
+Yêu cầu Node.js `>=22.22.2` và pnpm `10.32.1` (đã khóa trong `packageManager`).
 
 ```bash
 pnpm install
