@@ -80,10 +80,10 @@
 
 **Files:**
 - Create under `apps/web/src/_shared/ui/`: `avatar.tsx`, `badge.tsx`, `button.tsx`, `calendar.tsx`, `card.tsx`, `chart.tsx`, `dialog.tsx`, `dropdown-menu.tsx`, `field.tsx`, `input.tsx`, `label.tsx`, `popover.tsx`, `separator.tsx`, `sheet.tsx`, `sidebar.tsx`, `skeleton.tsx`, `sonner.tsx`, `spinner.tsx`, `table.tsx`, `theme-provider.tsx`, `toggle.tsx`, `toggle-group.tsx`, `tooltip.tsx`
-- Create: `apps/web/src/_shared/lib/utils.ts` and `apps/web/src/_shared/hooks/use-mobile.ts` only if required by the copied wrappers
+- Create: `apps/web/src/_shared/lib/cn.ts` and `apps/web/src/_shared/lib/hooks/use-mobile.ts` for the copied wrappers
 - Create: `apps/web/components.json`
 - Create tests: `button.test.tsx`, `dialog.test.tsx`, and `table.test.tsx` beside their components
-- Modify: `apps/web/package.json`, `apps/web/src/app/globals.css`
+- Modify: `apps/web/package.json`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/globals.css`
 
 **Interfaces:**
 - Components are imported from `@/_shared/ui/<component>` and keep the API of the Smart Stock wrappers.
@@ -91,7 +91,7 @@
 
 - [ ] **Step 1: Write component tests** asserting button accessible name/disabled behavior, dialog opens and closes from the keyboard, and table headers/cells render with semantic table roles.
 - [ ] **Step 2: Run the focused tests** with `pnpm --filter @smart-base/web exec vitest run src/_shared/ui/button.test.tsx src/_shared/ui/dialog.test.tsx src/_shared/ui/table.test.tsx`; confirm they fail because the components are not present.
-- [ ] **Step 3: Port the 23 reusable wrappers** from Smart Stock, remove brand/product imports, add only dependencies referenced by those components, and include the small `cn` utility/mobile hook only where required.
+- [ ] **Step 3: Port the 23 reusable wrappers** from Smart Stock, remove brand/product imports, add only dependencies referenced by those components, and include `cn` plus the mobile hook at the source paths. Keep theme storage under a neutral Smart Base key.
 - [ ] **Step 4: Run focused component tests, `pnpm lint`, and `pnpm typecheck`**; expected result: all pass with no app-specific dependency imports.
 
 ## Task 4: Add the typed API fetch pattern
