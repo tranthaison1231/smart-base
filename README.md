@@ -59,7 +59,7 @@ There are no additional shared packages or worker jobs in the starter. Add them 
 The current FSD slices live under `apps/web/src/`. The starter includes `app/`, `_app/`, `_entities/ai/`, and `_shared/`; create `_pages/`, `_widgets/`, and `_features/` only when a product needs them. The dependency direction is:
 
 ```text
-app → _pages → _widgets → _features → _entities → _shared
+app → _app → _pages → _widgets → _features → _entities → _shared
 ```
 
 ESLint checks import direction between layers. See [architecture.md](docs/architecture.md) for boundaries and examples.
