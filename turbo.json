@@ -13,6 +13,7 @@
       "outputs": []
     },
     "test": {
+      "cache": false,
       "outputs": []
     },
     "test:e2e": {

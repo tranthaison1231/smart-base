@@ -8,7 +8,9 @@ Smart Base is a product-neutral starter with no product domain yet. Read [projec
 - The AI service is server-only. Add authentication, rate limiting, and budget limits before creating a public route.
 - Keep PostgreSQL connections and credentials server-side; use `packages/database` for PostgreSQL access. Review generated Drizzle SQL before applying it; never run migrations against production as part of setup or tests.
 - Put each real background workload in its own package under `apps/workers/`; do not add placeholder jobs.
-- For behavior changes, write a regression test. Before finishing, run the relevant checks: `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
+- Add behavior-focused tests for each runtime module, including success, error, and relevant optional branches. For behavior changes, write a regression test first. `pnpm test` enforces 100% global line, statement, function, and branch coverage in `apps/web` and `packages/database`; run it before finishing.
+- Before finishing, run the relevant checks: `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`. Keep new runtime files inside the coverage include scope unless they are genuinely generated or test harness code.
+- Every future worker or shared package with runtime code must add a Turbo-visible `test` script, the matching Vitest coverage provider, an explicit runtime include, and the same four 100% thresholds. Follow [worker guidance](apps/workers/README.md) or [package guidance](packages/README.md).
 - Do not add product logic, environment variables, dependencies, or abstractions "for later" when the current feature does not need them.
 - If the repository has `.codegraph/`, use CodeGraph to trace symbols/call paths before using grep or reading many files. Do not initialize an index yourself.
 - Read the [feature-development](.agents/skills/feature-development/SKILL.md) skill when adding a new product workflow.

@@ -25,6 +25,8 @@ pnpm build
 
 `pnpm test:e2e` runs a browser smoke test with Chromium and starts the app on port `3100`. If Chromium is not installed, run `pnpm --filter @smart-base/web exec playwright install chromium`.
 
+`pnpm test` runs Vitest with coverage in both current test workspaces, `apps/web` and `packages/database`. Each workspace enforces 100% global line, statement, function, and branch coverage for its first-party runtime TypeScript and TSX files. See the [testing guide](docs/testing.md) for the exact scope and exclusions.
+
 ## Database
 
 `@smart-base/database` creates a PostgreSQL connection only when `getDb()` is called. Add product tables under `packages/database/src/schema/`, generate and review migrations with `pnpm db:generate`, then apply them explicitly with `DATABASE_URL=... pnpm db:migrate`. See the [database guide](docs/database.md).
@@ -42,16 +44,18 @@ pnpm build
 ```text
 apps/
 ├── web/                    # Next.js app with FSD layers under src/
-└── workers/                # One independent worker package per concrete workload
+└── workers/                # Workspace convention; no worker package exists yet
 packages/
-└── database/               # Shared server-only PostgreSQL/Drizzle connection
-drizzle/                    # Generated SQL migrations and Drizzle metadata
+└── database/               # Shared server-only PostgreSQL/Drizzle infrastructure
+drizzle/                    # Migration output; no generated migrations exist yet
 ```
 
-The web app's FSD layers live under `apps/web/src/`:
+There are no additional shared packages or worker jobs in the starter. Add them only for a real consumer or workload.
+
+The current FSD slices live under `apps/web/src/`. The starter includes `app/`, `_entities/ai/`, and `_shared/`; create `_pages/`, `_widgets/`, `_features/`, and `_app/` only when a product needs them. The dependency direction is:
 
 ```text
-app/ → _pages/ → _widgets/ → _features/ → _entities/ → _shared/
+app → _pages → _widgets → _features → _entities → _shared
 ```
 
 ESLint checks import direction between layers. See [architecture.md](docs/architecture.md) for boundaries and examples.

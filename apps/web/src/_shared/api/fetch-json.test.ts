@@ -51,6 +51,55 @@ describe("fetchJson", () => {
     })
   })
 
+  it("uses GET without a body and forwards a cache policy", async () => {
+    let requestInit: RequestInit | undefined
+    const fetchImpl: typeof fetch = async (_input, init) => {
+      requestInit = init
+      return Response.json({ id: 5 })
+    }
+
+    await fetchJson({
+      url: "/api/items",
+      schema,
+      errorMessage: "Could not load items",
+      cache: "no-store",
+      fetchImpl,
+    })
+
+    expect(requestInit).toMatchObject({
+      method: "GET",
+      cache: "no-store",
+      headers: { accept: "application/json" },
+    })
+    expect(requestInit?.body).toBeUndefined()
+  })
+
+  it("sends PUT requests with a JSON body", async () => {
+    let requestInit: RequestInit | undefined
+    const fetchImpl: typeof fetch = async (_input, init) => {
+      requestInit = init
+      return Response.json({ id: 6 })
+    }
+
+    await fetchJson({
+      url: "/api/items/6",
+      schema,
+      errorMessage: "Could not update item",
+      method: "PUT",
+      body: { name: "Updated" },
+      fetchImpl,
+    })
+
+    expect(requestInit).toMatchObject({
+      method: "PUT",
+      body: JSON.stringify({ name: "Updated" }),
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+    })
+  })
+
   it("rejects a non-OK response with the caller's safe message", async () => {
     await expect(
       fetchJson({
@@ -117,6 +166,42 @@ describe("fetchJson", () => {
     controller.abort(new DOMException("Canceled", "AbortError"))
 
     await expect(pending).rejects.toMatchObject({ name: "AbortError" })
+  })
+
+  it("combines the caller signal with the timeout signal", async () => {
+    const callerSignal = new AbortController().signal
+    const timeoutSignal = new AbortController().signal
+    const combinedSignal = new AbortController().signal
+    const timeout = vi.spyOn(AbortSignal, "timeout").mockReturnValue(timeoutSignal)
+    const any = vi.spyOn(AbortSignal, "any").mockReturnValue(combinedSignal)
+    const fetchImpl: typeof fetch = async (_input, init) => {
+      expect(init?.signal).toBe(combinedSignal)
+      return Response.json({ id: 7 })
+    }
+
+    await fetchJson({
+      url: "/api/items",
+      schema,
+      errorMessage: "Could not load items",
+      signal: callerSignal,
+      fetchImpl,
+    })
+
+    expect(timeout).toHaveBeenCalledWith(5_000)
+    expect(any).toHaveBeenCalledWith([callerSignal, timeoutSignal])
+  })
+
+  it("preserves transport errors from fetch", async () => {
+    const networkError = new TypeError("Network unavailable")
+
+    await expect(
+      fetchJson({
+        url: "/api/items",
+        schema,
+        errorMessage: "Could not load items",
+        fetchImpl: vi.fn().mockRejectedValue(networkError),
+      }),
+    ).rejects.toBe(networkError)
   })
 
   it("uses a 5-second timeout by default", async () => {

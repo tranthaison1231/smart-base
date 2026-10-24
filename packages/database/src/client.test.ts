@@ -24,4 +24,13 @@ describe("getDb", () => {
     const database = await import("./client")
     expect(database.getDb()).toBe(database.getDb())
   })
+
+  it("creates a lazy client without opening a network connection", async () => {
+    process.env.DATABASE_URL = "postgres://user:pass@127.0.0.1:1/smart_base_test"
+    vi.resetModules()
+
+    const database = await import("./client")
+
+    expect(database.getDb()).toBeDefined()
+  })
 })

@@ -10,6 +10,23 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, "e2e/**"],
     clearMocks: true,
     restoreMocks: true,
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "**/*.test.{ts,tsx}",
+        "**/*.spec.{ts,tsx}",
+        "src/test/**",
+        "**/*.d.ts",
+        "**/*.generated.{ts,tsx}",
+      ],
+      thresholds: {
+        lines: 100,
+        statements: 100,
+        functions: 100,
+        branches: 100,
+      },
+    },
   },
   resolve: {
     alias: {

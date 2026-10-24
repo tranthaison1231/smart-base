@@ -23,4 +23,36 @@ describe("ToggleGroup", () => {
 
     expect(second).toHaveFocus()
   })
+
+  it("inherits group variants and falls back to an item variant when unset", () => {
+    render(
+      <>
+        <ToggleGroup aria-label="Text style" variant="outline" size="sm" spacing={0}>
+          <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup aria-label="Display mode">
+          <ToggleGroupItem value="compact" variant="outline" size="lg">
+            Compact
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </>,
+    )
+
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute(
+      "data-variant",
+      "outline",
+    )
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute(
+      "data-size",
+      "sm",
+    )
+    expect(screen.getByRole("button", { name: "Compact" })).toHaveAttribute(
+      "data-variant",
+      "outline",
+    )
+    expect(screen.getByRole("button", { name: "Compact" })).toHaveAttribute(
+      "data-size",
+      "lg",
+    )
+  })
 })

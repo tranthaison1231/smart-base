@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest"
 
-import { readAiConfig } from "./ai-config"
 import {
   createAiTextService,
   createConfiguredAiTextService,
+  readAiConfig,
   type AiTextModel,
-} from "./ai-text-service"
+} from "../index.server"
 
 const validEnv = {
   AI_API_KEY: "test-key",
@@ -21,11 +21,28 @@ describe("AI text service", () => {
     expect(() => readAiConfig({ AI_API_KEY: "test-key" })).toThrow(
       "AI_MODEL is required",
     )
+    expect(() => readAiConfig({ AI_API_KEY: "  ", AI_MODEL: "test-model" })).toThrow(
+      "AI_API_KEY is required",
+    )
+    expect(() => readAiConfig({ AI_API_KEY: "test-key", AI_MODEL: "  " })).toThrow(
+      "AI_MODEL is required",
+    )
   })
 
   it("allows HTTPS and loopback HTTP but rejects unsafe provider URLs", () => {
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "" })).toEqual({
+      apiKey: "test-key",
+      model: "test-model",
+    })
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "  " }).baseUrl).toBeUndefined()
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "https://api.example.test/" }).baseUrl)
+      .toBe("https://api.example.test")
     expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://localhost:1234/v1" }).baseUrl)
       .toBe("http://localhost:1234/v1")
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://127.0.0.1:1234/v1" }).baseUrl)
+      .toBe("http://127.0.0.1:1234/v1")
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://[::1]:1234/v1" }).baseUrl)
+      .toBe("http://[::1]:1234/v1")
     expect(() => readAiConfig({ ...validEnv, AI_BASE_URL: "http://provider.example/v1" }))
       .toThrow("AI_BASE_URL must use HTTPS or loopback HTTP")
     expect(() => readAiConfig({ ...validEnv, AI_BASE_URL: "https://user:secret@provider.example/v1" }))

@@ -11,5 +11,8 @@ describe("starter home page", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Smart Base" }),
     ).toBeInTheDocument()
+    expect(
+      screen.getByText(/A clear starting point for the next product/),
+    ).toBeInTheDocument()
   })
 })

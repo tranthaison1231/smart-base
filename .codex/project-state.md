@@ -11,8 +11,11 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 ## Runtime and checks
 
 - pnpm/Turborepo monorepo; web app at `apps/web`, future independent worker packages under `apps/workers/*`, and shared infrastructure under `packages/*`.
+- Current workspace packages are `apps/web` and `packages/database`. `apps/workers/` has guidance only; no worker package or additional shared package is included.
 - Node.js `>=22.22.2`, pnpm `10.32.1`.
 - `pnpm dev`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
+- `pnpm test` runs coverage in both test workspaces and enforces 100% global line, statement, function, and branch coverage over their first-party runtime TypeScript and TSX under `src/`.
+- Coverage excludes colocated test/spec files, `src/test/**`, declarations, and generated files. See `docs/testing.md` for the complete contract.
 - `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
 - Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.
 - AI requires `AI_API_KEY` and `AI_MODEL` when calling a provider; they are not needed for build or tests.

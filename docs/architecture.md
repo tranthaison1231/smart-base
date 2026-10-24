@@ -22,15 +22,24 @@ Create FSD layers only when a feature needs them. Add other shared packages only
 
 FSD applies to the Next.js app under `apps/web/src/`. The monorepo also has separate deployment and infrastructure areas:
 
+```text
+apps/
+├── web/                    # Current Next.js application
+└── workers/README.md       # Worker convention; no worker package is included
+packages/
+└── database/               # Current shared PostgreSQL/Drizzle infrastructure
+drizzle/                    # Migration output and metadata; no migrations exist yet
+```
+
 | Path | Ownership |
 |---|---|
 | `apps/web/` | Next.js routes, UI, and product FSD slices |
-| `apps/workers/<name>/` | One independently deployed Cloudflare Worker package per real background workload; see [`apps/workers/README.md`](../apps/workers/README.md) |
+| `apps/workers/<name>/` | Future independently deployed Cloudflare Worker packages for real background workloads; see [`apps/workers/README.md`](../apps/workers/README.md). No worker package currently exists. |
 | `packages/database/` | Shared server-only PostgreSQL connection and Drizzle schema entry point |
-| `packages/<name>/` | Code with real consumers in more than one app |
-| `drizzle/` | Generated SQL migrations and Drizzle snapshots |
+| `packages/<name>/` | Future shared code only when it has real consumers in multiple apps. `packages/database` is the only package currently included. |
+| `drizzle/` | Generated SQL migrations and Drizzle snapshots. The directory currently contains guidance and metadata only. |
 
-The database package contains infrastructure only. Add product tables to `packages/database/src/schema/` when the application defines its domain, then generate and review a migration. Do not put worker jobs or product workflows in shared packages.
+The database package contains infrastructure only; `packages/database/src/schema/` has no product tables yet. Add tables after the application defines its domain, then generate and review a migration. Do not put worker jobs or product workflows in shared packages.
 
 ## Adding a feature
 
@@ -40,6 +49,8 @@ The database package contains infrastructure only. Add product tables to `packag
 4. Move reusable code to `_shared` only when it is independent of the domain.
 5. Keep tests close to their modules. Test API and AI behavior through dependency injection or mocks; unit tests must not call live services.
 6. Keep persistence schemas in `packages/database`; keep repositories and domain behavior in their owning FSD slices. Keep background jobs in their own `apps/workers/<name>/` workspace.
+
+Every runtime module must have behavior-focused tests for its success, error, and relevant optional paths. The default `pnpm test` command enforces the 100% coverage gate in each current test workspace; see the [testing guide](testing.md).
 
 A product list screen might use `app/products/page.tsx`, `_pages/products/ui/products-page.tsx`, `_widgets/product-list/`, `_features/search-products/`, `_entities/product/`, and `_shared/ui/table`. This is a structural example; the starter does not include this product behavior.
 

@@ -35,5 +35,5 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/_shared/ui/
 
 `RootLayout` already mounts `ThemeProvider`, `TooltipProvider`, and `Toaster`. Do not mount another instance in individual pages. CSS theme tokens live in `apps/web/src/app/globals.css`; use semantic tokens instead of hardcoded colors when creating components. `cn` (`@/_shared/lib/cn`) combines Tailwind classes; `useIsMobile` lives in `@/_shared/lib/hooks/use-mobile`.
 
-These wrappers follow shadcn component patterns and use Base UI primitives. Basic interaction tests cover buttons, dialogs, and tables. New components should preserve keyboard interactions, accessible names, and disabled and loading states where appropriate; extend tests to cover that behavior.
+These wrappers follow shadcn component patterns and use Base UI primitives. Colocated tests cover the current shared UI modules and their runtime branches. New components should preserve keyboard interactions, accessible names, and disabled and loading states where appropriate; add behavior tests for each supported state and run the root coverage gate.
 

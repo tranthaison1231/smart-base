@@ -7,7 +7,7 @@ Read the repository guidance in this order:
 3. [`.codex/project-state.md`](../.codex/project-state.md): current domain and project state.
 4. [`.agents/skills/feature-development/SKILL.md`](../.agents/skills/feature-development/SKILL.md): workflow for adding product features.
 
-Before making a change, identify the layer that owns the code, read the relevant module and tests, and write a test first for new behavior. Then run the appropriate lint, typecheck, test, and build commands. Update the documentation if a contract or structure changes. See [testing](testing.md).
+Before making a change, identify the layer that owns the code and read the relevant module and tests. Add behavior-focused tests for every runtime module and write a regression test first for new behavior. Run the appropriate lint, typecheck, test, and build commands; the root `pnpm test` command enforces 100% global line, statement, function, and branch coverage in each current test workspace. Update the documentation if a contract or structure changes. See [testing](testing.md).
 
 For features that persist data, use [`database.md`](database.md) and keep schema and migration work separate from repository and business logic. For background work, follow the per-worker workspace convention in [`apps/workers/README.md`](../apps/workers/README.md).
 
