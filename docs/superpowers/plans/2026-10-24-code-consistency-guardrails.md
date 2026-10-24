@@ -126,13 +126,13 @@ git commit -m "chore: enforce FSD slice boundaries"
 
 - Verify: all files changed by Tasks 1 and 2
 
-- [ ] **Step 1: Run the full quality suite**
+- [x] **Step 1: Run the full quality suite**
 
 Run: `pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e`
 
 Expected: every command exits 0; `pnpm test` retains 100% coverage in each current workspace, and browser smoke tests pass.
 
-- [ ] **Step 2: Review generated changes and repository state**
+- [x] **Step 2: Review generated changes and repository state**
 
 Run: `git diff --check` and `git status --short --branch`.
 
