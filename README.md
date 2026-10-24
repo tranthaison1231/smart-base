@@ -36,7 +36,7 @@ pnpm build
 1. Read the [architecture guide](docs/architecture.md) and identify the owning route, page, widget, feature, or entity.
 2. Read the [Codex workflow](docs/codex.md) and the [feature-development](.agents/skills/feature-development/SKILL.md) skill.
 3. Add the first domain model under `_entities`; do not add a placeholder domain to the starter.
-4. Review [UI components](docs/ui-components.md), [API](docs/api.md), [AI service](docs/ai-service.md), [database](docs/database.md), and [testing](docs/testing.md) before adding the corresponding layer.
+4. Review [UI components](docs/ui-components.md), [API](docs/api.md), [data fetching and tables](docs/data-fetching-and-tables.md), [AI service](docs/ai-service.md), [database](docs/database.md), and [testing](docs/testing.md) before adding the corresponding layer.
 5. Put independent background workloads under [`apps/workers/`](apps/workers/README.md); add a worker package only when the application has a defined workload.
 
 ## Structure

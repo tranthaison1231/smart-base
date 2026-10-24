@@ -4,6 +4,7 @@
 - Choose layers according to `docs/architecture.md`; keep routes thin and respect FSD boundaries.
 - Write behavior-focused tests for each runtime module before or alongside implementation. Cover success, failure, and relevant optional branches. Prefer the existing dependency injection patterns over new mock infrastructure.
 - Reuse `_shared/ui`, `fetchJson`, and the existing AI service when their contracts fit. Never call external APIs from client code.
+- Before adding client-side remote data or a data table, follow [the data-fetching and tables guide](../docs/data-fetching-and-tables.md). Prefer server loading or `fetchJson` for simple requests, use TanStack Query only when client-side server-state caching or synchronization is needed, and render TanStack Table through the shared `Table` primitives when table interactions justify it. Do not add either dependency without a current feature that needs it.
 - Keep errors at trust boundaries clear; do not log or return secrets or upstream payloads.
 - Keep database access in `packages/database` and server-only modules. Review generated Drizzle SQL before applying migrations; never point setup or tests at production.
 - Put each real background workload in its own `apps/workers/<name>/` workspace. Do not create a no-op worker.
