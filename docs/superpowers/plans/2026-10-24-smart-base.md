@@ -116,18 +116,19 @@
 - Create: `apps/web/src/_entities/ai/server/ai-config.ts`, `apps/web/src/_entities/ai/server/ai-text-service.ts`, `apps/web/src/_entities/ai/index.server.ts`
 - Create: `apps/web/src/_entities/ai/server/ai-text-service.test.ts`
 - Create: `.env.example`
-- Modify: `apps/web/package.json`
+- Modify: `apps/web/package.json`, `apps/web/vitest.config.mts`
 
 **Interfaces:**
-- `readAiConfig(env: NodeJS.ProcessEnv): AiConfig` validates `AI_API_KEY`, `AI_MODEL`, and optional `AI_BASE_URL`.
+- `readAiConfig(env: AiEnv): AiConfig` validates only the optional `AI_API_KEY`, `AI_MODEL`, and `AI_BASE_URL` environment keys.
 - `createAiTextService(model: AiTextModel)` returns `generateText({ systemPrompt, userPrompt, signal? }): Promise<string>`.
-- `createConfiguredAiTextService(env, modelFactory?)` validates config before constructing a model; the default factory uses `ChatOpenAI` from `@langchain/openai`, and tests inject a fake model factory/model.
+- `createConfiguredAiTextService(env?: AiEnv, modelFactory?)` validates config before constructing a model; the default factory uses `ChatOpenAI` from `@langchain/openai`, and tests inject a fake model factory/model.
 
 - [ ] **Step 1: Write tests** for missing credentials, invalid/unsafe base URL, model factory not called on invalid config, successful fake-model output, provider rejection, and abort propagation.
 - [ ] **Step 2: Run `pnpm --filter @smart-base/web exec vitest run src/_entities/ai/server/ai-text-service.test.ts`**; confirm the tests fail before the service is implemented.
 - [ ] **Step 3: Implement env validation and the injectable server-only service**. Permit HTTPS provider URLs and loopback HTTP only for local development; reject URL-embedded credentials; never expose the key or model object to client modules.
-- [ ] **Step 4: Add placeholder variable names to `.env.example`** and document that no key is required for build or tests.
-- [ ] **Step 5: Run focused AI tests, lint, and typecheck**; expected result: all pass with fake models and no provider request.
+- [ ] **Step 4: Alias Next's `server-only` test stub in Vitest** so tests can import guarded server modules without weakening the production boundary.
+- [ ] **Step 5: Add placeholder variable names to `.env.example`** and document that no key is required for build or tests.
+- [ ] **Step 6: Run focused AI tests, lint, and typecheck**; expected result: all pass with fake models and no provider request.
 
 ## Task 6: Add Codex guidance and Vietnamese documentation
 
