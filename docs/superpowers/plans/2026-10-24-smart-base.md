@@ -153,12 +153,12 @@
 
 **Files:**
 - Create: `apps/web/playwright.config.ts`, `apps/web/e2e/home.spec.ts`
-- Modify: root and web `package.json`, `turbo.json`, `README.md`, `docs/testing.md`
+- Modify: root and web `package.json`, `pnpm-lock.yaml`, `turbo.json`, `README.md`, `docs/testing.md`
 
 **Interfaces:**
 - `pnpm test:e2e` runs separately from the fast unit/component suite and starts the app without a database or AI credentials.
 
-- [ ] **Step 1: Write the Playwright smoke test** that opens `/` and checks the “Smart Base” heading and main landmark.
-- [ ] **Step 2: Run `pnpm test:e2e`**; install Chromium with `pnpm exec playwright install chromium` only if the browser is missing.
-- [ ] **Step 3: Run final checks**: `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, and `pnpm build`.
-- [ ] **Step 4: Inspect the full tree and `git diff --check`**; confirm no `.env`, product-domain files, database/auth code, or live AI requests were added.
+- [x] **Step 1: Write the Playwright smoke test** that opens `/` and checks the “Smart Base” heading and main landmark.
+- [x] **Step 2: Run `pnpm test:e2e`**; install Chromium with `pnpm --filter @smart-base/web exec playwright install chromium` only if the browser is missing.
+- [x] **Step 3: Run final checks**: `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, and `pnpm build`.
+- [x] **Step 4: Inspect the full tree and `git diff --check`**; confirm no `.env`, product-domain files, database/auth code, or live AI requests were added.

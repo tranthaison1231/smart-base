@@ -19,8 +19,11 @@ Mở `http://localhost:3000`. Không cần API key để chạy app, build hay t
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm test:e2e
 pnpm build
 ```
+
+`pnpm test:e2e` chạy browser smoke test bằng Chromium và tự khởi động app tại port `3100`. Nếu Chromium chưa được cài, chạy `pnpm --filter @smart-base/web exec playwright install chromium`.
 
 ## Bắt đầu thêm sản phẩm
 
