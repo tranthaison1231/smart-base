@@ -2,7 +2,7 @@
 
 Smart Base is a product-neutral starter with no product domain yet. Read [project state](.codex/project-state.md) and the [Codex documentation](docs/codex.md) before making major changes.
 
-- Preserve FSD dependency direction: higher layers may import lower layers only. `app/` handles route and layout wiring; do not put business logic there.
+- Preserve FSD dependency direction: higher layers may import lower layers only. Slices on the same layer cannot import one another; imports into another slice must use its public entry point (`index.ts`, `index.tsx`, `index.server.ts`, or `index.server.tsx`). `app/` handles route and layout wiring; do not put business logic there.
 - Add shared UI to `apps/web/src/_shared/ui` only when it is domain-independent. Check for an existing component before creating another one.
 - Call external APIs from server-side code and validate responses at trust boundaries with schemas. Never expose credentials to the client.
 - The AI service is server-only. Add authentication, rate limiting, and budget limits before creating a public route.

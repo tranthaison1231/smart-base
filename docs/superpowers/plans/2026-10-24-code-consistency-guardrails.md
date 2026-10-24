@@ -89,7 +89,7 @@ git commit -m "chore: enforce consistent formatting"
 - ESLint enforces imports for web FSD slices and resolves `@/*` using `apps/web/tsconfig.json`.
 - The existing `fsd-boundaries.test.ts` suite remains the focused regression contract.
 
-- [ ] **Step 1: Add failing ESLint boundary tests**
+- [x] **Step 1: Add failing ESLint boundary tests**
 
 Extend the focused suite to assert that ESLint accepts same-slice relative imports and lower-layer public API imports, and rejects sibling-slice imports, deep imports into a lower slice, and higher-layer imports. Include both `@/` aliases and relative imports where they apply, and assert that the web-only boundary rule does not run on `packages/database/src` files.
 
@@ -97,21 +97,21 @@ Run: `pnpm --filter @smart-base/web exec vitest run src/test/fsd-boundaries.test
 
 Expected: new tests fail because the current config does not enforce sibling-slice or public-entry boundaries.
 
-- [ ] **Step 2: Add explicit boundary tooling**
+- [x] **Step 2: Add explicit boundary tooling**
 
 Add exact web dev dependencies `eslint-plugin-boundaries@7.3.0` and `eslint-import-resolver-typescript@4.4.5`. Configure TypeScript resolution against `apps/web/tsconfig.json`, and scope the plugin rules to web source only.
 
-- [ ] **Step 3: Configure slice and public API policies**
+- [x] **Step 3: Configure slice and public API policies**
 
 Classify `app` and `_app` as the top layer, then `_pages`, `_widgets`, `_features`, `_entities`, and `_shared` in descending order. Preserve or replace existing native rules only after the tests show the plugin covers their relative and alias cases. Reject same-layer imports between distinct slices and external deep imports into slices; accept only `index.ts`, `index.tsx`, `index.server.ts`, and `index.server.tsx` as slice entry points; keep same-slice internal imports valid.
 
-- [ ] **Step 4: Run focused and workspace checks**
+- [x] **Step 4: Run focused and workspace checks**
 
 Run: `pnpm --filter @smart-base/web exec vitest run src/test/fsd-boundaries.test.ts`
 
 Expected: all existing and new boundary cases pass. Then run `pnpm lint` to confirm the rule is limited to web source and the database workspace remains unaffected.
 
-- [ ] **Step 5: Document the import contract and commit**
+- [x] **Step 5: Document the import contract and commit**
 
 Document that imports between slices on the same layer are forbidden and imports into another slice must use its public entry point. Update the agent guidance to follow the same rule.
 
