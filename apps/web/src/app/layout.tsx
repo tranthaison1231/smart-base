@@ -1,9 +1,7 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 
-import { ThemeProvider } from "@/_shared/ui/theme-provider"
-import { Toaster } from "@/_shared/ui/sonner"
-import { TooltipProvider } from "@/_shared/ui/tooltip"
+import { AppProviders } from "@/_app/providers"
 
 import "./globals.css"
 
@@ -16,12 +14,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="vi" className="dark">
       <body>
-        <ThemeProvider>
-          <TooltipProvider>
-            {children}
-            <Toaster />
-          </TooltipProvider>
-        </ThemeProvider>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   )

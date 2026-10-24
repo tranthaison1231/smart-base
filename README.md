@@ -1,6 +1,6 @@
 # Smart Base
 
-A copyable Next.js starter for new applications. It includes a Feature-Sliced Design (FSD) structure, shared UI components, a schema-validated API client, a server-only AI text service, a lazy PostgreSQL/Drizzle package, and lint, typecheck, and test tooling. It contains no product logic from Smart Stock, Smart Idea, or Smart Shop.
+A copyable Next.js starter for new applications. It includes a Feature-Sliced Design (FSD) structure, shared UI components, TanStack Query and Table, a schema-validated API client, a server-only AI text service, a lazy PostgreSQL/Drizzle package, and lint, typecheck, and test tooling. It contains no product logic from Smart Stock, Smart Idea, or Smart Shop.
 
 ## Getting started
 
@@ -52,7 +52,7 @@ drizzle/                    # Migration output; no generated migrations exist ye
 
 There are no additional shared packages or worker jobs in the starter. Add them only for a real consumer or workload.
 
-The current FSD slices live under `apps/web/src/`. The starter includes `app/`, `_entities/ai/`, and `_shared/`; create `_pages/`, `_widgets/`, `_features/`, and `_app/` only when a product needs them. The dependency direction is:
+The current FSD slices live under `apps/web/src/`. The starter includes `app/`, `_app/`, `_entities/ai/`, and `_shared/`; create `_pages/`, `_widgets/`, and `_features/` only when a product needs them. The dependency direction is:
 
 ```text
 app → _pages → _widgets → _features → _entities → _shared

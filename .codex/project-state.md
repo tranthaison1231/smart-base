@@ -2,7 +2,7 @@
 
 ## Goal
 
-Smart Base is a copyable starter repository for new applications. It provides Next.js, FSD, UI primitives, a JSON API client, a server-only AI text service, lazy PostgreSQL/Drizzle infrastructure, and baseline quality checks.
+Smart Base is a copyable starter repository for new applications. It provides Next.js, FSD, UI primitives, a root TanStack Query provider, a TanStack Table-backed `DataTable`, a JSON API client, a server-only AI text service, lazy PostgreSQL/Drizzle infrastructure, and baseline quality checks.
 
 ## Domain
 
@@ -19,6 +19,7 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 - `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
 - Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.
 - AI requires `AI_API_KEY` and `AI_MODEL` when calling a provider; they are not needed for build or tests.
+- `@tanstack/react-query` and `@tanstack/react-table` are declared in `apps/web`; `AppProviders` mounts the QueryClient once for browser use and per server render.
 
 ## Decisions when copying
 

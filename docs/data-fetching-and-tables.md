@@ -1,10 +1,10 @@
 # Data Fetching and Tables
 
-This guide helps feature work choose between Next.js server-side data loading, `fetchJson`, TanStack Query, the shared shadcn-style `Table`, and TanStack Table.
+This guide explains when to use Next.js server-side data loading, `fetchJson`, TanStack Query, the shared shadcn-style `Table`, and TanStack Table.
 
 ## Current starter defaults
 
-The starter includes `fetchJson` at `apps/web/src/_shared/api/fetch-json.ts` and presentational table primitives at `apps/web/src/_shared/ui/table.tsx`. TanStack Query and TanStack Table are **not installed**. Add either dependency only when a real feature needs it.
+The web workspace includes TanStack Query and TanStack Table v8. `AppProviders` at `apps/web/src/_app/providers.tsx` mounts the shared QueryClient and existing UI providers from the root layout. `DataTable` at `apps/web/src/_shared/ui/data-table.tsx` is a sortable, client-side table built with TanStack Table and the shared shadcn-style primitives in `table.tsx`.
 
 ## Choose the smallest tool that fits
 
@@ -14,7 +14,8 @@ The starter includes `fetchJson` at `apps/web/src/_shared/api/fetch-json.ts` and
 | Make a one-off client request or submit an action without shared caching, automatic refetching, or optimistic updates | `fetchJson` plus local React state | The existing helper validates JSON responses and handles request errors |
 | Share remote data between client components, keep it fresh, refetch it, or coordinate it with mutations, polling, or optimistic updates | TanStack Query | It manages client-side server state, caching, and synchronization |
 | Display a simple table with no sorting, filtering, pagination, selection, or column controls | The shared shadcn-style `Table` primitives | They provide semantic table markup and styling without a table-state engine |
-| Build an interactive table with sorting, filtering, pagination, row selection, visibility, or resizing | TanStack Table rendered with the shared `Table` primitives | TanStack Table manages table state and row models; the shared primitives render the UI |
+| Display a local dataset with sortable columns | The shared `DataTable` component | It provides common client-side sorting and rendering through existing UI primitives |
+| Build a table with server-side filtering or pagination, row selection, column visibility, or custom state | TanStack Table directly, rendered with the shared `Table` primitives | TanStack Table manages table state and row models; the shared primitives render the UI |
 
 TanStack Query and TanStack Table solve different problems. Query owns client-side remote data state; Table owns table state and row processing. They can be used independently or together.
 
@@ -27,34 +28,17 @@ TanStack Query and TanStack Table solve different problems. Query owns client-si
 - Include every input that changes the result in the query key, such as search text, filters, sort order, and page. Invalidate the narrowest affected key after a successful mutation.
 - Keep credentials, database access, and provider API calls on the server. A client query should call an authorized application route when it needs protected data.
 
-### Where to install and provide TanStack Query
+### Where Query is provided
 
-Install it in the web workspace only when a feature needs it:
+TanStack Query is already declared in `apps/web/package.json`; do not add a second provider in a page or feature. `AppProviders` is the single app-level provider and `apps/web/src/app/layout.tsx` mounts it around the route tree. The provider creates one stable QueryClient in the browser, a new client for each server render, and sets a one-minute default query `staleTime`.
 
-```bash
-pnpm --filter @smart-base/web add @tanstack/react-query
-```
-
-When the first Query-based client feature is added, create `apps/web/src/_app/providers.tsx` as a client component, create its `QueryClient` once per provider instance, and mount it from `apps/web/src/app/layout.tsx`. Preserve the existing theme, tooltip, and toast providers. Do not create a module-level QueryClient shared by server requests.
-
-```tsx
-"use client"
-
-import { useState, type ReactNode } from "react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-
-export function AppProviders({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient())
-
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-}
-```
-
-Import `AppProviders` in `apps/web/src/app/layout.tsx` and wrap the existing app providers and route content with it. If server prefetching, dehydration, or Suspense queries are introduced, follow TanStack Query's Next.js SSR guide instead of extending the basic provider blindly.
+Use it for client-side server state only. Keep queries and mutations in the owning entity or feature; a reusable entity query belongs under `_entities/<domain>/`, while a workflow-only query belongs under `_features/<workflow>/`. If server prefetching, dehydration, or Suspense queries are introduced, follow TanStack Query's Next.js SSR guide before changing the provider lifecycle.
 
 Place reusable entity queries in a domain-owned module such as `apps/web/src/_entities/<domain>/api/queries.ts`. Place queries used by one workflow in that feature's API module. Keep response schemas near the entity contract and reuse `fetchJson` in query functions:
 
 ```ts
+"use client"
+
 import { useQuery } from "@tanstack/react-query"
 
 import { fetchJson } from "@/_shared/api/fetch-json"
@@ -93,15 +77,32 @@ This is an illustrative product example; the starter does not include a product 
 
 Use the shared `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, and `TableCell` directly for static or simple data. Keep loading, empty, and error states in the page, widget, or feature that owns the workflow.
 
-For a table that needs interactive state, install TanStack Table in the web workspace:
-
-```bash
-pnpm --filter @smart-base/web add @tanstack/react-table
-```
-
-Keep column definitions beside the table's owning UI, usually under its feature or widget. TanStack Table is headless, so render its header groups and cells with the shared primitives:
+For a local dataset with sortable columns, use the shared `DataTable`. Define its columns in the client module that owns the table. Column definitions may contain render callbacks, so do not pass them from a Server Component across the client boundary:
 
 ```tsx
+"use client"
+
+import type { ColumnDef } from "@tanstack/react-table"
+
+import { DataTable } from "@/_shared/ui/data-table"
+
+type Person = { name: string; role: string }
+
+const columns: ColumnDef<Person>[] = [
+  { accessorKey: "name", header: "Name" },
+  { accessorKey: "role", header: "Role" },
+]
+
+export function PeopleTable({ people }: { people: Person[] }) {
+  return <DataTable columns={columns} data={people} />
+}
+```
+
+The starter declares TanStack Table in the web workspace already. `DataTable` handles local sorting and the empty state. For more advanced or server-managed behavior, build a feature-owned table with TanStack Table directly and render it using the shared `Table` primitives. TanStack Table is headless, so custom implementations render its header groups and cells with the shared primitives:
+
+```tsx
+"use client"
+
 import {
   flexRender,
   getCoreRowModel,
@@ -211,6 +212,6 @@ Use TanStack Query with TanStack Table when the interactive server-backed table 
 - [TanStack Query: Quick Start](https://tanstack.com/query/latest/docs/framework/react/quick-start)
 - [TanStack Query: Query Keys](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)
 - [TanStack Query: Advanced Server Rendering](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)
-- [TanStack Table: Introduction](https://tanstack.com/table/latest/docs/introduction)
-- [TanStack Table: Pagination](https://tanstack.com/table/latest/docs/guide/pagination)
-- [TanStack Table: Sorting](https://tanstack.com/table/latest/docs/guide/sorting)
+- [TanStack Table v8: Introduction](https://tanstack.com/table/v8/docs/introduction)
+- [TanStack Table v8: Pagination](https://tanstack.com/table/v8/docs/guide/pagination)
+- [TanStack Table v8: Sorting](https://tanstack.com/table/v8/docs/guide/sorting)
