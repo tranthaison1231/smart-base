@@ -32,6 +32,21 @@ describe("FSD import boundaries", () => {
     expect(await restrictedImports(source, filePath)).not.toHaveLength(0)
   })
 
+  it.each([
+    [
+      "alias",
+      'export const load = () => import("@/app/page")',
+      "src/_shared/api/boundary-probe.ts",
+    ],
+    [
+      "relative path",
+      'export const load = () => import("../app/page")',
+      "src/_app/boundary-probe.ts",
+    ],
+  ])("rejects upward dynamic imports by %s", async (_description, source, filePath) => {
+    expect(await boundaryViolations(source, filePath)).not.toHaveLength(0)
+  })
+
   it("allows same-slice internal imports", async () => {
     expect(
       await boundaryViolations('import "./ai-config"', "src/_entities/ai/server/boundary-probe.ts"),

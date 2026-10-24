@@ -65,6 +65,13 @@ const siblingSlicePolicies = sliceLayers.map((layer) => ({
   },
 }))
 
+const upwardLayerPolicies = layerOrder.flatMap((sourceLayer, sourceIndex) =>
+  layerOrder.slice(0, sourceIndex).map((higherLayer) => ({
+    from: { element: { type: sourceLayer } },
+    disallow: { to: { element: { type: higherLayer } } },
+  })),
+)
+
 const boundaryConfig = {
   basePath: webRoot,
   files: ["src/**/*.{ts,tsx}"],
@@ -90,7 +97,7 @@ const boundaryConfig = {
       "error",
       {
         default: "allow",
-        policies: [...publicEntryPolicies, ...siblingSlicePolicies],
+        policies: [...publicEntryPolicies, ...siblingSlicePolicies, ...upwardLayerPolicies],
       },
     ],
   },
