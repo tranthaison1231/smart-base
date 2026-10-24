@@ -20,6 +20,7 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 - Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.
 - AI requires `AI_API_KEY` and `AI_MODEL` when calling a provider; they are not needed for build or tests.
 - `@tanstack/react-query` and `@tanstack/react-table` are declared in `apps/web`; `AppProviders` mounts the QueryClient once for browser use and per server render.
+- Web deployment target: Vercel Git integration with `apps/web` as the project root. Real Cloudflare Workers use worker-specific GitHub Actions deployment workflows; the starter has no worker package yet.
 
 ## Decisions when copying
 

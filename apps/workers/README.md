@@ -4,6 +4,8 @@ Create one independently deployable Cloudflare Worker package under `apps/worker
 
 The starter does not include a worker package or deploy a sample job. Use the examples below as a starting point only after the application has a real workload.
 
+For production CI and deployment, follow the [deployment guide](../../docs/deployment.md#deploy-a-real-worker-to-cloudflare). Add the path-scoped GitHub Actions workflow alongside the real worker package; do not configure a no-op deployment job in the starter.
+
 ## Package structure
 
 Keep each worker's runtime, configuration, dependencies, tests, and deployment scripts in its own package:

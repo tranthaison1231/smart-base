@@ -27,6 +27,10 @@ pnpm build
 
 `pnpm test` runs Vitest with coverage in both current test workspaces, `apps/web` and `packages/database`. Each workspace enforces 100% global line, statement, function, and branch coverage for its first-party runtime TypeScript and TSX files. See the [testing guide](docs/testing.md) for the exact scope and exclusions.
 
+## Deployment
+
+Deploy the web app through Vercel Git integration and real background workers through worker-specific Cloudflare workflows. See the [deployment guide](docs/deployment.md) and [worker guide](apps/workers/README.md).
+
 ## Database
 
 `@smart-base/database` creates a PostgreSQL connection only when `getDb()` is called. Add product tables under `packages/database/src/schema/`, generate and review migrations with `pnpm db:generate`, then apply them explicitly with `DATABASE_URL=... pnpm db:migrate`. See the [database guide](docs/database.md).

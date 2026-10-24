@@ -11,6 +11,7 @@ Smart Base is a product-neutral starter with no product domain yet. Read [projec
 - Add behavior-focused tests for each runtime module, including success, error, and relevant optional branches. For behavior changes, write a regression test first. `pnpm test` enforces 100% global line, statement, function, and branch coverage in `apps/web` and `packages/database`; run it before finishing.
 - Before finishing, run the relevant checks: `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`. Keep new runtime files inside the coverage include scope unless they are genuinely generated or test harness code.
 - Every future worker or shared package with runtime code must add a Turbo-visible `test` script, the matching Vitest coverage provider, an explicit runtime include, and the same four 100% thresholds. Follow [worker guidance](apps/workers/README.md) or [package guidance](packages/README.md).
+- Deploy the web app through Vercel Git integration and deploy each real Cloudflare Worker through its own GitHub Actions workflow. Follow [deployment guidance](docs/deployment.md); do not add a Vercel deploy action or a placeholder Worker.
 - Do not add product logic, environment variables, dependencies, or abstractions "for later" when the current feature does not need them.
 - If the repository has `.codegraph/`, use CodeGraph to trace symbols/call paths before using grep or reading many files. Do not initialize an index yourself.
 - Read the [feature-development](.agents/skills/feature-development/SKILL.md) skill when adding a new product workflow.
