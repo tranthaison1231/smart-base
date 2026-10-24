@@ -1,27 +1,27 @@
 # Smart Base Workers and Database Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Implementation workflow:** Use `superpowers:subagent-driven-development` or `superpowers:executing-plans` to implement this plan one task at a time. Track progress with the checkboxes below.
 
-**Goal:** Add the requested worker workspace location and a reusable, product-neutral PostgreSQL/Drizzle foundation.
+**Goal:** Add a workspace for background workers and reusable, product-neutral PostgreSQL/Drizzle infrastructure.
 
 **Architecture:** Add `apps/workers/*` to the pnpm workspace as a home for future independent Cloudflare Worker packages, without shipping a no-op job. Add `packages/database` with lazy server-only PostgreSQL.js/Drizzle access, root Drizzle Kit commands, and an empty schema entry point; keep generated migrations in `drizzle/`.
 
-**Tech Stack:** Node.js `>=22.22.2`, pnpm `10.32.1`, TypeScript `5.9.3`, Drizzle ORM `0.45.x`, Drizzle Kit `0.31.x`, PostgreSQL.js `3.4.x`, Vitest `4.1.x`, Turborepo `2.11.5`.
+**Technology stack:** Node.js `>=22.22.2`, pnpm `10.32.1`, TypeScript `5.9.3`, Drizzle ORM `0.45.x`, Drizzle Kit `0.31.x`, PostgreSQL.js `3.4.x`, Vitest `4.1.x`, and Turborepo `2.11.5`.
 
 **Spec:** `docs/superpowers/specs/2026-10-24-smart-base-workers-database-design.md`
 
 ## Global Constraints
 
-- Keep `DATABASE_URL` out of builds/tests; read it only when `getDb()` or a migration command needs a connection.
-- Do not add domain tables, migration files, seeds, auth, worker jobs, or deployment secrets.
+- Builds and tests must not require `DATABASE_URL`. Read it only when `getDb()` or a migration command needs a connection.
+- Do not add domain tables, migration files, seeds, authentication, worker jobs, or deployment secrets.
 - Keep package exports server-only and keep the schema entry point empty until a product adds real tables.
-- Preserve the user's existing uncommitted English documentation changes.
+- Preserve the existing English documentation and update it only where needed to describe the new structure and workflows.
 
 ## Review Focus
 
-1. An eager database connection could break static builds without secrets; tests must prove config validation is lazy and isolated.
-2. A missing or blank URL must fail with a clear error before creating a Postgres client.
-3. Drizzle schema discovery must work with no tables and no live database URL.
+1. An eager database connection could break static builds that lack secrets; tests must verify lazy configuration and confirm that importing the package does not open a connection.
+2. A missing or blank URL must produce a clear error before creating a PostgreSQL.js client.
+3. Drizzle schema discovery must work without tables or `DATABASE_URL`.
 4. Migration commands must never connect to a live database during validation.
 5. The workspace glob must include a future package nested under `apps/workers/`.
 
@@ -56,7 +56,7 @@
 
 - [x] Include `apps/workers/*` in workspace globs.
 - [x] Document one package per concrete Cloudflare Worker, each owning Wrangler config, handler, tests, and deployment scripts; explain why no sample job is included and why Node PostgreSQL.js cannot be imported into Workers.
-- [x] Verify the workspace definition parses and future nested packages are not ignored.
+- [x] Verify that `pnpm-workspace.yaml` parses and its workspace glob matches packages under `apps/workers/*`.
 
 ## Task 4: Update onboarding and architecture documentation
 
@@ -64,4 +64,4 @@
 
 - [x] Document package ownership, worker placement, schema ownership, and migration commands in English.
 - [x] Update the project state to distinguish generic database infrastructure from the still-empty product domain.
-- [x] Run focused package checks, `pnpm install --frozen-lockfile`, all root quality gates, browser smoke test, production build, and `git diff --check`.
+- [x] Run focused package checks, `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`, and `git diff --check`.

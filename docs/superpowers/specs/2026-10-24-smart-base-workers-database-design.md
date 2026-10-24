@@ -14,7 +14,7 @@ Extend the copyable starter with a clear home for background-worker apps and a r
 
 ## Non-goals
 
-- No sample scheduled job, worker runtime, product schema, placeholder table, generated migration, auth system, database seed, or live database mutation.
+- No sample scheduled job, worker runtime, product schema, placeholder table, generated migration, authentication system, database seed, or live database mutation.
 - No Cloudflare credentials or environment-specific deployment settings.
 - No additional shared package beyond the reusable database infrastructure.
 
@@ -22,35 +22,35 @@ Extend the copyable starter with a clear home for background-worker apps and a r
 
 ### Worker directory
 
-1. Add a sample Cloudflare Worker with a no-op scheduled handler. This proves deployment wiring but ships a job with no useful work.
-2. Add `apps/workers/` as a documented workspace group for future per-job Cloudflare Worker packages. This provides the requested structure without copying Smart Stock's domain-specific ingestion jobs or inventing a fake job. **Selected.**
+1. Add a sample Cloudflare Worker with a no-op scheduled handler. This demonstrates deployment configuration but introduces a worker with no useful workload.
+2. Add `apps/workers/` as a documented workspace group for future per-job Cloudflare Worker packages. This provides a clear structure without copying Smart Stock's domain-specific ingestion jobs or inventing a placeholder workload. **Selected.**
 
-Smart Stock has independently deployed Wrangler workers under a root `workers/` directory; Smart Idea has no worker app. The starter will use the requested `apps/workers/` location and preserve the independent-package pattern.
+Smart Stock has independently deployed Wrangler workers under a root `workers/` directory; Smart Idea has no worker app. The starter uses `apps/workers/` and preserves the independent-package pattern.
 
 ### Database foundation
 
 1. Add only directories/configuration. This leaves each future app to rebuild connection handling.
-2. Add a small lazy database package and migration workflow, but no tables or migrations. This keeps secrets out of builds/tests and avoids product-specific schema. **Selected.**
+2. Add a small lazy database package and migration workflow, but no tables or migrations. This keeps builds and tests independent of a live database and avoids product-specific schema. **Selected.**
 
-Smart Idea's database package delays connection creation until `getDb()` is called. Smart Stock uses PostgreSQL.js with `max: 1` and `prepare: false` for serverless use. The starter will combine those patterns and keep `DATABASE_URL` optional until runtime.
+Smart Idea's database package delays connection creation until `getDb()` is called. Smart Stock uses PostgreSQL.js with `max: 1` and `prepare: false` for serverless use. The starter combines those patterns and requires `DATABASE_URL` only when opening a connection or applying migrations.
 
-## Architecture Decisions
+## Architecture decisions
 
 - Root pnpm workspaces include `apps/workers/*`; each concrete worker owns its `package.json`, Wrangler config, handlers, tests, and deploy command.
-- `packages/database` owns the shared database connection and an empty schema entry point. Product tables are added only when the copied app defines its domain.
+- `packages/database` owns the shared database connection and an empty schema entry point. Product tables are added only when the application defines its domain.
 - Root `drizzle.config.ts` reads schema files from `packages/database/src/schema/` and outputs to `drizzle/`. `db:generate` does not need a database; `db:migrate` requires `DATABASE_URL`.
-- `getDb()` validates `DATABASE_URL` lazily, creates one Postgres.js client with `max: 1` and `prepare: false`, and reuses the Drizzle instance in the current process.
-- The database package is for Node server code only. Cloudflare Workers must choose a worker-compatible serverless/HTTP driver for their provider; the starter does not guess a provider.
+- `getDb()` validates `DATABASE_URL` lazily, creates one PostgreSQL.js client with `max: 1` and `prepare: false`, and reuses the Drizzle instance in the current process.
+- The database package is for Node server code only. Cloudflare Workers need a database driver compatible with both the Worker runtime and the database provider; select one when adding a worker.
 - No package under `apps/workers/*` is created until a real job needs a runtime. The directory README records the exact pattern to follow.
 
-## Constraints and Safety
+## Constraints and safety
 
-- Keep database URL, client, and query code server-only.
+- Keep the database URL, connection client, and queries on the server.
 - Never connect to or mutate a live database during setup or validation.
 - Do not add product tables, seed data, or sample worker jobs.
-- Preserve the existing uncommitted English documentation changes.
+- Preserve the existing English documentation and update it only where needed to describe the new structure and workflows.
 
-## Acceptance Criteria
+## Acceptance criteria
 
 - `packages/database` is a workspace package with typed server-only exports.
 - Unit tests verify missing/blank database URLs fail clearly and configured URLs are trimmed.

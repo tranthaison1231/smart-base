@@ -1,28 +1,28 @@
 # Smart Base Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Implementation workflow:** Use `superpowers:subagent-driven-development` or `superpowers:executing-plans` to implement this plan one task at a time. Track progress with the checkboxes below.
 
-**Goal:** Build a copyable Next.js starter repo with reusable UI, API and AI foundations, documented FSD structure, and a ready Codex workflow.
+**Goal:** Build a copyable Next.js starter repository with reusable UI, API, and AI foundations, a documented FSD structure, and a ready-to-use Codex workflow.
 
-**Architecture:** A pnpm/Turborepo workspace containing one Next.js app under `apps/web`. The app follows the Smart Stock/Idea FSD layers; shared UI and API helpers live in `_shared`, while the server-only AI service lives in `_entities/ai`. Product logic, auth, and database packages are intentionally absent.
+**Initial architecture:** A pnpm/Turborepo workspace containing one Next.js app under `apps/web`. The app follows the Smart Stock and Smart Idea FSD layers; shared UI and API helpers live in `_shared`, while the server-only AI service lives in `_entities/ai`. The initial scope excluded product behavior, authentication, and database infrastructure. The worker workspace and PostgreSQL/Drizzle foundation are documented in the [follow-up plan](2026-10-24-smart-base-workers-database.md).
 
-**Tech Stack:** Node.js 22.22.2+, pnpm 10.32.1, Turborepo 2.11.5, Next.js 16.3.2, React 19.2.8, TypeScript 5.9.3, Tailwind CSS 4.3.3, shadcn/Base UI, ESLint 9, Vitest, Testing Library, and Playwright.
+**Technology stack:** Node.js 22.22.2+, pnpm 10.32.1, Turborepo 2.11.5, Next.js 16.3.2, React 19.2.8, TypeScript 5.9.3, Tailwind CSS 4.3.3, shadcn component patterns with Base UI, ESLint 9, Vitest, Testing Library, and Playwright.
 
 **Spec:** `docs/superpowers/specs/2026-10-24-smart-base-design.md`
 
-## Global Constraints
+## Initial-scope constraints
 
 - Node.js `>=22.22.2`; pnpm `10.32.1`; Turborepo `2.11.5`.
 - Next.js `16.3.2`; React `19.2.8`; TypeScript `5.9.3`; Tailwind CSS `4.3.3`.
 - Keep Next routes thin and follow `app`, `_app`, `_pages`, `_widgets`, `_features`, `_entities`, `_shared` dependency direction.
 - Keep AI keys and model construction server-side; do not add a public unauthenticated AI endpoint.
 - Tests use fake `fetch` and fake AI models; never make a live provider request.
-- Do not add auth, database, migration, product-domain, or provider-management code.
+- Do not add authentication, database infrastructure, migrations, product-domain code, or provider-management code within this initial scope.
 - Do not set repository model, sandbox, or approval preferences in Codex config.
 
 ## Review Focus
 
-1. Invalid or non-JSON API responses must fail schema validation without leaking raw provider data; cover in Task 4 tests.
+1. Malformed JSON and responses that fail schema validation must produce a safe error without exposing response data; cover both cases in Task 4.
 2. Missing AI credentials or an unsafe/invalid provider URL must fail before constructing a model; cover in Task 5 tests.
 3. Provider errors and aborted AI calls must remain observable to callers; cover with fake-model tests in Task 5.
 4. Core interactive UI must preserve keyboard behavior and accessible names; cover dialog/button interactions in Task 3 tests.
@@ -33,7 +33,7 @@
 ## File map
 
 - Root manifests and `turbo.json`: workspace membership and root commands.
-- `apps/web/`: Next.js app, lint/type/test configs, and e2e smoke test.
+- `apps/web/`: Next.js app, lint, typecheck, and test configuration, plus an end-to-end smoke test.
 - `apps/web/src/app/`: route entry points, root layout, and global CSS.
 - `apps/web/src/_app/` and `apps/web/src/_pages/`: app shell and the small starter home page.
 - `apps/web/src/_shared/ui/`: the reusable Smart Stock UI primitive set.
@@ -75,7 +75,7 @@
 
 - [x] **Step 1: Add ESLint, strict typecheck, and FSD import rules** to the web configuration. Keep global ignores limited to generated and dependency directories.
 - [x] **Step 2: Run `pnpm lint`, `pnpm typecheck`, and `pnpm test`**; expected result: the starter test and quality gates pass.
-- [x] **Step 3: Probe the FSD boundary** with regression tests for aliased/relative higher-layer imports and `@/app` routes from shared/app-provider code.
+- [x] **Step 3: Probe the FSD boundary** with regression tests that reject aliased and relative imports of higher-layer modules, including `@/app` route modules imported from `_shared` and `_app` code.
 
 ## Task 3: Add reusable UI components
 
@@ -90,8 +90,8 @@
 - Components are imported from `@/_shared/ui/<component>` and keep the API of the Smart Stock wrappers.
 - Styling uses Tailwind 4 tokens, `cn`, and Base UI; no second component framework is introduced.
 
-- [x] **Step 1: Write component tests** asserting button accessible name/disabled behavior, dialog opens and closes from the keyboard, and table headers/cells render with semantic table roles.
-- [x] **Step 2: Run the focused tests** with `pnpm --filter @smart-base/web exec vitest run src/_shared/ui/button.test.tsx src/_shared/ui/dialog.test.tsx src/_shared/ui/table.test.tsx`; confirm they fail because the components are not present.
+- [x] **Step 1: Write component tests** for button accessible names and disabled state, keyboard dialog interactions, semantic table markup, calendar keyboard navigation, and toggle-group arrow-key navigation.
+- [x] **Step 2: Run the focused tests** with `pnpm --filter @smart-base/web exec vitest run src/_shared/ui/button.test.tsx src/_shared/ui/dialog.test.tsx src/_shared/ui/table.test.tsx src/_shared/ui/calendar.test.tsx src/_shared/ui/toggle-group.test.tsx`; confirm they fail because the components are not present.
 - [x] **Step 3: Port the 23 reusable wrappers** from Smart Stock, remove brand/product imports, add only dependencies referenced by those components, and include `cn` plus the mobile hook at the source paths. Keep theme storage under a neutral Smart Base key.
 - [x] **Step 4: Run focused component tests, `pnpm lint`, and `pnpm typecheck`**; expected result: all pass with no app-specific dependency imports.
 
@@ -120,7 +120,7 @@
 - Modify: `apps/web/package.json`, `apps/web/vitest.config.mts`
 
 **Interfaces:**
-- `readAiConfig(env: AiEnv): AiConfig` validates only the optional `AI_API_KEY`, `AI_MODEL`, and `AI_BASE_URL` environment keys.
+- `readAiConfig(env: AiEnv): AiConfig` requires non-empty `AI_API_KEY` and `AI_MODEL` values and validates `AI_BASE_URL` when it is supplied.
 - `createAiTextService(model: AiTextModel)` returns `generateText({ systemPrompt, userPrompt, signal? }): Promise<string>`.
 - `createConfiguredAiTextService(env?: AiEnv, modelFactory?)` validates config before constructing a model; the default factory uses `ChatOpenAI` from `@langchain/openai`, and tests inject a fake model factory/model.
 
@@ -128,7 +128,7 @@
 - [x] **Step 2: Run `pnpm --filter @smart-base/web exec vitest run src/_entities/ai/server/ai-text-service.test.ts`**; confirm the tests fail before the service is implemented.
 - [x] **Step 3: Implement env validation and the injectable server-only service**. Permit HTTPS provider URLs and loopback HTTP only for local development; reject URL-embedded credentials; never expose the key or model object to client modules.
 - [x] **Step 4: Alias Next's `server-only` test stub in Vitest** so tests can import guarded server modules without weakening the production boundary.
-- [x] **Step 5: Add placeholder variable names to `.env.example`** and document that no key is required for build or tests.
+- [x] **Step 5: Add placeholder values for the AI variables to `.env.example`** and document that no key is required for build or tests.
 - [x] **Step 6: Run focused AI tests, lint, and typecheck**; expected result: all pass with fake models and no provider request.
 
 ## Task 6: Add Codex guidance and English documentation
@@ -142,11 +142,11 @@
 
 **Interfaces:**
 - Root `AGENTS.md` is the durable repository entry point and links to the docs and focused skill.
-- `.codex/AGENT.md` owns implementation workflow details; `.codex/project-state.md` describes the blank-domain starter state.
+- `.codex/AGENT.md` owns implementation workflow details; `.codex/project-state.md` describes the product-neutral starter state.
 - The feature-development skill triggers only when adding a product feature to this starter.
 
 - [x] **Step 1: Write the root README and architecture guide** with quick start, exact commands, FSD layer ownership, and the rule to add packages only when shared code exists.
-- [x] **Step 2: Document UI, API, and AI patterns** with imports and short examples that match the implemented interfaces; explicitly state the server-only and auth/rate-limit requirements before exposing AI.
+- [x] **Step 2: Document UI, API, and AI patterns** with imports and examples that match the implemented interfaces; document the server-only requirements, authentication, and rate limits for any future AI endpoint.
 - [x] **Step 3: Add Codex files and one concise skill**. Keep model, approval, and sandbox choices user-owned; do not add an empty config or plugin marketplace.
 - [x] **Step 4: Review all Markdown links, paths, commands, and examples** against the final tree; run `git diff --check`.
 
@@ -157,9 +157,9 @@
 - Modify: root and web `package.json`, `pnpm-lock.yaml`, `turbo.json`, `README.md`, `docs/testing.md`
 
 **Interfaces:**
-- `pnpm test:e2e` runs separately from the fast unit/component suite and starts the app without a database or AI credentials.
+- `pnpm test:e2e` runs separately from the fast unit and component test suite and starts the app without a database or AI credentials.
 
 - [x] **Step 1: Write the Playwright smoke test** that opens `/` and checks the “Smart Base” heading and main landmark.
 - [x] **Step 2: Run `pnpm test:e2e`**; install Chromium with `pnpm --filter @smart-base/web exec playwright install chromium` only if the browser is missing.
 - [x] **Step 3: Run final checks**: `pnpm install --frozen-lockfile`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, and `pnpm build`.
-- [x] **Step 4: Inspect the full tree and `git diff --check`**; confirm no `.env`, product-domain files, database/auth code, or live AI requests were added.
+- [x] **Step 4: Inspect the full tree and run `git diff --check`**; confirm that no `.env` file, product-domain code, database or authentication code, or live AI requests were added.

@@ -6,7 +6,7 @@ Smart Base is a product-neutral starter with no product domain yet. Read [projec
 - Add shared UI to `apps/web/src/_shared/ui` only when it is domain-independent. Check for an existing component before creating another one.
 - Call external APIs from server-side code and validate responses at trust boundaries with schemas. Never expose credentials to the client.
 - The AI service is server-only. Add authentication, rate limiting, and budget limits before creating a public route.
-- Keep PostgreSQL connections and credentials in `packages/database` server-side. Review generated Drizzle SQL before applying it; never run migrations against production as part of setup or tests.
+- Keep PostgreSQL connections and credentials server-side; use `packages/database` for PostgreSQL access. Review generated Drizzle SQL before applying it; never run migrations against production as part of setup or tests.
 - Put each real background workload in its own package under `apps/workers/`; do not add placeholder jobs.
 - For behavior changes, write a regression test. Before finishing, run the relevant checks: `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build`.
 - Do not add product logic, environment variables, dependencies, or abstractions "for later" when the current feature does not need them.
