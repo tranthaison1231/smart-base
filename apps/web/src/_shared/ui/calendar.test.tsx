@@ -115,7 +115,9 @@ describe("Calendar", () => {
       />,
     )
 
-    expect(screen.getByRole("combobox", { name: "Choose the Month" })).toHaveTextContent("Oct")
+    expect(screen.getByRole("combobox", { name: "Choose the Month" })).toHaveTextContent(
+      firstOfOctober.toLocaleString(undefined, { month: "short" }),
+    )
   })
 
   it("uses the supplied locale for date attributes and month options", () => {

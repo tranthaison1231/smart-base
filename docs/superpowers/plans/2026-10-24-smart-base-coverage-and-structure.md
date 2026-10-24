@@ -207,5 +207,5 @@
 - [x] Run `pnpm exec turbo run test --force` and record all four coverage metrics for both workspaces.
 - [x] Run `pnpm exec turbo run build --force`.
 - [x] Run `git diff --check` and inspect the complete diff for unintended runtime changes, Vietnamese documentation, and inaccurate structure references.
-- [ ] Stage only the files listed in this plan, then run `git diff --cached --check` and inspect the staged summary.
-- [ ] Commit the verified changes on `main` with message `test: enforce complete runtime coverage`.
+- [x] Stage only the files listed in this plan, then run `git diff --cached --check` and inspect the staged summary.
+- [x] Commit the verified changes with message `test: enforce complete runtime coverage` and fast-forward them to `main`.

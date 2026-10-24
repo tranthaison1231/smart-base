@@ -193,7 +193,7 @@ describe("ChartTooltipContent", () => {
     )
 
     expect(screen.getByLabelText("Series icon")).toBeInTheDocument()
-    expect(screen.getByText("1,234")).toBeInTheDocument()
+    expect(screen.getByText((1234).toLocaleString())).toBeInTheDocument()
   })
 })
 
