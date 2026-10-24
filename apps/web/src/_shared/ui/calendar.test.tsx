@@ -55,7 +55,9 @@ describe("Calendar", () => {
     expect(getDay(middle)).toHaveAttribute("data-range-middle", "true")
     expect(getDay(end)).toHaveAttribute("data-range-end", "true")
     expect(getDay(start)?.closest("td")).toHaveClass("custom-day")
-    expect(screen.getByRole("grid").querySelectorAll("th[aria-label='Week Number']")).toHaveLength(1)
+    expect(screen.getByRole("grid").querySelectorAll("th[aria-label='Week Number']")).toHaveLength(
+      1,
+    )
   })
 
   it("renders outside days and disables dates before the configured boundary", () => {
@@ -96,7 +98,9 @@ describe("Calendar", () => {
         />,
       )
 
-      expect(screen.getByRole("combobox", { name: "Choose the Month" })).toHaveTextContent("Oct custom")
+      expect(screen.getByRole("combobox", { name: "Choose the Month" })).toHaveTextContent(
+        "Oct custom",
+      )
       expect(screen.getByRole("button", { name: "Go to the Previous Month" })).toBeInTheDocument()
       expect(screen.getByRole("button", { name: "Go to the Next Month" })).toBeInTheDocument()
       expect(screen.getAllByText("day").length).toBeGreaterThan(0)
@@ -146,13 +150,17 @@ describe("Calendar", () => {
         captionLayout="label"
         showWeekNumber
         components={{
-            Root: ({ children, className, rootRef, ...props }) => (
-              <section data-slot="calendar" ref={rootRef} className={className} {...props}>
-                {children}
-              </section>
-            ),
+          Root: ({ children, className, rootRef, ...props }) => (
+            <section data-slot="calendar" ref={rootRef} className={className} {...props}>
+              {children}
+            </section>
+          ),
           Chevron: ({ orientation }) => <span>{orientation}</span>,
-          WeekNumber: ({ children, ...props }) => <td {...props}><b>{children}</b></td>,
+          WeekNumber: ({ children, ...props }) => (
+            <td {...props}>
+              <b>{children}</b>
+            </td>
+          ),
         }}
         formatters={{ formatWeekNumber: () => "W" }}
       />,

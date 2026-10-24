@@ -60,9 +60,11 @@ describe("ThemeProvider", () => {
 
   it("keeps the visual theme when browser storage throws", async () => {
     document.documentElement.classList.remove("dark")
-    vi.stubGlobal("localStorage", { setItem: () => {
-      throw new Error("Storage is unavailable")
-    } })
+    vi.stubGlobal("localStorage", {
+      setItem: () => {
+        throw new Error("Storage is unavailable")
+      },
+    })
     const user = userEvent.setup()
     render(
       <ThemeProvider>

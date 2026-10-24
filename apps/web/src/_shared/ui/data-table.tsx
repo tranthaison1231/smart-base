@@ -12,14 +12,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react"
 import { useState } from "react"
 
 import { Button } from "@/_shared/ui/button"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/_shared/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_shared/ui/table"
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
@@ -58,11 +51,7 @@ export function DataTable<TData, TValue>({
                   key={header.id}
                   colSpan={header.colSpan}
                   aria-sort={
-                    sorted === "asc"
-                      ? "ascending"
-                      : sorted === "desc"
-                        ? "descending"
-                        : undefined
+                    sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined
                   }
                 >
                   {header.isPlaceholder ? null : header.column.getCanSort() ? (

@@ -19,8 +19,12 @@ describe("Avatar", () => {
           <AvatarFallback>AL</AvatarFallback>
           <AvatarBadge aria-label="Online status" />
         </Avatar>
-        <Avatar size="default"><AvatarFallback>Default</AvatarFallback></Avatar>
-        <Avatar size="lg"><AvatarFallback>Large</AvatarFallback></Avatar>
+        <Avatar size="default">
+          <AvatarFallback>Default</AvatarFallback>
+        </Avatar>
+        <Avatar size="lg">
+          <AvatarFallback>Large</AvatarFallback>
+        </Avatar>
       </>,
     )
 
@@ -33,13 +37,13 @@ describe("Avatar", () => {
   it("groups avatars with a member count", () => {
     render(
       <AvatarGroup role="group" aria-label="Project team">
-        <Avatar><AvatarFallback>AL</AvatarFallback></Avatar>
+        <Avatar>
+          <AvatarFallback>AL</AvatarFallback>
+        </Avatar>
         <AvatarGroupCount>+3</AvatarGroupCount>
       </AvatarGroup>,
     )
 
-    expect(screen.getByRole("group", { name: "Project team" })).toHaveTextContent(
-      "+3",
-    )
+    expect(screen.getByRole("group", { name: "Project team" })).toHaveTextContent("+3")
   })
 })

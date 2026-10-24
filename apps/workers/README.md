@@ -84,7 +84,7 @@ Wrangler-generated declarations provide the `ExportedHandler` type. Keep the han
      "name": "smart-base-my-worker",
      "main": "src/index.ts",
      "compatibility_date": "2026-10-24",
-     "observability": { "enabled": true }
+     "observability": { "enabled": true },
    }
    ```
 

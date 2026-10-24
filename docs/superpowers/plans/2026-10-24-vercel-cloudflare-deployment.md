@@ -30,12 +30,14 @@
 ### Task 1: Add CI and deployment guidance
 
 **Files:**
+
 - Create: `.github/workflows/validate.yml`
 - Create: `docs/deployment.md`
 - Modify: `README.md`, `AGENTS.md`, `.codex/AGENT.md`, `.codex/project-state.md`, `apps/workers/README.md`
 - Verify: workflow YAML, markdown links, root quality commands, and Playwright smoke test
 
 **Interfaces:**
+
 - CI consumes the existing root scripts: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, and `pnpm test:e2e`.
 - Deployment docs point Vercel to `apps/web` and explain adding a Cloudflare workflow with each real worker.
 

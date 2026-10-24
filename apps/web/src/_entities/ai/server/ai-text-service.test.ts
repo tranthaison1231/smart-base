@@ -15,12 +15,8 @@ const validEnv = {
 
 describe("AI text service", () => {
   it("requires a non-empty API key and model", () => {
-    expect(() => readAiConfig({ AI_MODEL: "test-model" })).toThrow(
-      "AI_API_KEY is required",
-    )
-    expect(() => readAiConfig({ AI_API_KEY: "test-key" })).toThrow(
-      "AI_MODEL is required",
-    )
+    expect(() => readAiConfig({ AI_MODEL: "test-model" })).toThrow("AI_API_KEY is required")
+    expect(() => readAiConfig({ AI_API_KEY: "test-key" })).toThrow("AI_MODEL is required")
     expect(() => readAiConfig({ AI_API_KEY: "  ", AI_MODEL: "test-model" })).toThrow(
       "AI_API_KEY is required",
     )
@@ -35,36 +31,39 @@ describe("AI text service", () => {
       model: "test-model",
     })
     expect(readAiConfig({ ...validEnv, AI_BASE_URL: "  " }).baseUrl).toBeUndefined()
-    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "https://api.example.test/" }).baseUrl)
-      .toBe("https://api.example.test")
-    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://localhost:1234/v1" }).baseUrl)
-      .toBe("http://localhost:1234/v1")
-    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://127.0.0.1:1234/v1" }).baseUrl)
-      .toBe("http://127.0.0.1:1234/v1")
-    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://[::1]:1234/v1" }).baseUrl)
-      .toBe("http://[::1]:1234/v1")
-    expect(() => readAiConfig({ ...validEnv, AI_BASE_URL: "http://provider.example/v1" }))
-      .toThrow("AI_BASE_URL must use HTTPS or loopback HTTP")
-    expect(() => readAiConfig({ ...validEnv, AI_BASE_URL: "https://user:secret@provider.example/v1" }))
-      .toThrow("AI_BASE_URL must not contain credentials")
-    expect(() => readAiConfig({ ...validEnv, AI_BASE_URL: "not a URL" }))
-      .toThrow("AI_BASE_URL must be a valid URL")
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "https://api.example.test/" }).baseUrl).toBe(
+      "https://api.example.test",
+    )
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://localhost:1234/v1" }).baseUrl).toBe(
+      "http://localhost:1234/v1",
+    )
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://127.0.0.1:1234/v1" }).baseUrl).toBe(
+      "http://127.0.0.1:1234/v1",
+    )
+    expect(readAiConfig({ ...validEnv, AI_BASE_URL: "http://[::1]:1234/v1" }).baseUrl).toBe(
+      "http://[::1]:1234/v1",
+    )
+    expect(() => readAiConfig({ ...validEnv, AI_BASE_URL: "http://provider.example/v1" })).toThrow(
+      "AI_BASE_URL must use HTTPS or loopback HTTP",
+    )
+    expect(() =>
+      readAiConfig({ ...validEnv, AI_BASE_URL: "https://user:secret@provider.example/v1" }),
+    ).toThrow("AI_BASE_URL must not contain credentials")
+    expect(() => readAiConfig({ ...validEnv, AI_BASE_URL: "not a URL" })).toThrow(
+      "AI_BASE_URL must be a valid URL",
+    )
   })
 
   it("does not construct a model when config is invalid", () => {
     const modelFactory = vi.fn<() => AiTextModel>()
 
-    expect(() => createConfiguredAiTextService({}, modelFactory)).toThrow(
-      "AI_API_KEY is required",
-    )
+    expect(() => createConfiguredAiTextService({}, modelFactory)).toThrow("AI_API_KEY is required")
     expect(modelFactory).not.toHaveBeenCalled()
   })
 
   it("generates text with an injected fake model", async () => {
     const model: AiTextModel = {
-      generateText: vi.fn(async ({ systemPrompt, userPrompt }) =>
-        `${systemPrompt}: ${userPrompt}`,
-      ),
+      generateText: vi.fn(async ({ systemPrompt, userPrompt }) => `${systemPrompt}: ${userPrompt}`),
     }
     const modelFactory = vi.fn(() => model)
     const service = createConfiguredAiTextService(validEnv, modelFactory)
@@ -83,14 +82,17 @@ describe("AI text service", () => {
     const providerError = new Error("provider unavailable")
     const controller = new AbortController()
     const model: AiTextModel = {
-      generateText: vi.fn(({ signal }) => new Promise<string>((_resolve, reject) => {
-        expect(signal).toBe(controller.signal)
-        if (signal?.aborted) {
-          reject(signal.reason)
-          return
-        }
-        signal?.addEventListener("abort", () => reject(signal.reason), { once: true })
-      })),
+      generateText: vi.fn(
+        ({ signal }) =>
+          new Promise<string>((_resolve, reject) => {
+            expect(signal).toBe(controller.signal)
+            if (signal?.aborted) {
+              reject(signal.reason)
+              return
+            }
+            signal?.addEventListener("abort", () => reject(signal.reason), { once: true })
+          }),
+      ),
     }
     const service = createAiTextService(model)
     const aborted = service.generateText({

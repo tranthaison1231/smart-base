@@ -12,7 +12,8 @@ describe("Separator", () => {
       </>,
     )
 
-    expect(screen.getAllByRole("separator").map((item) => item.getAttribute("aria-orientation")))
-      .toEqual(["horizontal", "vertical"])
+    expect(
+      screen.getAllByRole("separator").map((item) => item.getAttribute("aria-orientation")),
+    ).toEqual(["horizontal", "vertical"])
   })
 })

@@ -14,11 +14,14 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.11",
+    "prettier": "3.9.10",
     "turbo": "2.11.5"
   }
 }

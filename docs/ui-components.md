@@ -19,8 +19,16 @@ export function Example() {
     <>
       <Button type="button">Save</Button>
       <Table>
-        <TableHeader><TableRow><TableHead>Name</TableHead></TableRow></TableHeader>
-        <TableBody><TableRow><TableCell>Product</TableCell></TableRow></TableBody>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Product</TableCell>
+          </TableRow>
+        </TableBody>
       </Table>
     </>
   )
@@ -44,9 +52,7 @@ import { DataTable } from "@/_shared/ui/data-table"
 
 type Product = { id: string; name: string }
 
-const columns: ColumnDef<Product>[] = [
-  { accessorKey: "name", header: "Name" },
-]
+const columns: ColumnDef<Product>[] = [{ accessorKey: "name", header: "Name" }]
 
 export function ProductTable({ products }: { products: Product[] }) {
   return <DataTable columns={columns} data={products} />
@@ -58,4 +64,3 @@ For server-side pagination/filtering or custom table state, use TanStack Table d
 `RootLayout` mounts `AppProviders`, which includes `ThemeProvider`, `TooltipProvider`, `Toaster`, and `QueryClientProvider`. Do not mount another instance in individual pages. CSS theme tokens live in `apps/web/src/app/globals.css`; use semantic tokens instead of hardcoded colors when creating components. `cn` (`@/_shared/lib/cn`) combines Tailwind classes; `useIsMobile` lives in `@/_shared/lib/hooks/use-mobile`.
 
 These wrappers follow shadcn component patterns and use Base UI primitives. Colocated tests cover the current shared UI modules and their runtime branches. New components should preserve keyboard interactions, accessible names, and disabled and loading states where appropriate; add behavior tests for each supported state and run the root coverage gate.
-

@@ -23,4 +23,3 @@ By default, non-2xx responses, malformed JSON, and schema validation failures th
 Keep schemas near the contract that owns them and validate data at the point of entry. Do not use type assertions as a substitute for runtime checks. Routes that handle secrets or sensitive data must enforce authorization on the server; this helper does not add authentication, retries, or logging.
 
 For client-side server-state caching, use TanStack Query with `fetchJson` as the query function; the root QueryClient provider is already mounted by `AppProviders`. Use server-side loading or `fetchJson` directly when a query cache and synchronization are unnecessary. See the [data-fetching and tables guide](data-fetching-and-tables.md).
-

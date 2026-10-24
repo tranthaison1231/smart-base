@@ -69,4 +69,3 @@ See [apps/workers/README.md](apps/workers/README.md) for worker placement and [p
 ## Codex
 
 `AGENTS.md` is the agent entry point. `.codex/` contains workflow guidance and the starter's current state; `.agents/skills/feature-development/` describes the feature-development process. Model, approval, and sandbox settings remain user-managed.
-

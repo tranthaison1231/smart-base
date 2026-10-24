@@ -20,4 +20,3 @@ When a future worker or shared package adds runtime code, give it a Turbo-visibl
 
 - Call external APIs only from server-side code. Validate responses before they enter the domain or UI.
 - Use the AI service through its server-only export. Add an AI route only after the app has suitable authentication and authorization, rate limits, budget controls, and timeout and cancellation handling. Otherwise, defer the route instead of exposing an anonymous endpoint. Use a fake model through dependency injection in tests; do not call a live provider. Never expose keys or upstream errors or response payloads.
-

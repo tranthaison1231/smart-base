@@ -7,11 +7,9 @@ import { useIsMobile } from "./use-mobile"
 function createMediaQueryList(initialWidth: number) {
   let width = initialWidth
   const listeners = new Set<EventListenerOrEventListenerObject>()
-  const addEventListener = vi.fn(
-    (_type: string, listener: EventListenerOrEventListenerObject) => {
-      listeners.add(listener)
-    },
-  )
+  const addEventListener = vi.fn((_type: string, listener: EventListenerOrEventListenerObject) => {
+    listeners.add(listener)
+  })
   const removeEventListener = vi.fn(
     (_type: string, listener: EventListenerOrEventListenerObject) => {
       listeners.delete(listener)
@@ -71,7 +69,10 @@ describe("useIsMobile", () => {
 
   it("uses the desktop snapshot at 768px", () => {
     const media = createMediaQueryList(768)
-    vi.stubGlobal("matchMedia", vi.fn(() => media.mediaQueryList))
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => media.mediaQueryList),
+    )
 
     expect(renderHook(() => useIsMobile()).result.current).toBe(false)
   })

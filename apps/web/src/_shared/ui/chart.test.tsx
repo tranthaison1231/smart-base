@@ -2,12 +2,7 @@ import type { ComponentProps, ComponentType, ReactNode, SVGProps } from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
-import {
-  ChartContainer,
-  ChartLegendContent,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "./chart"
+import { ChartContainer, ChartLegendContent, ChartTooltipContent, type ChartConfig } from "./chart"
 
 function SeriesIcon(props: SVGProps<SVGSVGElement>) {
   return <svg aria-label="Series icon" {...props} />
@@ -54,12 +49,18 @@ describe("ChartContainer", () => {
 
   it("omits generated styles when the config has no colors and supports generated ids", () => {
     const { container } = render(
-      <ChartContainer config={{ empty: { label: "Empty", color: "" } }} initialDimension={{ width: 640, height: 360 }}>
+      <ChartContainer
+        config={{ empty: { label: "Empty", color: "" } }}
+        initialDimension={{ width: 640, height: 360 }}
+      >
         <span>Empty plot</span>
       </ChartContainer>,
     )
 
-    expect(container.querySelector('[data-slot="chart"]')).toHaveAttribute("data-chart", expect.stringMatching(/^chart-/))
+    expect(container.querySelector('[data-slot="chart"]')).toHaveAttribute(
+      "data-chart",
+      expect.stringMatching(/^chart-/),
+    )
     expect(container.querySelector("style")).toBeNull()
     expect(screen.getByText("Empty plot")).toBeInTheDocument()
   })
@@ -153,7 +154,15 @@ describe("ChartTooltipContent", () => {
         hideLabel
         hideIndicator
         label={{ content: "ignored" } as unknown as string}
-        payload={[entry({ dataKey: "unknown", name: undefined, value: undefined, color: "#333333", payload: {} })]}
+        payload={[
+          entry({
+            dataKey: "unknown",
+            name: undefined,
+            value: undefined,
+            color: "#333333",
+            payload: {},
+          }),
+        ]}
       />,
       {},
     )
@@ -211,12 +220,14 @@ describe("ChartLegendContent", () => {
     withChart(
       <ChartLegendContent
         verticalAlign="top"
-        payload={[
-          { dataKey: "sales", color: "#123456", type: "line" },
-          { dataKey: "unknown", color: "#abcdef", type: "square" },
-          { dataKey: "profit", color: "#00ff00", type: "none" },
-          "malformed",
-        ] as unknown as ComponentProps<typeof ChartLegendContent>["payload"]}
+        payload={
+          [
+            { dataKey: "sales", color: "#123456", type: "line" },
+            { dataKey: "unknown", color: "#abcdef", type: "square" },
+            { dataKey: "profit", color: "#00ff00", type: "none" },
+            "malformed",
+          ] as unknown as ComponentProps<typeof ChartLegendContent>["payload"]
+        }
       />,
     )
 
@@ -231,10 +242,12 @@ describe("ChartLegendContent", () => {
       <ChartLegendContent
         hideIcon
         nameKey="kind"
-        payload={[
-          { kind: "sales", color: "#123456", type: "line" },
-          { dataKey: "unknown", color: "#abcdef", type: "square" },
-        ] as unknown as ComponentProps<typeof ChartLegendContent>["payload"]}
+        payload={
+          [
+            { kind: "sales", color: "#123456", type: "line" },
+            { dataKey: "unknown", color: "#abcdef", type: "square" },
+          ] as unknown as ComponentProps<typeof ChartLegendContent>["payload"]
+        }
       />,
     )
 

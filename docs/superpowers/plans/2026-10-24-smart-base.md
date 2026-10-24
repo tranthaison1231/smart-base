@@ -45,12 +45,14 @@
 ## Task 1: Create the workspace and minimal Next.js app
 
 **Files:**
+
 - Create: `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.json`, `.gitignore`, `pnpm-lock.yaml`
 - Create: `apps/web/package.json`, `apps/web/next.config.ts`, `apps/web/tsconfig.json`, `apps/web/postcss.config.mjs`
 - Create: `apps/web/src/app/layout.tsx`, `apps/web/src/app/page.tsx`, `apps/web/src/app/globals.css`
 - Create: `apps/web/vitest.config.mts`, `apps/web/src/test/setup.ts`, `apps/web/src/app/page.test.tsx`
 
 **Interfaces:**
+
 - Root scripts: `dev`, `build`, `start`, `lint`, `typecheck`, and `test` delegate to `@smart-base/web` or Turborepo. Add `test:e2e` with the Playwright task.
 - Workspace app name: `@smart-base/web`.
 
@@ -64,11 +66,13 @@
 ## Task 2: Add quality gates and FSD boundaries
 
 **Files:**
+
 - Create: `apps/web/eslint.config.mjs`
 - Create: `apps/web/src/test/fsd-boundaries.test.ts`
 - Modify: root and web `package.json`, `turbo.json`, `apps/web/tsconfig.json`
 
 **Interfaces:**
+
 - `pnpm lint`, `pnpm typecheck`, and `pnpm test` are root checks.
 - `apps/web` uses strict TypeScript and Vitest with jsdom and Testing Library.
 - ESLint blocks aliased and relative imports from lower FSD layers into higher layers, including Next route imports.
@@ -80,6 +84,7 @@
 ## Task 3: Add reusable UI components
 
 **Files:**
+
 - Create under `apps/web/src/_shared/ui/`: `avatar.tsx`, `badge.tsx`, `button.tsx`, `calendar.tsx`, `card.tsx`, `chart.tsx`, `dialog.tsx`, `dropdown-menu.tsx`, `field.tsx`, `input.tsx`, `label.tsx`, `popover.tsx`, `separator.tsx`, `sheet.tsx`, `sidebar.tsx`, `skeleton.tsx`, `sonner.tsx`, `spinner.tsx`, `table.tsx`, `theme-provider.tsx`, `toggle.tsx`, `toggle-group.tsx`, `tooltip.tsx`
 - Create: `apps/web/src/_shared/lib/cn.ts` and `apps/web/src/_shared/lib/hooks/use-mobile.ts` for the copied wrappers
 - Create: `apps/web/components.json`
@@ -87,6 +92,7 @@
 - Modify: `apps/web/package.json`, `apps/web/src/app/layout.tsx`, `apps/web/src/app/globals.css`
 
 **Interfaces:**
+
 - Components are imported from `@/_shared/ui/<component>` and keep the API of the Smart Stock wrappers.
 - Styling uses Tailwind 4 tokens, `cn`, and Base UI; no second component framework is introduced.
 
@@ -98,11 +104,13 @@
 ## Task 4: Add the typed API fetch pattern
 
 **Files:**
+
 - Create: `apps/web/src/_shared/api/fetch-json.ts`
 - Create: `apps/web/src/_shared/api/fetch-json.test.ts`
 - Modify: `apps/web/package.json` only if a required schema dependency is not already present
 
 **Interfaces:**
+
 - `fetchJson<T>(options: FetchJsonOptions<T>): Promise<T>`
 - Options: `url`, `schema.parse(unknown)`, `errorMessage`, optional `method` (`GET | POST | PUT`), `body`, injected `fetchImpl`, `signal`, `cache`, and `acceptResponse`.
 
@@ -114,12 +122,14 @@
 ## Task 5: Add a server-only AI text service
 
 **Files:**
+
 - Create: `apps/web/src/_entities/ai/server/ai-config.ts`, `apps/web/src/_entities/ai/server/ai-text-service.ts`, `apps/web/src/_entities/ai/index.server.ts`
 - Create: `apps/web/src/_entities/ai/server/ai-text-service.test.ts`
 - Create: `.env.example`
 - Modify: `apps/web/package.json`, `apps/web/vitest.config.mts`
 
 **Interfaces:**
+
 - `readAiConfig(env: AiEnv): AiConfig` requires non-empty `AI_API_KEY` and `AI_MODEL` values and validates `AI_BASE_URL` when it is supplied.
 - `createAiTextService(model: AiTextModel)` returns `generateText({ systemPrompt, userPrompt, signal? }): Promise<string>`.
 - `createConfiguredAiTextService(env?: AiEnv, modelFactory?)` validates config before constructing a model; the default factory uses `ChatOpenAI` from `@langchain/openai`, and tests inject a fake model factory/model.
@@ -134,6 +144,7 @@
 ## Task 6: Add Codex guidance and English documentation
 
 **Files:**
+
 - Create: `AGENTS.md`
 - Create: `.codex/AGENT.md`, `.codex/project-state.md`, `.codex/README.md`
 - Create: `.agents/skills/feature-development/SKILL.md`
@@ -141,6 +152,7 @@
 - Modify: root `README.md`, `apps/web/package.json`, `pnpm-lock.yaml`
 
 **Interfaces:**
+
 - Root `AGENTS.md` is the durable repository entry point and links to the docs and focused skill.
 - `.codex/AGENT.md` owns implementation workflow details; `.codex/project-state.md` describes the product-neutral starter state.
 - The feature-development skill triggers only when adding a product feature to this starter.
@@ -153,10 +165,12 @@
 ## Task 7: Add a browser smoke test and verify the complete base
 
 **Files:**
+
 - Create: `apps/web/playwright.config.ts`, `apps/web/e2e/home.spec.ts`
 - Modify: root and web `package.json`, `pnpm-lock.yaml`, `turbo.json`, `README.md`, `docs/testing.md`
 
 **Interfaces:**
+
 - `pnpm test:e2e` runs separately from the fast unit and component test suite and starts the app without a database or AI credentials.
 
 - [x] **Step 1: Write the Playwright smoke test** that opens `/` and checks the “Smart Base” heading and main landmark.

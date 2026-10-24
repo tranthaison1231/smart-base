@@ -36,7 +36,9 @@ function MenuExample({ onSelect }: { onSelect: () => void }) {
             <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem disabled>Disabled action</DropdownMenuItem>
-          <DropdownMenuItem variant="destructive" inset>Delete project</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive" inset>
+            Delete project
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
         </DropdownMenuGroup>
         <DropdownMenuCheckboxItem checked={checked} onCheckedChange={setChecked}>
@@ -44,7 +46,9 @@ function MenuExample({ onSelect }: { onSelect: () => void }) {
         </DropdownMenuCheckboxItem>
         <DropdownMenuRadioGroup value={alignment} onValueChange={setAlignment}>
           <DropdownMenuRadioItem value="left">Align left</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="right" inset>Align right</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="right" inset>
+            Align right
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger inset>More options</DropdownMenuSubTrigger>

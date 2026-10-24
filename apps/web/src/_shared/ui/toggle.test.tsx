@@ -14,17 +14,16 @@ describe("Toggle", () => {
         <Toggle aria-label="Pinned" variant="outline" size="lg" defaultPressed>
           Pinned
         </Toggle>
-        <Toggle aria-label="Unavailable" disabled>Unavailable</Toggle>
+        <Toggle aria-label="Unavailable" disabled>
+          Unavailable
+        </Toggle>
       </>,
     )
 
     const favorite = screen.getByRole("button", { name: "Favorite" })
     await user.click(favorite)
     expect(favorite).toHaveAttribute("aria-pressed", "true")
-    expect(screen.getByRole("button", { name: "Pinned" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    )
+    expect(screen.getByRole("button", { name: "Pinned" })).toHaveAttribute("aria-pressed", "true")
     expect(screen.getByRole("button", { name: "Unavailable" })).toBeDisabled()
   })
 })

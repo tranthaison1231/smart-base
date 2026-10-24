@@ -36,9 +36,7 @@ describe("DataTable", () => {
 
     const nameHeader = screen.getByRole("columnheader", { name: "Name" })
     expect(screen.getByRole("columnheader", { name: "Profile" })).toBeInTheDocument()
-    expect(screen.getByRole("columnheader", { name: "Actions" })).not.toHaveAttribute(
-      "aria-sort",
-    )
+    expect(screen.getByRole("columnheader", { name: "Actions" })).not.toHaveAttribute("aria-sort")
     expect(nameHeader).not.toHaveAttribute("aria-sort")
 
     fireEvent.click(screen.getByRole("button", { name: "Name" }))

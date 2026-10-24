@@ -8,11 +8,7 @@ describe("starter home page", () => {
     render(<Page />)
 
     expect(screen.getByRole("main")).toBeInTheDocument()
-    expect(
-      screen.getByRole("heading", { level: 1, name: "Smart Base" }),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(/A clear starting point for the next product/),
-    ).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1, name: "Smart Base" })).toBeInTheDocument()
+    expect(screen.getByText(/A clear starting point for the next product/)).toBeInTheDocument()
   })
 })

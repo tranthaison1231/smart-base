@@ -38,21 +38,12 @@ describe("ToggleGroup", () => {
       </>,
     )
 
-    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute(
-      "data-variant",
-      "outline",
-    )
-    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute(
-      "data-size",
-      "sm",
-    )
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute("data-variant", "outline")
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute("data-size", "sm")
     expect(screen.getByRole("button", { name: "Compact" })).toHaveAttribute(
       "data-variant",
       "outline",
     )
-    expect(screen.getByRole("button", { name: "Compact" })).toHaveAttribute(
-      "data-size",
-      "lg",
-    )
+    expect(screen.getByRole("button", { name: "Compact" })).toHaveAttribute("data-size", "lg")
   })
 })

@@ -18,7 +18,9 @@ describe("Card", () => {
         <CardHeader>
           <CardTitle>Account</CardTitle>
           <CardDescription>Current plan</CardDescription>
-          <CardAction><button type="button">Manage</button></CardAction>
+          <CardAction>
+            <button type="button">Manage</button>
+          </CardAction>
         </CardHeader>
         <CardContent>Standard</CardContent>
         <CardFooter>Renews in June</CardFooter>

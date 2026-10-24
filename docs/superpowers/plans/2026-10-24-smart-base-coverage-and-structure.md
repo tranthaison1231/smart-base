@@ -45,6 +45,7 @@
 ### Task 1: Complete API, AI, and database boundary tests
 
 **Files:**
+
 - Modify: `apps/web/src/_shared/api/fetch-json.test.ts`
 - Modify: `apps/web/src/_entities/ai/server/ai-text-service.test.ts`
 - Create: `apps/web/src/_entities/ai/server/ai-provider-model.test.ts`
@@ -53,6 +54,7 @@
 - Create: `packages/database/src/index.server.test.ts`
 
 **Interfaces:**
+
 - Consumes: `fetchJson<T>(FetchJsonOptions<T>)`, `readAiConfig(AiEnv)`, `createConfiguredAiTextService(AiEnv, AiTextModelFactory)`, and the existing `@smart-base/database/server` entry point.
 - Produces: deterministic tests for success, rejection, validation, cancellation, provider adapter, lazy database initialization, and server exports; no runtime API changes.
 
@@ -66,6 +68,7 @@
 ### Task 2: Cover shared utilities and basic UI primitives
 
 **Files:**
+
 - Create: `apps/web/src/_shared/lib/cn.test.ts`
 - Create: `apps/web/src/_shared/lib/hooks/use-mobile.test.tsx`
 - Create: `apps/web/src/_shared/ui/avatar.test.tsx`
@@ -82,6 +85,7 @@
 - Create: `apps/web/src/_shared/ui/toggle.test.tsx`
 
 **Interfaces:**
+
 - Consumes: the existing `cn`, `useIsMobile`, and exported shared UI components.
 - Produces: accessible, colocated tests that cover each module's default and optional/variant branches without changing component APIs.
 
@@ -97,6 +101,7 @@
 ### Task 3: Cover forms, menus, and overlay components
 
 **Files:**
+
 - Create: `apps/web/src/_shared/ui/field.test.tsx`
 - Modify: `apps/web/src/_shared/ui/dialog.test.tsx`
 - Create: `apps/web/src/_shared/ui/dropdown-menu.test.tsx`
@@ -105,6 +110,7 @@
 - Create: `apps/web/src/_shared/ui/tooltip.test.tsx`
 
 **Interfaces:**
+
 - Consumes: the current Base UI-backed component exports and their existing props.
 - Produces: tests for each exported wrapper, optional branch, and primary keyboard/pointer interaction; no new abstraction or runtime behavior.
 
@@ -119,6 +125,7 @@
 ### Task 4: Cover stateful and data-driven UI components
 
 **Files:**
+
 - Modify: `apps/web/src/_shared/ui/calendar.test.tsx`
 - Create: `apps/web/src/_shared/ui/chart.test.tsx`
 - Create: `apps/web/src/_shared/ui/sidebar.test.tsx`
@@ -126,6 +133,7 @@
 - Create: `apps/web/src/_shared/ui/sonner.test.tsx`
 
 **Interfaces:**
+
 - Consumes: current calendar, chart, sidebar, theme, and toast provider APIs.
 - Produces: deterministic tests for component-specific branches and interactive states; no charting/network services or product behavior.
 
@@ -139,10 +147,12 @@
 ### Task 5: Cover app composition and server entry points
 
 **Files:**
+
 - Create: `apps/web/src/app/layout.test.tsx`
 - Modify: `apps/web/src/app/page.test.tsx`
 
 **Interfaces:**
+
 - Consumes: `RootLayout`, exported `metadata`, `Page`, and the app/package server barrels.
 - Produces: direct coverage for route/layout wiring and public server entry points.
 
@@ -154,6 +164,7 @@
 ### Task 6: Enforce coverage from the default test command
 
 **Files:**
+
 - Modify: `apps/web/package.json`
 - Modify: `apps/web/vitest.config.mts`
 - Modify: `packages/database/package.json`
@@ -162,6 +173,7 @@
 - Modify: `pnpm-lock.yaml`
 
 **Interfaces:**
+
 - Consumes: passing workspace suites from Tasks 1–5.
 - Produces: `pnpm test` coverage enforcement for each Vitest workspace.
 
@@ -175,6 +187,7 @@
 ### Task 7: Align English documentation and agent guidance
 
 **Files:**
+
 - Modify: `README.md`
 - Modify: `docs/architecture.md`
 - Modify: `docs/testing.md`
@@ -187,6 +200,7 @@
 - Modify: `packages/README.md`
 
 **Interfaces:**
+
 - Consumes: actual paths from the current workspace, the coverage contract from Task 6, and the approved design spec.
 - Produces: professional English instructions that accurately describe app, worker, package, database, migration, test, and coverage ownership.
 

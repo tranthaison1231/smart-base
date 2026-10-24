@@ -3,6 +3,7 @@
 ## Available commands
 
 ```bash
+pnpm format:check # Verify formatting without changing files
 pnpm lint       # ESLint, including FSD import boundaries
 pnpm typecheck  # Strict TypeScript check, no emit
 pnpm test       # Vitest unit and component tests
@@ -11,6 +12,8 @@ pnpm build      # Next.js production build
 pnpm db:generate # Generate Drizzle SQL from local schema files; no database required
 pnpm db:migrate  # Apply generated SQL to DATABASE_URL
 ```
+
+Run `pnpm format` to apply the repository's pinned Prettier configuration. CI runs `pnpm format:check` before linting; resolve any reported formatting issues before submitting changes.
 
 To run one test file during development:
 
@@ -24,9 +27,9 @@ Focused Vitest commands are useful while developing, but they do not run the ful
 
 The root `pnpm test` command runs `vitest run --coverage` in both current test workspaces:
 
-| Workspace | Runtime coverage scope |
-|---|---|
-| `apps/web` | Every first-party `src/**/*.{ts,tsx}` runtime file |
+| Workspace           | Runtime coverage scope                             |
+| ------------------- | -------------------------------------------------- |
+| `apps/web`          | Every first-party `src/**/*.{ts,tsx}` runtime file |
 | `packages/database` | Every first-party `src/**/*.{ts,tsx}` runtime file |
 
 Each workspace enforces 100% global coverage for lines, statements, functions, and branches. Coverage includes runtime files even when no test currently imports them. `pnpm test` fails if any threshold is missed. Turbo caching is disabled for the `test` task, so each invocation executes both suites and evaluates a fresh coverage report.
@@ -53,4 +56,3 @@ pnpm --filter @smart-base/web exec playwright install chromium
 - Before completing a feature: run lint, typecheck, unit tests, and the production build.
 
 The browser smoke test covers only the default app shell. Add browser scenarios for new features when they have important interactions.
-

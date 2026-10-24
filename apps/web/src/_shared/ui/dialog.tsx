@@ -23,10 +23,7 @@ function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 }
 
-function DialogBackdrop({
-  className,
-  ...props
-}: DialogPrimitive.Backdrop.Props) {
+function DialogBackdrop({ className, ...props }: DialogPrimitive.Backdrop.Props) {
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-backdrop"
@@ -62,13 +59,7 @@ function DialogContent({
         {showCloseButton ? (
           <DialogPrimitive.Close
             data-slot="dialog-close"
-            render={
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="absolute top-3 right-3"
-              />
-            }
+            render={<Button variant="ghost" size="icon-sm" className="absolute top-3 right-3" />}
           >
             <XIcon />
             <span className="sr-only">Đóng</span>
@@ -81,11 +72,7 @@ function DialogContent({
 
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="dialog-header"
-      className={cn("flex flex-col gap-1", className)}
-      {...props}
-    />
+    <div data-slot="dialog-header" className={cn("flex flex-col gap-1", className)} {...props} />
   )
 }
 
@@ -93,10 +80,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-        className,
-      )}
+      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
       {...props}
     />
   )
@@ -106,19 +90,13 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn(
-        "font-heading text-lg font-medium text-foreground",
-        className,
-      )}
+      className={cn("font-heading text-lg font-medium text-foreground", className)}
       {...props}
     />
   )
 }
 
-function DialogDescription({
-  className,
-  ...props
-}: DialogPrimitive.Description.Props) {
+function DialogDescription({ className, ...props }: DialogPrimitive.Description.Props) {
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"

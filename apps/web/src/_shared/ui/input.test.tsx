@@ -12,10 +12,7 @@ describe("Input", () => {
       </>,
     )
 
-    expect(screen.getByRole("textbox", { name: "Email address" })).toHaveAttribute(
-      "type",
-      "email",
-    )
+    expect(screen.getByRole("textbox", { name: "Email address" })).toHaveAttribute("type", "email")
     expect(screen.getByPlaceholderText("name@example.com")).toBeEnabled()
     expect(screen.getByRole("textbox", { name: "Read only field" })).toBeDisabled()
   })

@@ -2,12 +2,7 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip"
 
 describe("Tooltip", () => {
   it("shows accessible content on keyboard focus with the default provider delay", async () => {
@@ -24,10 +19,7 @@ describe("Tooltip", () => {
 
     await user.tab()
     const content = screen.getByText("More information")
-    expect(content.closest('[data-slot="tooltip-content"]')).toHaveAttribute(
-      "data-open",
-      "",
-    )
+    expect(content.closest('[data-slot="tooltip-content"]')).toHaveAttribute("data-open", "")
   })
 
   it("honors provider delay on hover and accepts placement options", async () => {

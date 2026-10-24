@@ -11,22 +11,20 @@ const forbiddenLayers = {
   _pages: ["app", "_app"],
 }
 
-const layerBoundaries = Object.entries(forbiddenLayers).map(
-  ([layer, forbidden]) => ({
-    files: [`src/${layer}/**/*.{ts,tsx}`],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: forbidden.map((name) => ({
-            group: [`@/${name}/**`, `**/${name}/**`],
-            message: `${layer} cannot import from the higher ${name} layer.`,
-          })),
-        },
-      ],
-    },
-  }),
-)
+const layerBoundaries = Object.entries(forbiddenLayers).map(([layer, forbidden]) => ({
+  files: [`src/${layer}/**/*.{ts,tsx}`],
+  rules: {
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: forbidden.map((name) => ({
+          group: [`@/${name}/**`, `**/${name}/**`],
+          message: `${layer} cannot import from the higher ${name} layer.`,
+        })),
+      },
+    ],
+  },
+}))
 
 export default defineConfig([
   ...nextVitals,

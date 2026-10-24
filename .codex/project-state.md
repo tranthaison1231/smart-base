@@ -13,7 +13,8 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 - pnpm/Turborepo monorepo; web app at `apps/web`, future independent worker packages under `apps/workers/*`, and shared infrastructure under `packages/*`.
 - Current workspace packages are `apps/web` and `packages/database`. `apps/workers/` has guidance only; no worker package or additional shared package is included.
 - Node.js `>=22.22.2`, pnpm `10.32.1`.
-- `pnpm dev`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
+- `pnpm dev`, `pnpm format`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
+- Prettier is pinned at the repository root. CI checks formatting before lint, typecheck, coverage tests, and build.
 - `pnpm test` runs coverage in both test workspaces and enforces 100% global line, statement, function, and branch coverage over their first-party runtime TypeScript and TSX under `src/`.
 - Coverage excludes colocated test/spec files, `src/test/**`, declarations, and generated files. See `docs/testing.md` for the complete contract.
 - `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
@@ -25,4 +26,3 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 ## Decisions when copying
 
 Rename the repository and package for the new product, add its domain model and product state to this file, then update the README and domain documentation. Add a worker package only for a real background workload and other shared packages only when they have a real consumer.
-

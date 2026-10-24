@@ -24,4 +24,3 @@ const text = await ai.generateText({
 `generateText` accepts system and user prompts and an optional `AbortSignal` (a Route Handler can pass `request.signal`). The service applies a 25-second timeout, does not retry, and returns text only. Use `createAiTextService` with a fake `AiTextModel` in unit tests. Never call a live provider from tests.
 
 The starter does not include an AI API route. Before exposing AI through a public endpoint, add server-side authentication and authorization, rate limiting, budget limits, and input and output controls. Keep the API key on the server; never pass it through props, responses, or `NEXT_PUBLIC_*` variables.
-

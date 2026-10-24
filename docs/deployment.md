@@ -2,9 +2,9 @@
 
 Smart Base uses separate platforms for its web app and background workers:
 
-| Workload | Platform | Deployment method |
-|---|---|---|
-| Next.js web app | Vercel | Vercel Git integration |
+| Workload                 | Platform           | Deployment method                                      |
+| ------------------------ | ------------------ | ------------------------------------------------------ |
+| Next.js web app          | Vercel             | Vercel Git integration                                 |
 | A real background worker | Cloudflare Workers | Worker-specific GitHub Actions workflow using Wrangler |
 
 GitHub Actions validates pull requests and pushes to `main` with the [`validate.yml`](../.github/workflows/validate.yml) workflow. It does not deploy the web app or a placeholder worker.

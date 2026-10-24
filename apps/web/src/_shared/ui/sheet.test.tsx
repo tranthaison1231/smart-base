@@ -31,10 +31,7 @@ describe("Sheet", () => {
     )
 
     await user.click(screen.getByRole("button", { name: "Open settings sheet" }))
-    expect(screen.getByRole("dialog", { name: "Settings" })).toHaveAttribute(
-      "data-side",
-      "right",
-    )
+    expect(screen.getByRole("dialog", { name: "Settings" })).toHaveAttribute("data-side", "right")
     expect(screen.getByText("Manage your account preferences.")).toBeInTheDocument()
     await user.click(screen.getByRole("button", { name: "Close" }))
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument())

@@ -8,14 +8,14 @@ The web workspace includes TanStack Query and TanStack Table v8. `AppProviders` 
 
 ## Choose the smallest tool that fits
 
-| Need | Use | Why |
-|---|---|---|
-| Load data for a server-rendered page with no client refresh or shared cache requirement | A Next.js Server Component and the owning server-side entity/repository; use `fetchJson` for JSON HTTP calls | Keeps initial data loading on the server without adding a client cache |
-| Make a one-off client request or submit an action without shared caching, automatic refetching, or optimistic updates | `fetchJson` plus local React state | The existing helper validates JSON responses and handles request errors |
-| Share remote data between client components, keep it fresh, refetch it, or coordinate it with mutations, polling, or optimistic updates | TanStack Query | It manages client-side server state, caching, and synchronization |
-| Display a simple table with no sorting, filtering, pagination, selection, or column controls | The shared shadcn-style `Table` primitives | They provide semantic table markup and styling without a table-state engine |
-| Display a local dataset with sortable columns | The shared `DataTable` component | It provides common client-side sorting and rendering through existing UI primitives |
-| Build a table with server-side filtering or pagination, row selection, column visibility, or custom state | TanStack Table directly, rendered with the shared `Table` primitives | TanStack Table manages table state and row models; the shared primitives render the UI |
+| Need                                                                                                                                    | Use                                                                                                          | Why                                                                                    |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| Load data for a server-rendered page with no client refresh or shared cache requirement                                                 | A Next.js Server Component and the owning server-side entity/repository; use `fetchJson` for JSON HTTP calls | Keeps initial data loading on the server without adding a client cache                 |
+| Make a one-off client request or submit an action without shared caching, automatic refetching, or optimistic updates                   | `fetchJson` plus local React state                                                                           | The existing helper validates JSON responses and handles request errors                |
+| Share remote data between client components, keep it fresh, refetch it, or coordinate it with mutations, polling, or optimistic updates | TanStack Query                                                                                               | It manages client-side server state, caching, and synchronization                      |
+| Display a simple table with no sorting, filtering, pagination, selection, or column controls                                            | The shared shadcn-style `Table` primitives                                                                   | They provide semantic table markup and styling without a table-state engine            |
+| Display a local dataset with sortable columns                                                                                           | The shared `DataTable` component                                                                             | It provides common client-side sorting and rendering through existing UI primitives    |
+| Build a table with server-side filtering or pagination, row selection, column visibility, or custom state                               | TanStack Table directly, rendered with the shared `Table` primitives                                         | TanStack Table manages table state and row models; the shared primitives render the UI |
 
 TanStack Query and TanStack Table solve different problems. Query owns client-side remote data state; Table owns table state and row processing. They can be used independently or together.
 
@@ -113,14 +113,7 @@ import {
 } from "@tanstack/react-table"
 import { useState } from "react"
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/_shared/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_shared/ui/table"
 
 type Product = { id: string; name: string }
 
@@ -158,10 +151,7 @@ export function ProductTable({
                 }
               >
                 {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                  <button
-                    type="button"
-                    onClick={header.column.getToggleSortingHandler()}
-                  >
+                  <button type="button" onClick={header.column.getToggleSortingHandler()}>
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </button>
                 ) : (

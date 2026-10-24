@@ -80,9 +80,7 @@ describe("FieldError", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Required")
     expect(screen.queryByRole("list")).not.toBeInTheDocument()
 
-    rerender(
-      <FieldError errors={[{ message: "Required" }, { message: "Required" }]} />,
-    )
+    rerender(<FieldError errors={[{ message: "Required" }, { message: "Required" }]} />)
     expect(screen.getByRole("alert")).toHaveTextContent("Required")
     expect(screen.queryByRole("list")).not.toBeInTheDocument()
   })

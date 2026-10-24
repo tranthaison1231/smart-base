@@ -29,10 +29,7 @@ function readBaseUrl(value: string | undefined) {
     throw new Error("AI_BASE_URL must not contain credentials")
   }
 
-  if (
-    url.protocol !== "https:" &&
-    !(url.protocol === "http:" && loopbackHosts.has(url.hostname))
-  ) {
+  if (url.protocol !== "https:" && !(url.protocol === "http:" && loopbackHosts.has(url.hostname))) {
     throw new Error("AI_BASE_URL must use HTTPS or loopback HTTP")
   }
 

@@ -48,7 +48,10 @@ function setupMatchMedia(initialMatch = false) {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(() => true),
   }
-  vi.stubGlobal("matchMedia", vi.fn(() => mediaQuery))
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn(() => mediaQuery),
+  )
 
   return {
     mediaQuery,
@@ -124,22 +127,22 @@ describe("useSidebar and SidebarProvider", () => {
   it.each([true, false])(
     "sets a controlled %s value without changing the parent's value",
     async (controlledOpen) => {
-    setupMatchMedia()
-    const user = userEvent.setup()
-    const onOpenChange = vi.fn()
-    render(
-      <SidebarProvider open={controlledOpen} onOpenChange={onOpenChange}>
-        <SidebarTrigger />
-        <Sidebar />
-      </SidebarProvider>,
-    )
+      setupMatchMedia()
+      const user = userEvent.setup()
+      const onOpenChange = vi.fn()
+      render(
+        <SidebarProvider open={controlledOpen} onOpenChange={onOpenChange}>
+          <SidebarTrigger />
+          <Sidebar />
+        </SidebarProvider>,
+      )
 
-    await user.click(screen.getByRole("button", { name: "Toggle Sidebar" }))
-    expect(onOpenChange).toHaveBeenCalledWith(!controlledOpen)
-    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute(
-      "data-state",
-      controlledOpen ? "expanded" : "collapsed",
-    )
+      await user.click(screen.getByRole("button", { name: "Toggle Sidebar" }))
+      expect(onOpenChange).toHaveBeenCalledWith(!controlledOpen)
+      expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute(
+        "data-state",
+        controlledOpen ? "expanded" : "collapsed",
+      )
     },
   )
 
@@ -157,7 +160,9 @@ describe("useSidebar and SidebarProvider", () => {
     expect(screen.getByText("Context open: false")).toBeInTheDocument()
     expect(document.cookie).toContain("sidebar_state=false")
     await user.click(screen.getByRole("button", { name: "Grow directly" }))
-    expect(document.querySelector('[data-slot="sidebar-wrapper"]')).toHaveStyle("--sidebar-width: 240px")
+    expect(document.querySelector('[data-slot="sidebar-wrapper"]')).toHaveStyle(
+      "--sidebar-width: 240px",
+    )
   })
 
   it("renders the non-collapsible sidebar before mobile and desktop branches", () => {
@@ -177,7 +182,9 @@ describe("useSidebar and SidebarProvider", () => {
     render(
       <SidebarProvider>
         <SidebarTrigger />
-        <Sidebar side="right" dir="rtl">Mobile navigation</Sidebar>
+        <Sidebar side="right" dir="rtl">
+          Mobile navigation
+        </Sidebar>
       </SidebarProvider>,
     )
 
@@ -196,24 +203,32 @@ describe("useSidebar and SidebarProvider", () => {
     ["sidebar", "left", "offcanvas"],
     ["floating", "right", "icon"],
     ["inset", "left", "icon"],
-  ] as const)("renders desktop %s variant on the %s side with %s collapse", (variant, side, collapsible) => {
-    setupMatchMedia(false)
-    render(
-      <SidebarProvider defaultOpen={false}>
-        <Sidebar variant={variant} side={side} collapsible={collapsible} aria-label="Workspace sidebar">
-          Workspace
-        </Sidebar>
-      </SidebarProvider>,
-    )
+  ] as const)(
+    "renders desktop %s variant on the %s side with %s collapse",
+    (variant, side, collapsible) => {
+      setupMatchMedia(false)
+      render(
+        <SidebarProvider defaultOpen={false}>
+          <Sidebar
+            variant={variant}
+            side={side}
+            collapsible={collapsible}
+            aria-label="Workspace sidebar"
+          >
+            Workspace
+          </Sidebar>
+        </SidebarProvider>,
+      )
 
-    const sidebarContainer = screen.getByLabelText("Workspace sidebar")
-    const sidebar = sidebarContainer.closest('[data-slot="sidebar"]')!
-    expect(sidebar).toHaveAttribute("data-variant", variant)
-    expect(sidebar).toHaveAttribute("data-side", side)
-    expect(sidebar).toHaveAttribute("data-collapsible", collapsible)
-    expect(sidebar.querySelector('[data-slot="sidebar-gap"]')).toBeInTheDocument()
-    expect(sidebar.querySelector('[data-slot="sidebar-container"]')).toBeInTheDocument()
-  })
+      const sidebarContainer = screen.getByLabelText("Workspace sidebar")
+      const sidebar = sidebarContainer.closest('[data-slot="sidebar"]')!
+      expect(sidebar).toHaveAttribute("data-variant", variant)
+      expect(sidebar).toHaveAttribute("data-side", side)
+      expect(sidebar).toHaveAttribute("data-collapsible", collapsible)
+      expect(sidebar.querySelector('[data-slot="sidebar-gap"]')).toBeInTheDocument()
+      expect(sidebar.querySelector('[data-slot="sidebar-container"]')).toBeInTheDocument()
+    },
+  )
 })
 
 describe("SidebarRail", () => {
@@ -222,7 +237,9 @@ describe("SidebarRail", () => {
     const user = userEvent.setup()
     render(
       <SidebarProvider>
-        <Sidebar side="right"><SidebarRail /></Sidebar>
+        <Sidebar side="right">
+          <SidebarRail />
+        </Sidebar>
       </SidebarProvider>,
     )
     const rail = screen.getByRole("separator", { name: "Thay đổi độ rộng thanh bên" })
@@ -297,15 +314,24 @@ describe("SidebarRail", () => {
     expect(rail).toHaveAttribute("aria-valuenow", "252")
     const releasePointerCapture = vi.fn()
     Object.defineProperty(rail, "hasPointerCapture", { configurable: true, value: () => true })
-    Object.defineProperty(rail, "releasePointerCapture", { configurable: true, value: releasePointerCapture })
+    Object.defineProperty(rail, "releasePointerCapture", {
+      configurable: true,
+      value: releasePointerCapture,
+    })
     fireEvent.pointerUp(rail, { pointerId: 4, clientX: 40 })
     expect(wrapper).toHaveAttribute("data-resizing", "false")
     expect(releasePointerCapture).toHaveBeenCalledWith(4)
 
     fireEvent.click(rail)
-    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute("data-state", "expanded")
+    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute(
+      "data-state",
+      "expanded",
+    )
     fireEvent.click(rail)
-    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute("data-state", "collapsed")
+    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute(
+      "data-state",
+      "collapsed",
+    )
   })
 
   it("handles pointer cancellation, right-side drag direction, callback prevention, and wrong pointer ids", () => {
@@ -328,7 +354,10 @@ describe("SidebarRail", () => {
     fireEvent.pointerCancel(rail, { pointerId: 1 })
     expect(wrapper).toHaveAttribute("data-resizing", "false")
     fireEvent.click(rail)
-    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute("data-state", "collapsed")
+    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute(
+      "data-state",
+      "collapsed",
+    )
   })
 
   it("resizes a right sidebar in the opposite pointer direction and cancels without suppressing clicks", () => {
@@ -350,7 +379,10 @@ describe("SidebarRail", () => {
     fireEvent.pointerCancel(rail, { pointerId: 7 })
     expect(wrapper).toHaveAttribute("data-resizing", "false")
     fireEvent.click(rail)
-    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute("data-state", "collapsed")
+    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute(
+      "data-state",
+      "collapsed",
+    )
   })
 
   it("does not toggle after a prevented key or click handler", () => {
@@ -373,7 +405,10 @@ describe("SidebarRail", () => {
     fireEvent.pointerDown(rail, { button: 0, pointerId: 3, clientX: 0 })
     fireEvent.pointerMove(rail, { pointerId: 3, clientX: 30 })
     expect(rail).toHaveAttribute("aria-valuenow", "230")
-    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute("data-state", "expanded")
+    expect(document.querySelector('[data-slot="sidebar"]')).toHaveAttribute(
+      "data-state",
+      "expanded",
+    )
   })
 })
 
@@ -393,8 +428,12 @@ describe("Sidebar structural components", () => {
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton isActive variant="outline" size="lg">Dashboard</SidebarMenuButton>
-                    <SidebarMenuAction showOnHover aria-label="Dashboard actions">Actions</SidebarMenuAction>
+                    <SidebarMenuButton isActive variant="outline" size="lg">
+                      Dashboard
+                    </SidebarMenuButton>
+                    <SidebarMenuAction showOnHover aria-label="Dashboard actions">
+                      Actions
+                    </SidebarMenuAction>
                     <SidebarMenuAction aria-label="Always available actions" />
                     <SidebarMenuBadge>4</SidebarMenuBadge>
                     <SidebarMenuSub>
@@ -425,10 +464,14 @@ describe("Sidebar structural components", () => {
     expect(screen.getByText("4")).toBeInTheDocument()
     expect(screen.getByText("Header")).toBeInTheDocument()
     expect(screen.getByText("Footer")).toBeInTheDocument()
-    expect(screen.getByText("Main content").closest("main")).toHaveAttribute("data-slot", "sidebar-inset")
+    expect(screen.getByText("Main content").closest("main")).toHaveAttribute(
+      "data-slot",
+      "sidebar-inset",
+    )
     expect(document.querySelector('[data-sidebar="menu-skeleton-icon"]')).toBeInTheDocument()
-    expect(document.querySelector('[data-sidebar="menu-skeleton-text"]')?.getAttribute("style"))
-      .toMatch(/--skeleton-width: \d+%/)
+    expect(
+      document.querySelector('[data-sidebar="menu-skeleton-text"]')?.getAttribute("style"),
+    ).toMatch(/--skeleton-width: \d+%/)
     await user.type(screen.getByRole("textbox", { name: "Search navigation" }), "team")
     expect(screen.getByRole("textbox", { name: "Search navigation" })).toHaveValue("team")
   })

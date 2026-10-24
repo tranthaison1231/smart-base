@@ -1,10 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 
-import {
-  createAiTextService,
-  createConfiguredAiTextService,
-  readAiConfig,
-} from "./index.server"
+import { createAiTextService, createConfiguredAiTextService, readAiConfig } from "./index.server"
 
 describe("AI server entry point", () => {
   it("exports config and text-service behavior to server consumers", async () => {

@@ -10,7 +10,9 @@ describe("Badge", () => {
     render(
       <div>
         {variants.map((variant) => (
-          <Badge key={variant} variant={variant}>{variant}</Badge>
+          <Badge key={variant} variant={variant}>
+            {variant}
+          </Badge>
         ))}
       </div>,
     )
@@ -23,9 +25,6 @@ describe("Badge", () => {
   it("can render as a link while preserving its accessible name", () => {
     render(<Badge render={<a href="/reports" />}>Reports</Badge>)
 
-    expect(screen.getByRole("link", { name: "Reports" })).toHaveAttribute(
-      "href",
-      "/reports",
-    )
+    expect(screen.getByRole("link", { name: "Reports" })).toHaveAttribute("href", "/reports")
   })
 })

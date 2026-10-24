@@ -33,7 +33,10 @@ describe("Toaster", () => {
     expect(toaster).toHaveAttribute("data-sonner-theme", "dark")
     expect(toaster).toHaveAttribute("data-x-position", "right")
     expect(toaster).toHaveAttribute("data-y-position", "top")
-    expect(document.querySelector("[data-sonner-toast]")).toHaveAttribute("data-rich-colors", "true")
+    expect(document.querySelector("[data-sonner-toast]")).toHaveAttribute(
+      "data-rich-colors",
+      "true",
+    )
   })
 
   it("allows props to override theme-derived defaults", async () => {
@@ -61,7 +64,10 @@ describe("Toaster", () => {
     expect(toaster).toHaveAttribute("data-sonner-theme", "dark")
     expect(toaster).toHaveAttribute("data-x-position", "left")
     expect(toaster).toHaveAttribute("data-y-position", "bottom")
-    expect(document.querySelector("[data-sonner-toast]")).toHaveAttribute("data-rich-colors", "false")
+    expect(document.querySelector("[data-sonner-toast]")).toHaveAttribute(
+      "data-rich-colors",
+      "false",
+    )
   })
 
   it("throws when rendered outside ThemeProvider", () => {
