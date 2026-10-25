@@ -5,6 +5,7 @@
 ```bash
 pnpm format:check # Verify formatting without changing files
 pnpm lint       # ESLint, including FSD import boundaries
+pnpm knip       # Detect unused files, exports, and dependencies
 pnpm typecheck  # Strict TypeScript check, no emit
 pnpm test       # Vitest unit and component tests
 pnpm test:e2e   # Playwright browser smoke test on Chromium
@@ -13,7 +14,7 @@ pnpm db:generate # Generate Drizzle SQL from local schema files; no database req
 pnpm db:migrate  # Apply generated SQL to DATABASE_URL
 ```
 
-Run `pnpm format` to apply the repository's pinned Prettier configuration. CI runs `pnpm format:check` before linting; resolve any reported formatting issues before submitting changes.
+Run `pnpm format` to apply the repository's pinned Prettier configuration. CI runs `pnpm format:check`, lint, and Knip before typechecking; resolve any reported issues before submitting changes.
 
 To run one test file during development:
 

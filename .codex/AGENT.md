@@ -11,6 +11,7 @@
 - Put each real background workload in its own `apps/workers/<name>/` workspace. Do not create a no-op worker.
 - Deploy the web app through Vercel Git integration and add a Cloudflare deployment workflow only alongside a real worker. Follow [deployment guidance](../docs/deployment.md); keep provider credentials in Vercel or GitHub environment settings.
 - Run `pnpm format` to apply the pinned Prettier rules, then run `pnpm format:check`; CI enforces the check.
+- Run `pnpm knip` to catch unused files, exports, and dependencies; intentional public UI modules and entity barrels are configured as entry points in `knip.jsonc`.
 - After changes, run the relevant commands from `docs/testing.md`. The root `pnpm test` command runs fresh coverage suites in `apps/web` and `packages/database`, enforcing 100% global line, statement, function, and branch coverage in each workspace. Run all quality checks before declaring a feature complete.
 - For each future worker or shared package with runtime code, add a Turbo-visible `test` script, the Vitest coverage provider matching the workspace Vitest version, an explicit runtime include, and the same four 100% thresholds.
 - Update documentation when paths, contracts, or operations change. Do not add Codex model, approval, or sandbox configuration to the repository.

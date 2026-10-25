@@ -101,7 +101,7 @@ Replace the worker and shared-package names with the real workspace names. Keep 
 
 ## Continuous integration
 
-The root validation workflow runs the existing `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, and `pnpm test:e2e` commands. `pnpm test` enforces 100% global line, statement, function, and branch coverage in each current test workspace. Make both workflow jobs required status checks on `main`; GitHub branch protection must be configured in repository settings.
+The root validation workflow runs `pnpm lint`, `pnpm knip`, `pnpm typecheck`, `pnpm test`, `pnpm build`, and `pnpm test:e2e`. `pnpm test` enforces 100% global line, statement, function, and branch coverage in each current test workspace. Make both workflow jobs required status checks on `main`; GitHub branch protection must be configured in repository settings.
 
 The web build does not need Cloudflare credentials. Worker deployment credentials are only read by a worker-specific production workflow after a real worker is added.
 

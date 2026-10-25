@@ -13,14 +13,16 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 - pnpm/Turborepo monorepo; web app at `apps/web`, future independent worker packages under `apps/workers/*`, and shared infrastructure under `packages/*`.
 - Current workspace packages are `apps/web` and `packages/database`. `apps/workers/` has guidance only; no worker package or additional shared package is included.
 - Node.js `>=22.22.2`, pnpm `10.32.1`.
-- `pnpm dev`, `pnpm format`, `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
-- Prettier is pinned at the repository root. CI checks formatting before lint, typecheck, coverage tests, and build.
+- `pnpm dev`, `pnpm format`, `pnpm format:check`, `pnpm lint`, `pnpm knip`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
+- Prettier and Knip are configured at the repository root. CI checks formatting, lint, unused files/exports/dependencies, typecheck, coverage tests, and build.
 - `pnpm test` runs coverage in both test workspaces and enforces 100% global line, statement, function, and branch coverage over their first-party runtime TypeScript and TSX under `src/`.
 - Coverage excludes colocated test/spec files, `src/test/**`, declarations, and generated files. See `docs/testing.md` for the complete contract.
 - `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
 - Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.
 - AI requires `AI_API_KEY` and `AI_MODEL` when calling a provider; they are not needed for build or tests.
 - `@tanstack/react-query` and `@tanstack/react-table` are declared in `apps/web`; `AppProviders` mounts the QueryClient once for browser use and per server render.
+- Zod is the documented schema standard. React Hook Form and its Zod resolver are added to the web workspace only when the first complex form needs them; see `docs/forms.md`.
+- Observability uses Vercel and Cloudflare's platform tooling by default. No third-party monitoring SDK or Worker is configured; see `docs/observability.md`.
 - Web deployment target: Vercel Git integration with `apps/web` as the project root. Real Cloudflare Workers use worker-specific GitHub Actions deployment workflows; the starter has no worker package yet.
 
 ## Decisions when copying

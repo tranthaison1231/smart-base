@@ -34,6 +34,28 @@ TanStack Query is already declared in `apps/web/package.json`; do not add a seco
 
 Use it for client-side server state only. Keep queries and mutations in the owning entity or feature; a reusable entity query belongs under `_entities/<domain>/`, while a workflow-only query belongs under `_features/<workflow>/`. If server prefetching, dehydration, or Suspense queries are introduced, follow TanStack Query's Next.js SSR guide before changing the provider lifecycle.
 
+### Debounce rapidly changing query inputs
+
+For search or filter inputs that would otherwise change a query key on every keystroke, keep the input responsive and debounce only the value passed to the query. `useDebouncedValue` is a shared timer utility; the owning feature or entity still defines the query key and request:
+
+```tsx
+"use client"
+
+import { useState } from "react"
+
+import { useDebouncedValue } from "@/_shared/lib/hooks/use-debounced-value"
+
+function ProductSearch() {
+  const [search, setSearch] = useState("")
+  const debouncedSearch = useDebouncedValue(search, 300)
+  const products = useProductList({ page: 1, search: debouncedSearch })
+
+  return <input value={search} onChange={(event) => setSearch(event.target.value)} />
+}
+```
+
+Use `search` for the input value so typing updates immediately. Use the debounced value only for the query or other expensive downstream work. Do not put network requests or product-specific query logic inside the shared hook.
+
 Place reusable entity queries in a domain-owned module such as `apps/web/src/_entities/<domain>/api/queries.ts`. Place queries used by one workflow in that feature's API module. Keep response schemas near the entity contract and reuse `fetchJson` in query functions:
 
 ```ts
@@ -199,6 +221,7 @@ Use TanStack Query with TanStack Table when the interactive server-backed table 
 
 ## Official references
 
+- [React: Reusing Logic with Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
 - [TanStack Query: Quick Start](https://tanstack.com/query/latest/docs/framework/react/quick-start)
 - [TanStack Query: Query Keys](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)
 - [TanStack Query: Advanced Server Rendering](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)

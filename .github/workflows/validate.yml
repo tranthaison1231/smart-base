@@ -43,6 +43,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Check unused code and dependencies
+        run: pnpm knip
+
       - name: Typecheck
         run: pnpm typecheck
 
