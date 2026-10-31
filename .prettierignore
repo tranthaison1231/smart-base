@@ -1,6 +1,7 @@
 pnpm-lock.yaml
 **/next-env.d.ts
 drizzle/meta/
+packages/create-smart-base/templates/base/
 node_modules/
 .next/
 .turbo/

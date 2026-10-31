@@ -1,4 +1,6 @@
 {
+  // These are standalone generated workspaces; validate them after scaffolding.
+  "ignore": ["packages/create-smart-base/templates/**"],
   "workspaces": {
     "apps/web": {
       // Shared UI modules and entity barrels are intentionally public for future features.

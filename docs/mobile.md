@@ -1,6 +1,6 @@
 # Optional mobile app
 
-Smart Base currently ships only a Next.js web app. Add an Expo app in a product copy when the product needs iOS or Android; Expo, mobile dependencies, and mobile CI are not included in the starter. Keep the web-only setup usable without a mobile toolchain.
+Smart Base currently runs only a Next.js web app. The [CLI](create-project.md) can generate an Expo app for a product that needs iOS or Android; an installed mobile workspace is not included in this checkout. Keep the web-only setup usable without a mobile toolchain.
 
 For a product with both web and mobile, prefer a separate `apps/api` backend so both clients use a shared HTTP API. A product can document a reason to keep the API in Next.js initially. No API workspace is included; see [choosing a backend](architecture.md#choosing-a-backend) and [API deployment](deployment.md#deploy-a-separate-api-when-needed).
 

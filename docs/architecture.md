@@ -22,6 +22,8 @@ Create product FSD layers only when a feature needs them. `_app/` already contai
 
 FSD applies to the Next.js app under `apps/web/src/`. The monorepo also has separate deployment and infrastructure areas:
 
+The starter also contains the [`create-smart-base` CLI](create-project.md) under `packages/create-smart-base`; it creates products and is not part of the generated applications.
+
 ```text
 apps/
 ├── web/                    # Current Next.js application

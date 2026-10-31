@@ -1,0 +1,12 @@
+# Mobile product
+
+This project contains an Expo Router mobile app styled with NativeWind in `apps/mobile`.
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Run `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` before handing off changes.
+Configure native identifiers, signing, authentication, API access, and EAS only when the
+product needs them. Public mobile configuration must never contain secrets.

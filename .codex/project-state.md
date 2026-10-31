@@ -11,11 +11,11 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 ## Runtime and checks
 
 - pnpm/Turborepo monorepo; web app at `apps/web`, future independent worker packages under `apps/workers/*`, and shared infrastructure under `packages/*`.
-- Current workspace packages are `apps/web` and `packages/database`. `apps/workers/` has guidance only; no worker package or additional shared package is included.
+- Current workspace packages are `apps/web`, `packages/database`, and the `create-smart-base` CLI in `packages/create-smart-base`. `apps/workers/` has guidance only; no worker package is included.
 - Node.js `>=22.22.2`, pnpm `10.32.1`.
-- `pnpm dev`, `pnpm format`, `pnpm format:check`, `pnpm lint`, `pnpm knip`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
+- `pnpm dev`, `pnpm create:app`, `pnpm format`, `pnpm format:check`, `pnpm lint`, `pnpm knip`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
 - Prettier and Knip are configured at the repository root. CI checks formatting, lint, unused files/exports/dependencies, typecheck, coverage tests, and build.
-- `pnpm test` runs coverage in both test workspaces and enforces 100% global line, statement, function, and branch coverage over their first-party runtime TypeScript and TSX under `src/`.
+- `pnpm test` runs coverage in all three test workspaces and enforces 100% global line, statement, function, and branch coverage over their first-party runtime sources. The CLI also includes its executable entry point.
 - Coverage excludes colocated test/spec files, `src/test/**`, declarations, and generated files. See `docs/testing.md` for the complete contract.
 - `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
 - Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.

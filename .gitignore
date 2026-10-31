@@ -14,3 +14,4 @@ test-results/
 .dev.vars*
 !.dev.vars.example
 .wrangler/
+packages/create-smart-base/templates/base/

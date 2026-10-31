@@ -14,6 +14,10 @@ For a product with web and mobile, prefer a separate backend shared by both apps
 
 These diagrams illustrate possible product architectures and data flows, not deployed connections. Smart Base currently includes the web app and database package; mobile, a separate API, product business logic, and external services are added when needed. The database package needs a compatible entry point and connection strategy for a separate API runtime. See the [architecture guide](docs/architecture.md#choosing-a-backend).
 
+## Create a product
+
+After installing dependencies, run `pnpm create:app` and select Web, Mobile, or both. Web uses the current Next.js starter; Mobile adds an Expo Router and NativeWind app; selecting both also adds a minimal API. See the [CLI guide](docs/create-project.md) for generated commands and packaging.
+
 ## Getting started
 
 Requires Node.js `>=22.22.2` and pnpm `10.32.1` (pinned in `packageManager`).
@@ -39,7 +43,7 @@ pnpm build
 
 `pnpm test:e2e` runs a browser smoke test with Chromium and starts the app on port `3100`. If Chromium is not installed, run `pnpm --filter @smart-base/web exec playwright install chromium`.
 
-`pnpm test` runs Vitest with coverage in both current test workspaces, `apps/web` and `packages/database`. Each workspace enforces 100% global line, statement, function, and branch coverage for its first-party runtime TypeScript and TSX files. See the [testing guide](docs/testing.md) for the exact scope and exclusions.
+`pnpm test` runs Vitest with coverage in `apps/web`, `packages/database`, and the `create-smart-base` CLI. Each workspace enforces 100% global line, statement, function, and branch coverage for its first-party runtime sources. See the [testing guide](docs/testing.md) for the exact scope and exclusions.
 
 ## Deployment
 
@@ -68,11 +72,12 @@ apps/
 ├── web/                    # Next.js app with FSD layers under src/
 └── workers/                # Workspace convention; no worker package exists yet
 packages/
-└── database/               # Shared server-only PostgreSQL/Drizzle infrastructure
+├── database/               # Shared server-only PostgreSQL/Drizzle infrastructure
+└── create-smart-base/      # CLI and opt-in product templates
 drizzle/                    # Migration output; no generated migrations exist yet
 ```
 
-There are no additional shared packages or worker jobs in the starter. Add them only for a real consumer or workload.
+The CLI is a tool for creating products; it is not copied into generated products. There are no additional product-shared packages or worker jobs in the starter. Add them only for a real consumer or workload.
 
 The current FSD slices live under `apps/web/src/`. The starter includes `app/`, `_app/`, `_entities/ai/`, and `_shared/`; create `_pages/`, `_widgets/`, and `_features/` only when a product needs them. The dependency direction is:
 

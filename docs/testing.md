@@ -26,16 +26,17 @@ Focused Vitest commands are useful while developing, but they do not run the ful
 
 ## Coverage contract
 
-The root `pnpm test` command runs `vitest run --coverage` in both current test workspaces:
+The root `pnpm test` command runs `vitest run --coverage` in the current test workspaces:
 
-| Workspace           | Runtime coverage scope                             |
-| ------------------- | -------------------------------------------------- |
-| `apps/web`          | Every first-party `src/**/*.{ts,tsx}` runtime file |
-| `packages/database` | Every first-party `src/**/*.{ts,tsx}` runtime file |
+| Workspace                    | Runtime coverage scope                             |
+| ---------------------------- | -------------------------------------------------- |
+| `apps/web`                   | Every first-party `src/**/*.{ts,tsx}` runtime file |
+| `packages/database`          | Every first-party `src/**/*.{ts,tsx}` runtime file |
+| `packages/create-smart-base` | CLI runtime modules and executable entry point     |
 
-Each workspace enforces 100% global coverage for lines, statements, functions, and branches. Coverage includes runtime files even when no test currently imports them. `pnpm test` fails if any threshold is missed. Turbo caching is disabled for the `test` task, so each invocation executes both suites and evaluates a fresh coverage report.
+Each workspace enforces 100% global coverage for lines, statements, functions, and branches. Coverage includes runtime files even when no test currently imports them. `pnpm test` fails if any threshold is missed. Turbo caching is disabled for the `test` task, so each invocation executes the suites and evaluates fresh coverage reports. Generated application templates are validated as generated products, not as CLI runtime modules.
 
-The coverage report excludes `*.test.ts`, `*.test.tsx`, `*.spec.ts`, `*.spec.tsx`, `src/test/**`, `*.d.ts`, and `*.generated.ts` or `*.generated.tsx`. Vitest configuration, stylesheets, dependencies, and files outside the included `src/` trees are not measured. The `src/test/` directories contain test harness code rather than runtime behavior.
+The coverage report excludes colocated test/spec files, `src/test/**`, declarations, and generated files. Vitest configuration, stylesheets, and dependencies are not measured. The CLI coverage also includes its executable entry point. The `src/test/` directories contain test harness code rather than runtime behavior.
 
 Unit and component tests use Vitest, Testing Library, and jsdom. The database package uses Vitest in Node. Inject `fetchImpl` or an AI model as needed; tests do not depend on the network, secrets, a live database, or an external provider. Test UI behavior, semantics, and accessibility rather than implementation details.
 

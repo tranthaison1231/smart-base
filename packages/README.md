@@ -2,7 +2,7 @@
 
 Add code here only when multiple applications need to share it. The starter includes `@smart-base/database` for server-only PostgreSQL and Drizzle infrastructure. Keep product models and workflows in their owning app until another application has a clear need to share them.
 
-`packages/database` is the only package currently included. There are no placeholder shared packages. Add a package only with a real consumer, a clear owner, and a documented public API.
+`packages/database` is the only product-shared package currently included. `packages/create-smart-base` contains the project creation CLI and is not copied into generated products. There are no placeholder shared packages. Add a package only with a real consumer, a clear owner, and a documented public API.
 
 When both web and mobile need the same code, share platform-neutral types, validation schemas, or pure business rules with an explicit public API. Keep Next.js, React Native, browser, Node-only, database, and secret-dependent code out of packages intended for both platforms. UI stays with its platform unless a real cross-platform component is proven to work in both apps. Do not import `@smart-base/database` from mobile; call an authenticated server API for server-owned work. See the [mobile guide](../docs/mobile.md).
 

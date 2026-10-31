@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Smart Base",
+    "slug": "smart-base-mobile",
+    "scheme": "smartbase",
+    "version": "1.0.0",
+    "userInterfaceStyle": "automatic",
+    "orientation": "portrait",
+    "plugins": ["expo-router"]
+  }
+}
