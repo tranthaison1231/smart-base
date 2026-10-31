@@ -41,6 +41,8 @@ The [infrastructure guide](infra/README.md) provides an empty Terraform structur
 
 ## Building a product
 
+After copying this repository, use the [product setup checklist](docs/start-a-product.md) and [product brief template](docs/product-brief.md) before starting the first workflow with an agent.
+
 1. Read the [architecture guide](docs/architecture.md) and identify the owning route, page, widget, feature, or entity.
 2. Read the [Codex workflow](docs/codex.md) and the [feature-development](.agents/skills/feature-development/SKILL.md) skill.
 3. Add the first domain model under `_entities`; do not add a placeholder domain to the starter.
