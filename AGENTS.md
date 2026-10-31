@@ -7,6 +7,7 @@ Smart Base is a product-neutral starter with no product domain yet. Read [projec
 - Call external APIs from server-side code and validate responses at trust boundaries with schemas. Never expose credentials to the client.
 - The AI service is server-only. Add authentication, rate limiting, and budget limits before creating a public route.
 - Keep PostgreSQL connections and credentials server-side; use `packages/database` for PostgreSQL access. Review generated Drizzle SQL before applying it; never run migrations against production as part of setup or tests.
+- For a product that needs mobile, follow [mobile guidance](docs/mobile.md). Keep native and web UI in their respective apps; share platform-neutral code only when both apps need it. Never import server-only packages into mobile.
 - Put each real background workload in its own package under `apps/workers/`; do not add placeholder jobs.
 - Add behavior-focused tests for each runtime module, including success, error, and relevant optional branches. For behavior changes, write a regression test first. `pnpm test` enforces 100% global line, statement, function, and branch coverage in `apps/web` and `packages/database`; run it before finishing.
 - Run `pnpm format` to apply the pinned Prettier rules and `pnpm format:check` to verify them; CI enforces the check.

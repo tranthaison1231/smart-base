@@ -11,6 +11,8 @@ Before making a change, identify the layer that owns the code and read the relev
 
 For features that persist data, use [`database.md`](database.md) and keep schema and migration work separate from repository and business logic. For background work, follow the per-worker workspace convention in [`apps/workers/README.md`](../apps/workers/README.md).
 
+For a product with both web and mobile, follow [mobile guidance](mobile.md). Keep route and UI code in its app; extract platform-neutral types, validation, or business logic only when both apps use it. Mobile must access server-owned behavior through an authenticated API, not import server-only database or AI code. Treat each API and direct database access path as a separate authorization boundary.
+
 The repository intentionally does not set a default model, approval policy, sandbox, or plugin marketplace. Those choices belong to each user's environment; do not commit credentials or personal configuration to the starter.
 
 When copying the starter for a new product, update `project-state.md`, `README.md`, and the domain documentation before asking an agent to build the first feature.
