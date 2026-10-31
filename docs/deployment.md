@@ -103,6 +103,8 @@ Replace the worker and shared-package names with the real workspace names. Keep 
 
 The root validation workflow runs `pnpm lint`, `pnpm knip`, `pnpm typecheck`, `pnpm test`, `pnpm build`, and `pnpm test:e2e`. `pnpm test` enforces 100% global line, statement, function, and branch coverage in each current test workspace. Make both workflow jobs required status checks on `main`; GitHub branch protection must be configured in repository settings.
 
+Dependabot is configured in `.github/dependabot.yml` to propose weekly npm workspace and GitHub Actions updates. Minor and patch npm updates are grouped; major updates remain separate for review. Once the configuration reaches the default branch, review each pull request and its CI results before merging; repository settings may affect Dependabot availability and permissions.
+
 The web build does not need Cloudflare credentials. Worker deployment credentials are only read by a worker-specific production workflow after a real worker is added.
 
 ## Platform references

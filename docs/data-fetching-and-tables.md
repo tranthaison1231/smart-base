@@ -1,10 +1,10 @@
 # Data Fetching and Tables
 
-This guide explains when to use Next.js server-side data loading, `fetchJson`, TanStack Query, the shared shadcn-style `Table`, and TanStack Table.
+This guide explains when to use Next.js server-side data loading, `fetchJson`, TanStack Query, the shared shadcn-style `Table`, TanStack Table, and TanStack Virtual.
 
 ## Current starter defaults
 
-The web workspace includes TanStack Query and TanStack Table v8. `AppProviders` at `apps/web/src/_app/providers.tsx` mounts the shared QueryClient and existing UI providers from the root layout. `DataTable` at `apps/web/src/_shared/ui/data-table.tsx` is a sortable, client-side table built with TanStack Table and the shared shadcn-style primitives in `table.tsx`.
+The web workspace includes TanStack Query, TanStack Table v8, and TanStack Virtual. `AppProviders` at `apps/web/src/_app/providers.tsx` mounts the shared QueryClient and existing UI providers from the root layout. `DataTable` at `apps/web/src/_shared/ui/data-table.tsx` is a sortable, client-side table built with TanStack Table and the shared shadcn-style primitives in `table.tsx`; it does not virtualize rows.
 
 ## Choose the smallest tool that fits
 
@@ -55,6 +55,12 @@ function ProductSearch() {
 ```
 
 Use `search` for the input value so typing updates immediately. Use the debounced value only for the query or other expensive downstream work. Do not put network requests or product-specific query logic inside the shared hook.
+
+### When to consider TanStack Pacer
+
+TanStack Pacer is not installed in the starter. Keep using `useDebouncedValue` for a simple delayed search or filter value. Consider Pacer within the owning feature when a real workflow needs more control, such as autosave with observable pending state and cancellation, throttling frequent events, or coordinating a client-side queue or batch. Choose the behavior carefully: debounce discards intermediate calls, while a queue handles individual operations.
+
+Pacer is currently beta, so review its current API and test the specific workflow before adopting it. For autosave, account for failed or overlapping writes and leaving the page; a pending timer alone does not guarantee a save. Client-side queues and rate limits do not replace durable server-side jobs, authorization, or server-side rate limiting. Implement the first use in the app, and document a reusable recipe if the same need recurs in another app.
 
 Place reusable entity queries in a domain-owned module such as `apps/web/src/_entities/<domain>/api/queries.ts`. Place queries used by one workflow in that feature's API module. Keep response schemas near the entity contract and reuse `fetchJson` in query functions:
 
@@ -219,12 +225,70 @@ For a dataset small enough to load completely, TanStack Table can sort and pagin
 
 Use TanStack Query with TanStack Table when the interactive server-backed table benefits from client caching, refetching, or mutation invalidation. A server-rendered table does not need TanStack Query just because it uses TanStack Table.
 
+### Long lists and virtualization
+
+`@tanstack/react-virtual` is installed in the web workspace. Use it in the owning feature when profiling shows that rendering many visible and offscreen items makes a long list or table slow. For small datasets, normal rendering or pagination is simpler. Virtualization limits mounted DOM nodes; it does not fetch, filter, paginate, or reduce the amount of data held in memory. Continue using server-side pagination or infinite loading when the dataset is too large to load at once.
+
+For example, this fixed-height list renders the visible items and a small buffer. Item IDs must be stable and unique, and the rendered row height must match the estimate:
+
+```tsx
+"use client"
+
+import { useVirtualizer } from "@tanstack/react-virtual"
+import { useRef } from "react"
+
+type Item = { id: string; name: string }
+
+export function LongList({ items }: { items: Item[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const virtualizer = useVirtualizer({
+    count: items.length,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: () => 40,
+    getItemKey: (index) => items[index].id,
+    overscan: 5,
+  })
+
+  return (
+    <div ref={scrollRef} tabIndex={0} aria-label="Items" style={{ height: 320, overflow: "auto" }}>
+      <ul
+        style={{ height: virtualizer.getTotalSize(), position: "relative", margin: 0, padding: 0 }}
+      >
+        {virtualizer.getVirtualItems().map((row) => (
+          <li
+            key={row.key}
+            aria-setsize={items.length}
+            aria-posinset={row.index + 1}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: row.size,
+              transform: `translateY(${row.start}px)`,
+            }}
+          >
+            {items[row.index].name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+For variable-height items, use the library's measurement support rather than assuming a fixed size. For a table, virtualize the rows from `table.getRowModel().rows` after the relevant sorting and filtering, and keep table markup and headers accessible; see the official table example below. Offscreen content is not mounted, so browser find, screen-reader navigation, keyboard focus, and printing may behave differently. Test those workflows with the actual feature and offer pagination or another accessible alternative when needed.
+
 ## Official references
 
 - [React: Reusing Logic with Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
 - [TanStack Query: Quick Start](https://tanstack.com/query/latest/docs/framework/react/quick-start)
 - [TanStack Query: Query Keys](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)
 - [TanStack Query: Advanced Server Rendering](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)
+- [TanStack Pacer: Overview](https://tanstack.com/pacer/latest/docs/overview)
+- [TanStack Pacer: React Debouncing](https://tanstack.com/pacer/latest/docs/framework/react/guides/debouncing)
 - [TanStack Table v8: Introduction](https://tanstack.com/table/v8/docs/introduction)
 - [TanStack Table v8: Pagination](https://tanstack.com/table/v8/docs/guide/pagination)
 - [TanStack Table v8: Sorting](https://tanstack.com/table/v8/docs/guide/sorting)
+- [TanStack Virtual: Introduction](https://tanstack.com/virtual/latest/docs/introduction)
+- [TanStack Virtual: React Table Example](https://tanstack.com/virtual/latest/docs/framework/react/examples/table)

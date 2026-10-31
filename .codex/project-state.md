@@ -20,9 +20,10 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 - `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
 - Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.
 - AI requires `AI_API_KEY` and `AI_MODEL` when calling a provider; they are not needed for build or tests.
-- `@tanstack/react-query` and `@tanstack/react-table` are declared in `apps/web`; `AppProviders` mounts the QueryClient once for browser use and per server render.
+- `@tanstack/react-query`, `@tanstack/react-table`, and `@tanstack/react-virtual` are declared in `apps/web`; `AppProviders` mounts the QueryClient once for browser use and per server render. Virtual is available for feature-owned long lists; the shared DataTable does not virtualize rows.
 - Zod is the documented schema standard. React Hook Form and its Zod resolver are added to the web workspace only when the first complex form needs them; see `docs/forms.md`.
 - Observability uses Vercel and Cloudflare's platform tooling by default. No third-party monitoring SDK or Worker is configured; see `docs/observability.md`.
+- Root route errors and missing pages have shared fallback UI. Dependabot proposes weekly dependency and GitHub Actions updates; see `docs/observability.md` and `docs/deployment.md`.
 - Web deployment target: Vercel Git integration with `apps/web` as the project root. Real Cloudflare Workers use worker-specific GitHub Actions deployment workflows; the starter has no worker package yet.
 
 ## Decisions when copying
