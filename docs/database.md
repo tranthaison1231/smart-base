@@ -20,6 +20,8 @@ const db = getDb()
 
 The `server-only` marker protects this export from client bundles. Never pass the database URL or connection object to Client Components.
 
+This entry point is intended for the Next.js server. A separately deployed API or Cloudflare Worker may need a runtime-compatible entry point and connection lifecycle; do not assume the Next.js `server-only` marker or these pooling settings work unchanged. Keep database access and credentials server-side, and test the chosen approach against its runtime and database provider. In particular, Cloudflare's [Hyperdrive guidance](https://developers.cloudflare.com/hyperdrive/examples/connect-to-postgres/) advises against `prepare: false` with Postgres.js. See [choosing a backend](architecture.md#choosing-a-backend).
+
 ## Schema and migrations
 
 Add Drizzle tables under `packages/database/src/schema/` after the application has a defined domain. The schema entry point is intentionally empty. Keep repositories and domain behavior in their owning FSD slices; the database package owns connection and shared schema definitions.

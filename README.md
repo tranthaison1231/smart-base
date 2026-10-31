@@ -2,6 +2,18 @@
 
 A copyable Next.js starter for new applications. It includes a Feature-Sliced Design (FSD) structure, shared UI components, TanStack Query and Table, a schema-validated API client, a server-only AI text service, a lazy PostgreSQL/Drizzle package, and lint, typecheck, and test tooling. It contains no product logic from Smart Stock, Smart Idea, or Smart Shop.
 
+## Architecture options
+
+For a web-only product, keep the backend with the Next.js app:
+
+![Web-only architecture with a backend in Next.js and optional external services](docs/images/smart-base-web.png)
+
+For a product with web and mobile, prefer a separate backend shared by both apps:
+
+![Web and mobile architecture with a separate API and optional external services](docs/images/smart-base-web-mobile.png)
+
+These diagrams illustrate possible product architectures and data flows, not deployed connections. Smart Base currently includes the web app and database package; mobile, a separate API, product business logic, and external services are added when needed. See the [architecture guide](docs/architecture.md#choosing-a-backend).
+
 ## Getting started
 
 Requires Node.js `>=22.22.2` and pnpm `10.32.1` (pinned in `packageManager`).

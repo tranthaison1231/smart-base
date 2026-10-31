@@ -2,6 +2,8 @@
 
 Smart Base currently ships only a Next.js web app. Add an Expo app in a product copy when the product needs iOS or Android; Expo, mobile dependencies, and mobile CI are not included in the starter. Keep the web-only setup usable without a mobile toolchain.
 
+For a product with both web and mobile, prefer a separate `apps/api` backend so both clients use a shared HTTP API. A product can document a reason to keep the API in Next.js initially. No API workspace is included; see [choosing a backend](architecture.md#choosing-a-backend) and [API deployment](deployment.md#deploy-a-separate-api-when-needed).
+
 ## Add Expo to a product
 
 1. Review the current [Expo monorepo guide](https://docs.expo.dev/guides/monorepos/) and [Expo Router guide](https://docs.expo.dev/router/introduction/). Choose an Expo SDK compatible with the product's React Native, React, Node, and pnpm versions. Follow Expo's current project creation instructions to create `apps/mobile` in the copied product; the existing `apps/*` workspace glob already covers it. Do not copy the example as a product feature.

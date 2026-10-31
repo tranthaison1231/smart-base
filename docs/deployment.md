@@ -23,6 +23,14 @@ No `vercel.json` is needed for Git integration. Add `apps/web/vercel.json` only 
 
 Do not add a Vercel deploy job or Vercel token to GitHub Actions when Vercel Git integration owns web deployments. Keep CI as a validation gate and use GitHub branch rules to prevent unvalidated changes from merging.
 
+## Deploy a separate API when needed
+
+For a product with web and mobile, prefer a separately deployed `apps/api` backend; a web-only product can keep its backend in Next.js. This starter does not include an API workspace or deploy one. See [choosing a backend](architecture.md#choosing-a-backend).
+
+When a real product adds an API, consider a separate Vercel project first to keep web and API deployments independent while using the same platform. Select an API framework and runtime that fit the workload, and verify their current Vercel support. Cloudflare Workers is another option when its runtime and bindings fit; a container-based host may be more appropriate for workloads requiring a long-running process. Evaluate cost, limits, region, operational requirements, and runtime compatibility before deciding.
+
+Configure the API's own production and preview environments, secrets, build and test checks, and HTTPS endpoint. Define how web and mobile authenticate and authorize requests, how browser origins are handled when cross-origin requests are needed, and how API contract changes remain compatible with released mobile versions. Keep the API close to its database where practical. Test database connections, migrations, and failure paths against the chosen runtime; the starter's `@smart-base/database/server` cannot be assumed to work unchanged outside Next.js. See [database guidance](database.md#connection).
+
 ## Deploy a real worker to Cloudflare
 
 The starter has no worker package. Add a deployment workflow only when a real workload has been added under `apps/workers/<worker-name>/`. Follow the [worker setup guide](../apps/workers/README.md) for package scripts, Wrangler configuration, generated types, local development, and manual deployment.
