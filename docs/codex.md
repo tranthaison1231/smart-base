@@ -14,3 +14,12 @@ For features that persist data, use [`database.md`](database.md) and keep schema
 The repository intentionally does not set a default model, approval policy, sandbox, or plugin marketplace. Those choices belong to each user's environment; do not commit credentials or personal configuration to the starter.
 
 When copying the starter for a new product, update `project-state.md`, `README.md`, and the domain documentation before asking an agent to build the first feature.
+
+## Reusing capabilities across products
+
+- Implement a capability in the product app on its first use.
+- After a second product uses the same approach, document the proven setup as an optional recipe under `docs/recipes/`.
+- After a third use, if the setup is stable, consider an opt-in template or scaffold. Keep its dependencies out of the starter defaults.
+- Add a capability to the core only when nearly every new product needs it and the maintenance cost is justified.
+
+Do not add a plugin registry or runtime feature flags to this copy-based starter.

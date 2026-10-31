@@ -6,13 +6,15 @@ Use the hosting platform's built-in logs and metrics first. Add a third-party SD
 
 Vercel provides project Observability and runtime logs for deployed functions. Open the project in the Vercel dashboard and use **Observability** to inspect traffic, errors, and function behavior, then use **Logs** to inspect individual runtime output. These platform views do not require a repository dependency.
 
-Use `console.info`, `console.warn`, and `console.error` for concise server-side operational events. Log structured objects so fields can be filtered, for example:
+Use the shared Pino logger for concise server-side operational events. It writes JSON to stdout for info and stderr for warnings and errors, for example:
 
 ```ts
-console.error({ event: "profile.save_failed", requestId, errorCode: "DATABASE_UNAVAILABLE" })
+import { logger } from "@/_shared/lib/logger"
+
+logger.error({ event: "profile.save_failed", requestId, errorCode: "DATABASE_UNAVAILABLE" })
 ```
 
-Do not log credentials, authorization headers, full request bodies, personal data, or raw upstream responses. Return safe error messages to clients and keep detailed diagnostics in server-side logs.
+Use `logger.info`, `logger.warn`, or `logger.error` with a stable event name and safe context. This Node.js server-only logger does not configure automatic redaction: do not log credentials, authorization headers, full request bodies, personal data, raw errors, or raw upstream responses. Return safe error messages to clients and keep detailed diagnostics in server-side logs. On Vercel, stderr can be classified as an error even for warning events; use the JSON `level` field to distinguish them.
 
 If a product needs error grouping, release tracking, alerts, or one view spanning Vercel and Cloudflare, evaluate Sentry or another provider and follow its current Next.js setup guide. Configure any upload token as a Vercel build secret; never put it in source control or a `NEXT_PUBLIC_` variable. Review source-map access and event scrubbing before enabling client-side capture.
 
