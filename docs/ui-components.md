@@ -4,7 +4,7 @@ Shared UI primitives live in `apps/web/src/_shared/ui`. Reuse these components b
 
 ## Available components
 
-`Avatar`, `Badge`, `Button`, `Calendar`, `Card`, `ChartContainer`, `ChartLegend`, `ChartLegendContent`, `ChartTooltip`, `ChartTooltipContent`, `DataTable`, `Dialog`, `DropdownMenu`, `Field`, `Input`, `Label`, `Popover`, `Separator`, `Sheet`, `Sidebar`, `Skeleton`, `Toaster`, `Spinner`, `Table`, `ThemeProvider`, `Toggle`, `ToggleGroup`, and `Tooltip`.
+`Avatar`, `Badge`, `Button`, `Calendar`, `Card`, `ChartContainer`, `ChartLegend`, `ChartLegendContent`, `ChartTooltip`, `ChartTooltipContent`, `DataTable`, `Dialog`, `DropdownMenu`, `Field`, `Input`, `Label`, `Pagination`, `Popover`, `Select`, `Separator`, `Sheet`, `Sidebar`, `Skeleton`, `Toaster`, `Spinner`, `Table`, `ThemeProvider`, `Toggle`, `ToggleGroup`, and `Tooltip`.
 
 The chart module also exports the `ChartConfig` type for defining chart series.
 
@@ -39,6 +39,31 @@ Dialogs can use the primitives exported from the same module:
 
 ```tsx
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/_shared/ui/dialog"
+```
+
+Use `Pagination` for page links. The caller supplies page URLs and the active page, and omits unavailable previous or next links:
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+} from "@/_shared/ui/pagination"
+
+;<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationLink href="?page=1" isActive>
+        1
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="?page=2" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
 ```
 
 Use `Table` primitives for static or simple markup. Use `DataTable` for a local dataset that needs sortable columns:
