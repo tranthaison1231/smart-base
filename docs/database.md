@@ -37,3 +37,17 @@ DATABASE_URL=postgres://user:password@localhost:5432/app pnpm db:migrate
 ```
 
 Set `DATABASE_URL` explicitly for the intended environment. Do not run migrations against production during setup, tests, or routine verification. The starter's test suite does not apply migrations or need a live database.
+
+## Optional Redis
+
+When an application has a concrete need for shared caching or distributed rate limiting, evaluate [Upstash Redis](https://upstash.com/docs/redis/overall/getstarted) first. Its HTTP-based client works with serverless environments, including Next.js and Cloudflare Workers. Redis is not installed or configured in the starter, and it does not replace PostgreSQL as the source of truth or [Cloudflare Queues](../apps/workers/README.md#queued-workloads) for background jobs.
+
+Add the integration in the feature that needs it:
+
+1. Review the current [pricing and limits](https://upstash.com/pricing/redis), region, availability, retention, and security requirements. Use separate databases or isolated credentials for development and production where appropriate.
+2. Create a database only for the real application. Install `@upstash/redis` in the workspace that uses it, following the [official client guide](https://upstash.com/docs/redis/howto/connect-with-upstash-redis).
+3. Store the REST URL and token as server-side environment variables or Worker secrets. Document their names and empty placeholders in that application's environment example. Never commit credentials, expose the token through `NEXT_PUBLIC_`, or send it to a browser.
+4. Keep integration code and cache keys with the owning feature or entity. For caching, define expiry and invalidation, avoid storing unnecessary sensitive data, and decide whether a Redis failure should fall back to the source of truth.
+5. For rate limiting, enforce it on the server and explicitly choose how the endpoint behaves if Redis is unavailable or quota is exhausted. Security-sensitive endpoints may need to reject requests rather than silently allow them. Test normal operation, expiry, failures, and the chosen fallback without requiring live credentials in the test suite.
+
+Monitor command usage, bandwidth, and storage against the selected plan; check limits again before deployment rather than relying on a fixed quota in this document. Promote a setup into an optional recipe only after the same approach has been used by another product.

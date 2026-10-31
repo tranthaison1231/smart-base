@@ -25,6 +25,7 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 - Observability uses Vercel and Cloudflare's platform tooling by default. No third-party monitoring SDK or Worker is configured; see `docs/observability.md`.
 - Root route errors and missing pages have shared fallback UI. Dependabot proposes weekly dependency and GitHub Actions updates; see `docs/observability.md` and `docs/deployment.md`.
 - Web deployment target: Vercel Git integration with `apps/web` as the project root. Real Cloudflare Workers use worker-specific GitHub Actions deployment workflows; the starter has no worker package yet.
+- `infra/` documents the Terraform environment structure and state conventions; no Terraform providers, backend, resources, or apply workflow are configured.
 
 ## Decisions when copying
 

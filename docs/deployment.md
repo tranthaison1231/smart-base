@@ -9,6 +9,8 @@ Smart Base uses separate platforms for its web app and background workers:
 
 GitHub Actions validates pull requests and pushes to `main` with the [`validate.yml`](../.github/workflows/validate.yml) workflow. It does not deploy the web app or a placeholder worker.
 
+The [infrastructure guide](../infra/README.md) defines the Terraform directory and ownership, state, and review conventions for real cloud resources. No Terraform backend, provider, resource, or apply workflow is configured in the starter.
+
 ## Deploy the web app to Vercel
 
 1. Import this Git repository as a Vercel project.

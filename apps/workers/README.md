@@ -6,6 +6,18 @@ The starter does not include a worker package or deploy a sample job. Use the ex
 
 For production CI and deployment, follow the [deployment guide](../../docs/deployment.md#deploy-a-real-worker-to-cloudflare). Add the path-scoped GitHub Actions workflow alongside the real worker package; do not configure a no-op deployment job in the starter.
 
+## Queued workloads
+
+Use [Cloudflare Queues](https://developers.cloudflare.com/queues/) as the default queue service when a real workload needs asynchronous message processing. The starter does not create a queue, producer, consumer, credentials, or a placeholder worker. Add them only for the feature that needs them.
+
+1. Define the message schema, owning feature, retry policy, and recovery process. Validate messages at the consumer boundary and avoid putting credentials or unnecessary sensitive data in them.
+2. Create the queue and a consumer Worker in its own `apps/workers/<worker-name>/` package. Configure its queue consumer binding and regenerate the Worker types. Use separate queue resources for different environments.
+3. Publish from a Worker using a producer binding, or from the Vercel-hosted web server using Cloudflare's authenticated [HTTP API](https://developers.cloudflare.com/queues/examples/publish-to-a-queue-via-http/). Keep API tokens in server-side secret storage, scope their permissions, and never expose them to the browser. Handle publish failures; do not report a job as accepted until the queue accepts it.
+4. Make processing idempotent: delivery is at least once and a message can be delivered more than once. Acknowledge only after successful processing, retry transient failures, and configure a dead-letter queue and recovery procedure for messages that cannot be processed. If a database write and queue publish must both succeed, design for their failure independently, for example with a transactional outbox.
+5. Test success, duplicate delivery, validation failures, retry and dead-letter behavior locally and in a non-production environment. Monitor queue backlog and failed messages. Follow the Worker coverage and deployment guidance in this document.
+
+Check current [pricing](https://developers.cloudflare.com/queues/platform/pricing/) and [limits](https://developers.cloudflare.com/queues/platform/limits/) before choosing a plan. The Free plan includes a daily operation allowance and limited message retention; reads, writes, deletes, and retries affect usage, and Worker limits apply separately. A queue is not a substitute for authorization, durable source-of-truth storage, or a defined recovery process.
+
 ## Package structure
 
 Keep each worker's runtime, configuration, dependencies, tests, and deployment scripts in its own package:
@@ -204,3 +216,6 @@ The root Turbo `test` task disables caching, so `pnpm test` runs the worker's co
 - [Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/)
 - [Scheduled handler](https://developers.cloudflare.com/workers/runtime-apis/handlers/scheduled/)
 - [Deploy with GitHub Actions](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/)
+- [Queues: delivery guarantees](https://developers.cloudflare.com/queues/reference/delivery-guarantees/)
+- [Queues: local development](https://developers.cloudflare.com/queues/configuration/local-development/)
+- [Queues: dead-letter queues](https://developers.cloudflare.com/queues/configuration/dead-letter-queues/)

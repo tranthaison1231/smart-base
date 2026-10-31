@@ -33,6 +33,8 @@ pnpm build
 
 Deploy the web app through Vercel Git integration and real background workers through worker-specific Cloudflare workflows. See the [deployment guide](docs/deployment.md) and [worker guide](apps/workers/README.md).
 
+The [infrastructure guide](infra/README.md) provides an empty Terraform structure and operating conventions for resources added by a product.
+
 ## Database
 
 `@smart-base/database` creates a PostgreSQL connection only when `getDb()` is called. Add product tables under `packages/database/src/schema/`, generate and review migrations with `pnpm db:generate`, then apply them explicitly with `DATABASE_URL=... pnpm db:migrate`. See the [database guide](docs/database.md).
