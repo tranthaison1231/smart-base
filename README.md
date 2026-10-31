@@ -6,13 +6,13 @@ A copyable Next.js starter for new applications. It includes a Feature-Sliced De
 
 For a web-only product, keep the backend with the Next.js app:
 
-![Web-only architecture with a backend in Next.js and optional external services](docs/images/smart-base-web.png)
+![Web-only architecture with a backend in Next.js and optional external services](docs/images/smart-base-web-white.png)
 
 For a product with web and mobile, prefer a separate backend shared by both apps:
 
-![Web and mobile architecture with a separate API and optional external services](docs/images/smart-base-web-mobile.png)
+![Web and mobile architecture with a separate API and optional external services](docs/images/smart-base-web-mobile-drizzle.png)
 
-These diagrams illustrate possible product architectures and data flows, not deployed connections. Smart Base currently includes the web app and database package; mobile, a separate API, product business logic, and external services are added when needed. See the [architecture guide](docs/architecture.md#choosing-a-backend).
+These diagrams illustrate possible product architectures and data flows, not deployed connections. Smart Base currently includes the web app and database package; mobile, a separate API, product business logic, and external services are added when needed. The database package needs a compatible entry point and connection strategy for a separate API runtime. See the [architecture guide](docs/architecture.md#choosing-a-backend).
 
 ## Getting started
 
