@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "pnpm --filter @smart-base/web dev",
     "create:app": "node packages/create-smart-base/scripts/prepare-template.mjs && node packages/create-smart-base/bin/create-smart-base.mjs",
+    "changeset": "changeset",
     "build": "pnpm --filter @smart-base/web build",
     "start": "pnpm --filter @smart-base/web start",
     "lint": "turbo run lint",
@@ -23,6 +24,7 @@
     "db:migrate": "cd templates/base && pnpm exec drizzle-kit migrate"
   },
   "devDependencies": {
+    "@changesets/cli": "3.0.3",
     "drizzle-kit": "^0.31.11",
     "knip": "^6.43.0",
     "prettier": "3.9.10",

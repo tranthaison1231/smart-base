@@ -2,34 +2,77 @@ name: Publish CLI
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
 
-permissions:
-  contents: read
-  id-token: write
+permissions: {}
+
+concurrency:
+  group: publish-cli-${{ github.ref }}
 
 jobs:
-  publish:
+  select:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.select.outputs.mode }}
+      plan: ${{ steps.select.outputs.publish-plan-artifact-id }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - name: Verify release tag and commit
-        run: |
-          node -e 'const version = require("./packages/create-smart-base/package.json").version; if (!/^\d+\.\d+\.\d+$/.test(version) || process.env.GITHUB_REF_NAME !== `v${version}`) { console.error("Tag must match the stable package version (vX.Y.Z)."); process.exit(1) }'
-          git fetch origin main
-          git merge-base --is-ancestor "$GITHUB_SHA" FETCH_HEAD
+          persist-credentials: false
       - uses: pnpm/action-setup@v4
         with:
           version: 10.32.1
       - uses: actions/setup-node@v4
         with:
           node-version: 22.22.2
-          registry-url: https://registry.npmjs.org
-      - run: npm install --global npm@11.19.1
+      - run: pnpm install --frozen-lockfile
+      - id: select
+        uses: changesets/action/select-mode@v2.1.2
+
+  version:
+    if: needs.select.outputs.mode == 'version'
+    needs: select
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+      - run: pnpm install --frozen-lockfile
+      - uses: changesets/action/version@v2.1.2
+        with:
+          pr-title: "Release create-smart-base"
+
+  pack:
+    if: needs.select.outputs.mode == 'publish'
+    needs: select
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    outputs:
+      artifact: ${{ steps.pack.outputs.pack-dir-artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
       - run: pnpm lint
@@ -39,5 +82,30 @@ jobs:
       - run: pnpm build
       - run: pnpm --filter @smart-base/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
-      - run: npm publish --access public
-        working-directory: packages/create-smart-base
+      - id: pack
+        uses: changesets/action/pack@v2.1.2
+        with:
+          publish-plan-artifact-id: ${{ needs.select.outputs.plan }}
+
+  publish:
+    needs: pack
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          registry-url: https://registry.npmjs.org
+      - run: npm install --global npm@11.19.1
+      - run: pnpm install --frozen-lockfile
+      - uses: changesets/action/publish@v2.1.2
+        with:
+          pack-dir-artifact-id: ${{ needs.pack.outputs.artifact }}

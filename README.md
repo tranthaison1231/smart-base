@@ -18,8 +18,6 @@ These diagrams illustrate possible product architectures and data flows, not dep
 
 Requires Node.js `>=22.22.2`, pnpm `10.32.1`, and network access to install dependencies. Run the published CLI from the directory where you want to create the project:
 
-Version `0.1.0` has been submitted to npm and is still being processed; the command becomes usable when npm makes that version available.
-
 ```bash
 npx create-smart-base@latest
 ```

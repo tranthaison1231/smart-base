@@ -2,8 +2,6 @@
 
 Run the published CLI from the directory where you want to create the project:
 
-Version `0.1.0` has been submitted to npm and is still being processed; it is not yet confirmed available for installation.
-
 ```bash
 npx create-smart-base@latest
 ```
@@ -47,17 +45,12 @@ The [published package](https://www.npmjs.com/package/create-smart-base) is avai
 
 ## Release the CLI
 
-Before publishing, check the package name and version, and review the tarball contents. Run the repository quality checks, then test the tarball in a clean directory for Web, Mobile, and Web + Mobile. Package versions cannot be reused after publishing.
+For a change that affects the CLI or any shipped template, run `pnpm changeset`, select `create-smart-base`, choose the appropriate patch, minor, or major bump, and commit the generated changeset with the change. Template changes need a changeset even when the CLI source did not change. Skip the changeset for repository-only changes that should not be released.
 
-For the first release, sign in to npm with an account authorized for the package and 2FA enabled. From `packages/create-smart-base`, run `npm publish --access public`; its `prepack` script builds the templates from this checkout. Verify the published version with `npm view create-smart-base version` and run `npx create-smart-base@latest` in a clean directory.
+After changesets reach `main`, **Publish CLI** creates or updates a release PR with the version and changelog. Review and merge that PR; the next run executes the quality checks, packs the release, and publishes it through npm Trusted Publishing. A failed check prevents publication. The workflow can also retry an unpublished version on a later push to `main`. Package versions cannot be reused.
 
-For subsequent releases, update `packages/create-smart-base/package.json` to a new stable version, run the checks, and merge the release changes to `main`. After the first release, configure npm Trusted Publishing for `.github/workflows/publish-cli.yml` on the `tranthaison1231/smart-base` repository, with direct publishing allowed. The workflow must use the exact repository and workflow names configured on npm and run successfully within two days of creating the trusted publisher. See [npm's Trusted Publishing guide](https://docs.npmjs.com/trusted-publishers/).
+Before the first automated release:
 
-Create and push a tag that matches the package version. For example, if its version is `0.1.1`:
-
-```bash
-git tag v0.1.1
-git push origin v0.1.1
-```
-
-The tag must point to a commit reachable from `main`. A push to the tag starts the **Publish CLI** workflow, which checks the tag and version, runs the quality checks, and publishes through GitHub Actions OIDC. Ordinary branch pushes do not publish. The workflow only supports stable `X.Y.Z` versions; it does not publish prereleases.
+1. In GitHub repository settings under **Actions → General**, allow GitHub Actions to create and approve pull requests. Repository rules may require additional approval of checks on a bot-created PR.
+2. On npm, configure Trusted Publishing for `tranthaison1231/smart-base`, workflow `publish-cli.yml`, with direct `npm publish` allowed. The names must match exactly. A new trusted publisher expires if it does not publish successfully within two days. See [npm's Trusted Publishing guide](https://docs.npmjs.com/trusted-publishers/).
+3. Merge a changeset into `main`, then review and merge the generated release PR. After publication, verify `npm view create-smart-base version` and run `npx create-smart-base@latest` in a clean directory.
