@@ -16,7 +16,50 @@ These diagrams illustrate possible product architectures and data flows, not dep
 
 ## Create a product
 
-After installing dependencies, run `pnpm create:app` and select Web, Mobile, or both. Web uses the current Next.js starter; Mobile adds an Expo Router and NativeWind app; selecting both also adds a minimal API. See the [CLI guide](docs/create-project.md) for generated commands and packaging.
+Requires Node.js `>=22.22.2`, pnpm `10.32.1`, and network access to install dependencies. From this repository, run:
+
+```bash
+pnpm install
+pnpm create:app
+```
+
+The CLI first asks which platforms to include:
+
+```text
+What type of website do you want to build? Select one or more.
+◻ Web
+◻ Mobile
+```
+
+Use the arrow keys to navigate, **Space** to select one or both options, and **Enter** to confirm. Then enter a project name using lowercase letters, numbers, and hyphens, for example `my-app`.
+
+| Selection      | What the CLI creates                                         |
+| -------------- | ------------------------------------------------------------ |
+| Web            | Next.js app and server-only database package.                |
+| Mobile         | Expo Router app with NativeWind; no backend.                 |
+| Web and Mobile | Next.js app, Expo app, and a minimal Hono API in `apps/api`. |
+
+The project is created in a new directory under the current working directory. The CLI installs dependencies and formats the generated files; it refuses to overwrite an existing directory. If installation or formatting fails, run the indicated command again inside the generated directory.
+
+To start the generated project:
+
+```bash
+cd my-app
+pnpm dev          # Web when selected; otherwise Mobile
+pnpm dev:mobile   # Mobile, when selected
+pnpm dev:api      # API, when both Web and Mobile were selected
+```
+
+The API currently exposes only `GET /health`; it does not yet provide authentication, product routes, or database access. See the [CLI guide](docs/create-project.md) for packaging, mobile release, and further details.
+
+To use the CLI from outside this checkout, build a local tarball and use its absolute path:
+
+```bash
+pnpm --filter create-smart-base pack
+npx --yes --package=/absolute/path/to/create-smart-base-0.1.0.tgz create-smart-base
+```
+
+The CLI has not been published to npm; `npx create-smart-base` will be available only after the package is published under that name.
 
 ## Getting started
 
@@ -47,9 +90,9 @@ pnpm build
 
 ## Deployment
 
-Deploy the web app through Vercel Git integration and real background workers through worker-specific Cloudflare workflows. See the [deployment guide](docs/deployment.md) and [worker guide](apps/workers/README.md).
+Deploy the web app through Vercel Git integration and real background workers through worker-specific Cloudflare workflows. See the [deployment guide](docs/deployment.md) and [worker guide](templates/base/apps/workers/README.md).
 
-The [infrastructure guide](infra/README.md) provides an empty Terraform structure and operating conventions for resources added by a product.
+The [infrastructure guide](templates/base/infra/README.md) provides an empty Terraform structure and operating conventions for resources added by a product.
 
 ## Database
 
@@ -57,13 +100,27 @@ The [infrastructure guide](infra/README.md) provides an empty Terraform structur
 
 ## Building a product
 
-After copying this repository, use the [product setup checklist](docs/start-a-product.md) and [product brief template](docs/product-brief.md) before starting the first workflow with an agent.
+For a new product, use the [product setup checklist](docs/start-a-product.md) and [product brief template](docs/product-brief.md) before starting the first workflow with an agent.
 
 1. Read the [architecture guide](docs/architecture.md) and identify the owning route, page, widget, feature, or entity.
 2. Read the [Codex workflow](docs/codex.md) and the [feature-development](.agents/skills/feature-development/SKILL.md) skill.
 3. Add the first domain model under `_entities`; do not add a placeholder domain to the starter.
 4. Review [UI components](docs/ui-components.md), [forms](docs/forms.md), [API](docs/api.md), [data fetching and tables](docs/data-fetching-and-tables.md), [AI service](docs/ai-service.md), [database](docs/database.md), [mobile](docs/mobile.md), [observability](docs/observability.md), and [testing](docs/testing.md) before adding the corresponding layer.
-5. Put independent background workloads under [`apps/workers/`](apps/workers/README.md); add a worker package only when the application has a defined workload.
+5. Put independent background workloads under [`apps/workers/`](templates/base/apps/workers/README.md); add a worker package only when the application has a defined workload.
+
+## Repository structure
+
+The CLI lives separately from its source templates. In this repository, `pnpm dev` runs the web template; use the CLI to create a separate product before adding product-specific code.
+
+```text
+packages/create-smart-base/  # CLI
+templates/base/             # Web, database, migrations, and infrastructure
+templates/mobile/           # Expo app template
+templates/mobile-root/      # Mobile-only workspace template
+templates/api/              # Minimal API template
+```
+
+The following shows a generated Web product alongside the source-only CLI. In this repository the Web product files below live under `templates/base/`.
 
 ## Structure
 
@@ -87,7 +144,7 @@ app → _app → _pages → _widgets → _features → _entities → _shared
 
 ESLint checks import direction between layers. See [architecture.md](docs/architecture.md) for boundaries and examples.
 
-See [apps/workers/README.md](apps/workers/README.md) for worker placement and [packages/README.md](packages/README.md) for shared-package ownership.
+See [worker guidance](templates/base/apps/workers/README.md) for worker placement and [package guidance](templates/base/packages/README.md) for shared-package ownership.
 
 ## Codex
 

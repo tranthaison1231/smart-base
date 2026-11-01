@@ -18,8 +18,8 @@
     "test:e2e": "turbo run test:e2e",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:generate": "cd templates/base && pnpm exec drizzle-kit generate",
+    "db:migrate": "cd templates/base && pnpm exec drizzle-kit migrate"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.11",

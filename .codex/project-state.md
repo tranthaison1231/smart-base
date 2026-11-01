@@ -10,22 +10,22 @@ There is no product domain yet. Keep product-specific logic and data from Smart 
 
 ## Runtime and checks
 
-- pnpm/Turborepo monorepo; web app at `apps/web`, future independent worker packages under `apps/workers/*`, and shared infrastructure under `packages/*`.
-- Current workspace packages are `apps/web`, `packages/database`, and the `create-smart-base` CLI in `packages/create-smart-base`. `apps/workers/` has guidance only; no worker package is included.
+- pnpm/Turborepo monorepo; starter sources live in `templates/base`, and Mobile and API templates live in `templates/mobile` and `templates/api`.
+- Current workspace packages are `templates/base/apps/web`, `templates/base/packages/database`, and the `create-smart-base` CLI in `packages/create-smart-base`. The workers directory has guidance only; no worker package is included.
 - Node.js `>=22.22.2`, pnpm `10.32.1`.
 - `pnpm dev`, `pnpm create:app`, `pnpm format`, `pnpm format:check`, `pnpm lint`, `pnpm knip`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm build`.
 - Prettier and Knip are configured at the repository root. CI checks formatting, lint, unused files/exports/dependencies, typecheck, coverage tests, and build.
 - `pnpm test` runs coverage in all three test workspaces and enforces 100% global line, statement, function, and branch coverage over their first-party runtime sources. The CLI also includes its executable entry point.
 - Coverage excludes colocated test/spec files, `src/test/**`, declarations, and generated files. See `docs/testing.md` for the complete contract.
 - `pnpm db:generate` works from local schema files; `pnpm db:migrate` requires an explicit `DATABASE_URL`.
-- Database schema entry point: `packages/database/src/schema/`; migration output: `drizzle/`.
+- Database schema entry point: `templates/base/packages/database/src/schema/`; migration output: `templates/base/drizzle/`.
 - AI requires `AI_API_KEY` and `AI_MODEL` when calling a provider; they are not needed for build or tests.
 - `@tanstack/react-query`, `@tanstack/react-table`, and `@tanstack/react-virtual` are declared in `apps/web`; `AppProviders` mounts the QueryClient once for browser use and per server render. Virtual is available for feature-owned long lists; the shared DataTable does not virtualize rows.
 - Zod is the documented schema standard. React Hook Form and its Zod resolver are added to the web workspace only when the first complex form needs them; see `docs/forms.md`.
 - Observability uses Vercel and Cloudflare's platform tooling by default. No third-party monitoring SDK or Worker is configured; see `docs/observability.md`.
 - Root route errors and missing pages have shared fallback UI. Dependabot proposes weekly dependency and GitHub Actions updates; see `docs/observability.md` and `docs/deployment.md`.
-- Web deployment target: Vercel Git integration with `apps/web` as the project root. Real Cloudflare Workers use worker-specific GitHub Actions deployment workflows; the starter has no worker package yet.
-- `infra/` documents the Terraform environment structure and state conventions; no Terraform providers, backend, resources, or apply workflow are configured.
+- Web deployment target for a generated product: Vercel Git integration with `apps/web` as the project root. Real Cloudflare Workers use worker-specific GitHub Actions deployment workflows; the starter has no worker package yet.
+- `templates/base/infra/` documents the Terraform environment structure and state conventions; generated Web products place it at `infra/`. No Terraform providers, backend, resources, or apply workflow are configured.
 
 ## Decisions when copying
 

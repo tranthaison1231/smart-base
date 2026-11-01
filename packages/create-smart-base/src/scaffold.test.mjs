@@ -50,6 +50,19 @@ describe("createProject", () => {
     expect(manifest.scripts.dev).toContain(web ? "@smart-base/web" : "@smart-base/mobile")
     expect(await exists(path.join(project, "pnpm-lock.yaml"))).toBe(web && !mobile)
     if (web) {
+      expect(await readFile(path.join(project, "pnpm-workspace.yaml"), "utf8")).toContain("apps/*")
+      expect(await readFile(path.join(project, "pnpm-workspace.yaml"), "utf8")).not.toContain(
+        "templates/base",
+      )
+      expect(await readFile(path.join(project, "apps/workers/README.md"), "utf8")).toContain(
+        "](../../docs/",
+      )
+      expect(await readFile(path.join(project, "packages/README.md"), "utf8")).toContain(
+        "](../docs/",
+      )
+      expect(await readFile(path.join(project, ".codex/project-state.md"), "utf8")).not.toContain(
+        "templates/base",
+      )
       expect(await readFile(path.join(project, ".codex/project-state.md"), "utf8")).not.toContain(
         "create-smart-base",
       )
@@ -59,6 +72,9 @@ describe("createProject", () => {
       expect(await readFile(path.join(project, "README.md"), "utf8")).not.toContain(
         "packages/create-smart-base",
       )
+      const readme = await readFile(path.join(project, "README.md"), "utf8")
+      expect(readme).not.toContain(", `packages/database`. Each workspace")
+      expect(readme).not.toContain("After copying this repository")
       expect(await readFile(path.join(project, "docs/testing.md"), "utf8")).not.toContain(
         "packages/create-smart-base",
       )

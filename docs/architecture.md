@@ -1,5 +1,7 @@
 # Architecture
 
+Paths such as `apps/web` and `packages/database` below describe a generated product. In this repository their source lives under `templates/base/`; the CLI is maintained separately in `packages/create-smart-base/`.
+
 Smart Base uses the Next.js App Router with Feature-Sliced Design (FSD). Routes are thin composition roots; domains and user workflows live in separate layers so they are easier to change and test.
 
 ## Layers and ownership
@@ -33,13 +35,13 @@ packages/
 drizzle/                    # Migration output and metadata; no migrations exist yet
 ```
 
-| Path                   | Ownership                                                                                                                                                                              |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apps/web/`            | Next.js routes, UI, and product FSD slices                                                                                                                                             |
-| `apps/workers/<name>/` | Future independently deployed Cloudflare Worker packages for real background workloads; see [`apps/workers/README.md`](../apps/workers/README.md). No worker package currently exists. |
-| `packages/database/`   | Shared server-only PostgreSQL connection and Drizzle schema entry point                                                                                                                |
-| `packages/<name>/`     | Future shared code only when it has real consumers in multiple apps. `packages/database` is the only package currently included.                                                       |
-| `drizzle/`             | Generated SQL migrations and Drizzle snapshots. The directory currently contains guidance and metadata only.                                                                           |
+| Path                   | Ownership                                                                                                                                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/web/`            | Next.js routes, UI, and product FSD slices                                                                                                                                                            |
+| `apps/workers/<name>/` | Future independently deployed Cloudflare Worker packages for real background workloads; see [`apps/workers/README.md`](../templates/base/apps/workers/README.md). No worker package currently exists. |
+| `packages/database/`   | Shared server-only PostgreSQL connection and Drizzle schema entry point                                                                                                                               |
+| `packages/<name>/`     | Future shared code only when it has real consumers in multiple apps. `packages/database` is the only package currently included.                                                                      |
+| `drizzle/`             | Generated SQL migrations and Drizzle snapshots. The directory currently contains guidance and metadata only.                                                                                          |
 
 The database package contains infrastructure only; `packages/database/src/schema/` has no product tables yet. Add tables after the application defines its domain, then generate and review a migration. Do not put worker jobs or product workflows in shared packages.
 
@@ -49,7 +51,7 @@ The database package contains infrastructure only; `packages/database/src/schema
 - **Web and mobile:** Prefer an independently deployed HTTP API in an `apps/api` workspace in the product copy. Web and mobile use the same API for shared server-owned behavior; keep authorization and business rules on the backend rather than duplicating them in each app. Server Actions may call that API for web-specific flows; they are not the mobile API.
 - A separate backend is a default preference, not a requirement to create an empty workspace. If a real product has a clear reason to keep an API in Next.js initially, document the decision and reassess as its needs change.
 
-An independent API is not included in Smart Base. When adding one, choose the runtime, authentication and authorization, request and response contracts, versioning, deployment, and compatible database connection for the actual product. Authenticate and authorize protected operations, validate input and external responses, and test permitted and denied access. Add workspace scripts, coverage, CI, and deployment checks for the API; a web build does not validate it. See [deployment guidance](deployment.md#deploy-a-separate-api-when-needed) and [mobile guidance](mobile.md).
+An independent API is not included in Smart Base. For a product API, decide on authentication and authorization, request and response contracts, versioning, deployment, and a compatible database connection for the actual runtime. Authenticate and authorize protected operations, validate input and external responses, and test permitted and denied access. Ensure workspace scripts, coverage, CI, and deployment checks cover the API; a web build alone does not validate it. See [deployment guidance](deployment.md#deploy-a-separate-api-when-needed) and [mobile guidance](mobile.md).
 
 The existing `@smart-base/database/server` uses Next.js's `server-only` marker and a Node-oriented connection. Do not assume it can be imported unchanged into an independent runtime; choose and test an appropriate server-only database entry point and connection strategy for that runtime, keeping migrations and schema ownership explicit. See [database guidance](database.md#connection).
 

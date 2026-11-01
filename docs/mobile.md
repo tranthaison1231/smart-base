@@ -22,7 +22,7 @@ At the time of writing, stable NativeWind v4 uses Tailwind CSS v3 while the web 
 - Keep web UI and routing in `apps/web` and native UI and navigation in `apps/mobile`. Existing web components use web-specific dependencies and are not native UI components.
 - Keep database connections, server-only AI code, private credentials, and privileged operations on trusted servers. Never import `@smart-base/database` into mobile.
 - Use an HTTPS server API when both apps need server-owned business behavior. Authenticate each request, authorize the operation and resource, validate input and responses at trust boundaries, and test success and denied access. A mobile access token is not itself proof of authorization.
-- Extract types, Zod schemas, or pure business rules into a shared package only when both apps have a real consumer. A shared package must not import platform-specific or server-only code; see [shared package guidance](../packages/README.md).
+- Extract types, Zod schemas, or pure business rules into a shared package only when both apps have a real consumer. A shared package must not import platform-specific or server-only code; see [shared package guidance](../templates/base/packages/README.md).
 - Mobile configuration prefixed `EXPO_PUBLIC_` is embedded in the app and is public. Never put a database URL, secret key, or service-role key there; keep only intended public configuration and document the variables a product actually uses.
 
 ## Supabase when needed

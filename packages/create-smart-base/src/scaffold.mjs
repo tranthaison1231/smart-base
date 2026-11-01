@@ -77,7 +77,12 @@ export async function createProject({ root, name, platforms }) {
     let readme = await readFile(readmePath, "utf8")
     readme = readme.replace(/## Create a product\n[\s\S]*?(?=## Getting started)/, "")
     readme = readme
-      .replace(", and the `create-smart-base` CLI", mobile ? ", `apps/mobile`, and `apps/api`" : "")
+      .replace(
+        "`apps/web`, `packages/database`, and the `create-smart-base` CLI",
+        mobile
+          ? "`apps/web`, `packages/database`, `apps/mobile`, and `apps/api`"
+          : "`apps/web` and `packages/database`",
+      )
       .replace(
         "├── database/               # Shared server-only PostgreSQL/Drizzle infrastructure\n└── create-smart-base/      # CLI and opt-in product templates",
         "└── database/               # Shared server-only PostgreSQL/Drizzle infrastructure",

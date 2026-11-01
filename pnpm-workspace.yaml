@@ -1,4 +1,5 @@
 packages:
-  - apps/*
-  - apps/workers/*
+  - templates/base/apps/*
+  - templates/base/apps/workers/*
+  - templates/base/packages/*
   - packages/*

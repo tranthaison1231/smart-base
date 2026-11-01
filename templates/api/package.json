@@ -1,0 +1,26 @@
+{
+  "name": "@smart-base/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch scripts/dev.ts",
+    "build": "tsc --noEmit",
+    "lint": "eslint src scripts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.5",
+    "hono": "^4.13.14"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "@typescript-eslint/parser": "^8.46.2",
+    "@vitest/coverage-v8": "4.1.11",
+    "eslint": "9.39.5",
+    "tsx": "^4.21.0",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  }
+}

@@ -1,8 +1,8 @@
 {
   // These are standalone generated workspaces; validate them after scaffolding.
-  "ignore": ["packages/create-smart-base/templates/**"],
+  "ignore": ["templates/api/**", "templates/mobile/**", "templates/base/drizzle.config.ts"],
   "workspaces": {
-    "apps/web": {
+    "templates/base/apps/web": {
       // Shared UI modules and entity barrels are intentionally public for future features.
       "entry": ["src/_shared/ui/*.tsx", "src/_entities/*/index.server.ts"],
       // These dependencies are documented for product features, but the starter has no such feature yet.
