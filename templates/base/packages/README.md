@@ -4,7 +4,7 @@ Add code here only when multiple applications need to share it. The starter incl
 
 `packages/database` is the only product-shared package currently included. `packages/create-smart-base` contains the project creation CLI and is not copied into generated products. There are no placeholder shared packages. Add a package only with a real consumer, a clear owner, and a documented public API.
 
-When both web and mobile need the same code, share platform-neutral types, validation schemas, or pure business rules with an explicit public API. Keep Next.js, React Native, browser, Node-only, database, and secret-dependent code out of packages intended for both platforms. UI stays with its platform unless a real cross-platform component is proven to work in both apps. Do not import `@smart-base/database` from mobile; call an authenticated server API for server-owned work. See the [mobile guide](../../../docs/mobile.md).
+When both web and mobile need the same code, share platform-neutral types, validation schemas, or pure business rules with an explicit public API. Keep Next.js, React Native, browser, Node-only, database, and secret-dependent code out of packages intended for both platforms. UI stays with its platform unless a real cross-platform component is proven to work in both apps. Do not import `@smart-base/database` from mobile; call an authenticated server API for server-owned work. See the [mobile guide](../docs/mobile.md).
 
 ## Possible packages for a product
 
@@ -30,4 +30,4 @@ packages/
 
 ## Testing and coverage
 
-Every package that adds runtime code must expose a Turbo-discoverable `test` script that runs Vitest coverage, add `@vitest/coverage-v8` at the same version as its Vitest dependency, and explicitly include all runtime TypeScript and TSX files under `src/`. Exclude test/spec files, `src/test/**`, declarations, and generated files. Set global `lines`, `statements`, `functions`, and `branches` thresholds to `100` so the root `pnpm test` command enforces the same gate in every workspace. See the [testing guide](../../../docs/testing.md) for the full coverage contract.
+Every package that adds runtime code must expose a Turbo-discoverable `test` script that runs Vitest coverage, add `@vitest/coverage-v8` at the same version as its Vitest dependency, and explicitly include all runtime TypeScript and TSX files under `src/`. Exclude test/spec files, `src/test/**`, declarations, and generated files. Set global `lines`, `statements`, `functions`, and `branches` thresholds to `100` so the root `pnpm test` command enforces the same gate in every workspace. See the [testing guide](../docs/testing.md) for the full coverage contract.

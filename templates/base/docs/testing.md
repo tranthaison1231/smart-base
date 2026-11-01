@@ -42,7 +42,7 @@ The coverage report excludes colocated test/spec files, `src/test/**`, declarati
 
 Unit and component tests use Vitest, Testing Library, and jsdom. The database package uses Vitest in Node. Inject `fetchImpl` or an AI model as needed; tests do not depend on the network, secrets, a live database, or an external provider. Test UI behavior, semantics, and accessibility rather than implementation details.
 
-If a future worker or shared package adds runtime code, add a Turbo-visible `test` script, the matching `@vitest/coverage-v8` provider, an explicit runtime include, and the same four 100% thresholds before adding the package to the workspace. See [worker guidance](../templates/base/apps/workers/README.md) and [package guidance](../templates/base/packages/README.md).
+If a future worker or shared package adds runtime code, add a Turbo-visible `test` script, the matching `@vitest/coverage-v8` provider, an explicit runtime include, and the same four 100% thresholds before adding the package to the workspace. See [worker guidance](../apps/workers/README.md) and [package guidance](../packages/README.md).
 
 Playwright starts the Next.js development server on port `3100` and checks the `/` route. If Chromium is not installed on the machine, install it once:
 

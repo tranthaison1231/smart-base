@@ -28,7 +28,6 @@ export async function createProject({ root, name, platforms }) {
   const manifestPath = path.join(target, "package.json")
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"))
   manifest.name = name
-  delete manifest.scripts["create:app"]
   if (mobile) {
     await cp(path.join(templates, "mobile"), path.join(target, "apps/mobile"), { recursive: true })
     const mobileConfigPath = path.join(target, "apps/mobile/app.json")
@@ -143,7 +142,7 @@ export async function createProject({ root, name, platforms }) {
     const mobileDocsPath = path.join(target, "docs/mobile.md")
     let mobileDocs = await readFile(mobileDocsPath, "utf8")
     mobileDocs = mobileDocs.replace(
-      "Smart Base currently runs only a Next.js web app. The [CLI](create-project.md) can generate an Expo app for a product that needs iOS or Android; an installed mobile workspace is not included in this checkout. Keep the web-only setup usable without a mobile toolchain.",
+      "Smart Base currently runs only a Next.js web app. The [CLI](../../../docs/create-project.md) can generate an Expo app for a product that needs iOS or Android; an installed mobile workspace is not included in this checkout. Keep the web-only setup usable without a mobile toolchain.",
       mobile
         ? "This product includes an Expo app in `apps/mobile` and a separate minimal API in `apps/api`. Run `pnpm dev:mobile` and `pnpm dev:api` from the workspace root. Native builds, authentication, and provider integrations require product-specific setup."
         : "This product currently includes a Next.js web app. Add an Expo app when the product needs iOS or Android.",
@@ -161,7 +160,7 @@ export async function createProject({ root, name, platforms }) {
     const architecturePath = path.join(target, "docs/architecture.md")
     const architecture = await readFile(architecturePath, "utf8")
     let productArchitecture = architecture.replace(
-      "The starter also contains the [`create-smart-base` CLI](create-project.md) under `packages/create-smart-base`; it creates products and is not part of the generated applications.\n\n",
+      "The starter also contains the [`create-smart-base` CLI](../../../docs/create-project.md) under `packages/create-smart-base`; it creates products and is not part of the generated applications.\n\n",
       "",
     )
     if (mobile) {
@@ -220,18 +219,6 @@ export async function createProject({ root, name, platforms }) {
         )
         .replace(" The CLI coverage also includes its executable entry point.", ""),
     )
-
-    const knipPath = path.join(target, "knip.jsonc")
-    const knip = await readFile(knipPath, "utf8")
-    await writeFile(
-      knipPath,
-      knip.replace(
-        '  // These are standalone generated workspaces; validate them after scaffolding.\n  "ignore": ["packages/create-smart-base/templates/**"],\n',
-        "",
-      ),
-    )
-
-    await rm(path.join(target, "docs/create-project.md"))
   }
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
   return target

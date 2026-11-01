@@ -6,13 +6,13 @@ A copyable Next.js starter for new applications. It includes a Feature-Sliced De
 
 For a web-only product, keep the backend with the Next.js app:
 
-![Web-only architecture with a backend in Next.js and optional external services](docs/images/smart-base-web-white.png)
+![Web-only architecture with a backend in Next.js and optional external services](templates/base/docs/images/smart-base-web-white.png)
 
 For a product with web and mobile, prefer a separate backend shared by both apps:
 
-![Web and mobile architecture with a separate API and optional external services](docs/images/smart-base-web-mobile-drizzle.png)
+![Web and mobile architecture with a separate API and optional external services](templates/base/docs/images/smart-base-web-mobile-drizzle.png)
 
-These diagrams illustrate possible product architectures and data flows, not deployed connections. Smart Base currently includes the web app and database package; mobile, a separate API, product business logic, and external services are added when needed. The database package needs a compatible entry point and connection strategy for a separate API runtime. See the [architecture guide](docs/architecture.md#choosing-a-backend).
+These diagrams illustrate possible product architectures and data flows, not deployed connections. Smart Base currently includes the web app and database package; mobile, a separate API, product business logic, and external services are added when needed. The database package needs a compatible entry point and connection strategy for a separate API runtime. See the [architecture guide](templates/base/docs/architecture.md#choosing-a-backend).
 
 ## Create a product
 
@@ -94,26 +94,26 @@ pnpm build
 
 `pnpm test:e2e` runs a browser smoke test with Chromium and starts the app on port `3100`. If Chromium is not installed, run `pnpm --filter @smart-base/web exec playwright install chromium`.
 
-`pnpm test` runs Vitest with coverage in `apps/web`, `packages/database`, and the `create-smart-base` CLI. Each workspace enforces 100% global line, statement, function, and branch coverage for its first-party runtime sources. See the [testing guide](docs/testing.md) for the exact scope and exclusions.
+`pnpm test` runs Vitest with coverage in `apps/web`, `packages/database`, and the `create-smart-base` CLI. Each workspace enforces 100% global line, statement, function, and branch coverage for its first-party runtime sources. See the [testing guide](templates/base/docs/testing.md) for the exact scope and exclusions.
 
 ## Deployment
 
-Deploy the web app through Vercel Git integration and real background workers through worker-specific Cloudflare workflows. See the [deployment guide](docs/deployment.md) and [worker guide](templates/base/apps/workers/README.md).
+Deploy the web app through Vercel Git integration and real background workers through worker-specific Cloudflare workflows. See the [deployment guide](templates/base/docs/deployment.md) and [worker guide](templates/base/apps/workers/README.md).
 
 The [infrastructure guide](templates/base/infra/README.md) provides an empty Terraform structure and operating conventions for resources added by a product.
 
 ## Database
 
-`@smart-base/database` creates a PostgreSQL connection only when `getDb()` is called. Add product tables under `packages/database/src/schema/`, generate and review migrations with `pnpm db:generate`, then apply them explicitly with `DATABASE_URL=... pnpm db:migrate`. See the [database guide](docs/database.md).
+`@smart-base/database` creates a PostgreSQL connection only when `getDb()` is called. Add product tables under `packages/database/src/schema/`, generate and review migrations with `pnpm db:generate`, then apply them explicitly with `DATABASE_URL=... pnpm db:migrate`. See the [database guide](templates/base/docs/database.md).
 
 ## Building a product
 
-For a new product, use the [product setup checklist](docs/start-a-product.md) and [product brief template](docs/product-brief.md) before starting the first workflow with an agent.
+For a new product, use the [product setup checklist](templates/base/docs/start-a-product.md) and [product brief template](templates/base/docs/product-brief.md) before starting the first workflow with an agent.
 
-1. Read the [architecture guide](docs/architecture.md) and identify the owning route, page, widget, feature, or entity.
-2. Read the [Codex workflow](docs/codex.md) and the [feature-development](.agents/skills/feature-development/SKILL.md) skill.
+1. Read the [architecture guide](templates/base/docs/architecture.md) and identify the owning route, page, widget, feature, or entity.
+2. Read the [Codex workflow](templates/base/docs/codex.md) and the [feature-development](templates/base/.agents/skills/feature-development/SKILL.md) skill.
 3. Add the first domain model under `_entities`; do not add a placeholder domain to the starter.
-4. Review [UI components](docs/ui-components.md), [forms](docs/forms.md), [API](docs/api.md), [data fetching and tables](docs/data-fetching-and-tables.md), [AI service](docs/ai-service.md), [database](docs/database.md), [mobile](docs/mobile.md), [observability](docs/observability.md), and [testing](docs/testing.md) before adding the corresponding layer.
+4. Review [UI components](templates/base/docs/ui-components.md), [forms](templates/base/docs/forms.md), [API](templates/base/docs/api.md), [data fetching and tables](templates/base/docs/data-fetching-and-tables.md), [AI service](templates/base/docs/ai-service.md), [database](templates/base/docs/database.md), [mobile](templates/base/docs/mobile.md), [observability](templates/base/docs/observability.md), and [testing](templates/base/docs/testing.md) before adding the corresponding layer.
 5. Put independent background workloads under [`apps/workers/`](templates/base/apps/workers/README.md); add a worker package only when the application has a defined workload.
 
 ## Repository structure
@@ -122,11 +122,13 @@ The CLI lives separately from its source templates. In this repository, `pnpm de
 
 ```text
 packages/create-smart-base/  # CLI
-templates/base/             # Web, database, migrations, and infrastructure
+templates/base/             # Web, database, migrations, infrastructure, and .env.example
 templates/mobile/           # Expo app template
 templates/mobile-root/      # Mobile-only workspace template
 templates/api/              # Minimal API template
 ```
+
+Product-specific root configuration, including `.env.example`, package scripts, workspace membership, and Git, Prettier, and Knip settings, lives in `templates/base/`. The CLI copies these files into each generated Web product. Root workspace, TypeScript, Turbo, formatting, CI, and agent configuration also support development of this repository; settings that apply equally to a product are shared when packaging.
 
 The following shows a generated Web product alongside the source-only CLI. In this repository the Web product files below live under `templates/base/`.
 
@@ -150,10 +152,10 @@ The current FSD slices live under `apps/web/src/`. The starter includes `app/`, 
 app → _app → _pages → _widgets → _features → _entities → _shared
 ```
 
-ESLint checks import direction between layers. See [architecture.md](docs/architecture.md) for boundaries and examples.
+ESLint checks import direction between layers. See [architecture.md](templates/base/docs/architecture.md) for boundaries and examples.
 
 See [worker guidance](templates/base/apps/workers/README.md) for worker placement and [package guidance](templates/base/packages/README.md) for shared-package ownership.
 
 ## Codex
 
-`AGENTS.md` is the agent entry point. `.codex/` contains workflow guidance and the starter's current state; `.agents/skills/feature-development/` describes the feature-development process. Model, approval, and sandbox settings remain user-managed.
+`AGENTS.md` is the agent entry point. `.codex/` contains workflow guidance and the starter's current state; `templates/base/.agents/skills/feature-development/` describes the feature-development process for generated Web products. Model, approval, and sandbox settings remain user-managed.

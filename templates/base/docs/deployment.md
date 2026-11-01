@@ -9,9 +9,9 @@ Smart Base uses separate platforms for its web app and background workers:
 | Next.js web app          | Vercel             | Vercel Git integration                                 |
 | A real background worker | Cloudflare Workers | Worker-specific GitHub Actions workflow using Wrangler |
 
-GitHub Actions validates pull requests and pushes to `main` with the [`validate.yml`](../.github/workflows/validate.yml) workflow. It does not deploy the web app or a placeholder worker.
+GitHub Actions validates pull requests and pushes to `main` with the [`validate.yml`](../../../.github/workflows/validate.yml) workflow. It does not deploy the web app or a placeholder worker.
 
-The [infrastructure guide](../templates/base/infra/README.md) defines the Terraform directory and ownership, state, and review conventions for real cloud resources. No Terraform backend, provider, resource, or apply workflow is configured in the starter.
+The [infrastructure guide](../infra/README.md) defines the Terraform directory and ownership, state, and review conventions for real cloud resources. No Terraform backend, provider, resource, or apply workflow is configured in the starter.
 
 ## Deploy the web app to Vercel
 
@@ -35,7 +35,7 @@ Configure the API's own production and preview environments, secrets, build and 
 
 ## Deploy a real worker to Cloudflare
 
-The starter has no worker package. Add a deployment workflow only when a real workload has been added under `apps/workers/<worker-name>/`. Follow the [worker setup guide](../templates/base/apps/workers/README.md) for package scripts, Wrangler configuration, generated types, local development, and manual deployment.
+The starter has no worker package. Add a deployment workflow only when a real workload has been added under `apps/workers/<worker-name>/`. Follow the [worker setup guide](../apps/workers/README.md) for package scripts, Wrangler configuration, generated types, local development, and manual deployment.
 
 Use one production workflow per worker with path-specific triggers. Keep the workflow inside this repository so the starter remains copyable. A worker workflow should:
 
@@ -44,7 +44,7 @@ Use one production workflow per worker with path-specific triggers. Keep the wor
 3. Install with `pnpm install --frozen-lockfile`, generate Worker types, then run the worker's lint, typecheck, coverage tests, and `wrangler deploy --dry-run`.
 4. Deploy with the worker's local Wrangler script only after those checks pass.
 
-Store `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the GitHub `Production` environment and expose them only to the deploy step. Scope the token to the target account and the Workers permissions and resources the workload needs. Never put credentials in `wrangler.jsonc`, workflow source, or repository variables. See [Cloudflare Worker setup](../templates/base/apps/workers/README.md#secrets) for local and deployed secret handling.
+Store `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the GitHub `Production` environment and expose them only to the deploy step. Scope the token to the target account and the Workers permissions and resources the workload needs. Never put credentials in `wrangler.jsonc`, workflow source, or repository variables. See [Cloudflare Worker setup](../apps/workers/README.md#secrets) for local and deployed secret handling.
 
 Example workflow shape for a worker named `my-worker`:
 

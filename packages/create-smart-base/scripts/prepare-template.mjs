@@ -7,24 +7,25 @@ const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 const repositoryRoot = path.resolve(packageRoot, "../..")
 const destination = path.join(packageRoot, "templates/base")
 const paths = [
-  ".agents",
   ".codex",
   ".github",
-  ".env.example",
-  ".prettierignore",
   ".prettierrc.json",
   "AGENTS.md",
   "LICENSE",
   "README.md",
-  "docs",
-  "knip.jsonc",
-  "package.json",
   "pnpm-lock.yaml",
-  "pnpm-workspace.yaml",
   "tsconfig.json",
   "turbo.json",
 ]
 const templatePaths = [
+  "docs",
+  ".agents",
+  ".env.example",
+  "gitignore.template",
+  "prettierignore.template",
+  "knip.template.jsonc",
+  "pnpm-workspace.template.yaml",
+  "package.template.json",
   "apps/web",
   "apps/workers",
   "drizzle",
@@ -62,32 +63,17 @@ for (const item of ["mobile", "mobile-root", "api"]) {
     { recursive: true },
   )
 }
-await cp(path.join(repositoryRoot, ".gitignore"), path.join(destination, "gitignore.template"))
+for (const [from, to] of [
+  ["prettierignore.template", ".prettierignore"],
+  ["knip.template.jsonc", "knip.jsonc"],
+  ["pnpm-workspace.template.yaml", "pnpm-workspace.yaml"],
+  ["package.template.json", "package.json"],
+]) {
+  await rename(path.join(destination, from), path.join(destination, to))
+}
 await rename(
   path.join(destination, "infra/.gitignore"),
   path.join(destination, "infra/gitignore.template"),
-)
-const manifestPath = path.join(destination, "package.json")
-const manifest = JSON.parse(await readFile(manifestPath, "utf8"))
-manifest.scripts["db:generate"] = "drizzle-kit generate"
-manifest.scripts["db:migrate"] = "drizzle-kit migrate"
-await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
-const workspacePath = path.join(destination, "pnpm-workspace.yaml")
-await writeFile(
-  workspacePath,
-  (await readFile(workspacePath, "utf8"))
-    .replaceAll("templates/base/apps/", "apps/")
-    .replace("  - templates/base/packages/*\n", ""),
-)
-const knipPath = path.join(destination, "knip.jsonc")
-await writeFile(
-  knipPath,
-  (await readFile(knipPath, "utf8"))
-    .replace('"templates/base/apps/web"', '"apps/web"')
-    .replace(
-      /  \/\/ These are standalone generated workspaces; validate them after scaffolding\.\n  "ignore": \[[\s\S]*?\],\n/,
-      "",
-    ),
 )
 for (const item of ["AGENTS.md", ".codex/project-state.md", "README.md"]) {
   const file = path.join(destination, item)
@@ -122,6 +108,10 @@ async function normalizeLinks(directory) {
         contents
           .replaceAll("](../templates/base/", "](../")
           .replaceAll("](templates/base/", "](")
+          .replaceAll("](../../../AGENTS.md", "](../AGENTS.md")
+          .replaceAll("](../../../.codex/", "](../.codex/")
+          .replaceAll("](../../../.github/", "](../.github/")
+          .replaceAll("`templates/base/docs/", "`docs/")
           .replace(
             "Paths such as `apps/web` and `packages/database` below describe a generated product. In this repository their source lives under `templates/base/`; the CLI is maintained separately in `packages/create-smart-base/`.\n\n",
             "",
@@ -136,11 +126,3 @@ async function normalizeLinks(directory) {
 }
 await normalizeLinks(path.join(destination, "docs"))
 await normalizeLinks(path.join(destination, ".codex"))
-for (const [item, from, to] of [
-  ["apps/workers/README.md", "](../../../../docs/", "](../../docs/"],
-  ["packages/README.md", "](../../../docs/", "](../docs/"],
-  ["infra/README.md", "](../../../docs/", "](../docs/"],
-]) {
-  const file = path.join(destination, item)
-  await writeFile(file, (await readFile(file, "utf8")).replaceAll(from, to))
-}

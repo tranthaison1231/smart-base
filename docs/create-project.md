@@ -23,7 +23,7 @@ The first prompt lets you select Web, Mobile, or both with Space; press Enter to
 | Mobile         | An Expo Router app with NativeWind. No backend is included.                             |
 | Web and Mobile | The Next.js starter and database package, Expo app, and minimal Hono API in `apps/api`. |
 
-In a Web + Mobile product, run `pnpm dev` for web, `pnpm dev:mobile` for Expo, and `pnpm dev:api` for the API. The API exposes only `GET /health`; it does not provide product routes, authentication, or database access. See [mobile guidance](mobile.md) and [backend guidance](architecture.md#choosing-a-backend).
+In a Web + Mobile product, run `pnpm dev` for web, `pnpm dev:mobile` for Expo, and `pnpm dev:api` for the API. The API exposes only `GET /health`; it does not provide product routes, authentication, or database access. See [mobile guidance](../templates/base/docs/mobile.md) and [backend guidance](../templates/base/docs/architecture.md#choosing-a-backend).
 
 The selected workspaces become part of the generated product; the CLI itself stays in this repository. Web products include the architecture, database, deployment, testing, and agent guides. A Mobile-only product has its own smaller README and agent instructions and does not include the web, API, or database workspaces.
 

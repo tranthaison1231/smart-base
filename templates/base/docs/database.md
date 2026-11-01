@@ -55,7 +55,7 @@ This starter does not provision Supabase, install its SDK, or configure its serv
 
 ## Optional Redis
 
-When an application has a concrete need for shared caching or distributed rate limiting, evaluate [Upstash Redis](https://upstash.com/docs/redis/overall/getstarted) first. Its HTTP-based client works with serverless environments, including Next.js and Cloudflare Workers. Redis is not installed or configured in the starter, and it does not replace PostgreSQL as the source of truth or [Cloudflare Queues](../templates/base/apps/workers/README.md#queued-workloads) for background jobs.
+When an application has a concrete need for shared caching or distributed rate limiting, evaluate [Upstash Redis](https://upstash.com/docs/redis/overall/getstarted) first. Its HTTP-based client works with serverless environments, including Next.js and Cloudflare Workers. Redis is not installed or configured in the starter, and it does not replace PostgreSQL as the source of truth or [Cloudflare Queues](../apps/workers/README.md#queued-workloads) for background jobs.
 
 Add the integration in the feature that needs it:
 

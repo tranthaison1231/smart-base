@@ -24,7 +24,7 @@ Create product FSD layers only when a feature needs them. `_app/` already contai
 
 FSD applies to the Next.js app under `apps/web/src/`. The monorepo also has separate deployment and infrastructure areas:
 
-The starter also contains the [`create-smart-base` CLI](create-project.md) under `packages/create-smart-base`; it creates products and is not part of the generated applications.
+The starter also contains the [`create-smart-base` CLI](../../../docs/create-project.md) under `packages/create-smart-base`; it creates products and is not part of the generated applications.
 
 ```text
 apps/
@@ -35,13 +35,13 @@ packages/
 drizzle/                    # Migration output and metadata; no migrations exist yet
 ```
 
-| Path                   | Ownership                                                                                                                                                                                             |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apps/web/`            | Next.js routes, UI, and product FSD slices                                                                                                                                                            |
-| `apps/workers/<name>/` | Future independently deployed Cloudflare Worker packages for real background workloads; see [`apps/workers/README.md`](../templates/base/apps/workers/README.md). No worker package currently exists. |
-| `packages/database/`   | Shared server-only PostgreSQL connection and Drizzle schema entry point                                                                                                                               |
-| `packages/<name>/`     | Future shared code only when it has real consumers in multiple apps. `packages/database` is the only package currently included.                                                                      |
-| `drizzle/`             | Generated SQL migrations and Drizzle snapshots. The directory currently contains guidance and metadata only.                                                                                          |
+| Path                   | Ownership                                                                                                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/web/`            | Next.js routes, UI, and product FSD slices                                                                                                                                             |
+| `apps/workers/<name>/` | Future independently deployed Cloudflare Worker packages for real background workloads; see [`apps/workers/README.md`](../apps/workers/README.md). No worker package currently exists. |
+| `packages/database/`   | Shared server-only PostgreSQL connection and Drizzle schema entry point                                                                                                                |
+| `packages/<name>/`     | Future shared code only when it has real consumers in multiple apps. `packages/database` is the only package currently included.                                                       |
+| `drizzle/`             | Generated SQL migrations and Drizzle snapshots. The directory currently contains guidance and metadata only.                                                                           |
 
 The database package contains infrastructure only; `packages/database/src/schema/` has no product tables yet. Add tables after the application defines its domain, then generate and review a migration. Do not put worker jobs or product workflows in shared packages.
 

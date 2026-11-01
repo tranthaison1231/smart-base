@@ -18,7 +18,7 @@ Keep each environment's Terraform root and state separate. Add shared modules on
 
 - Use Terraform for the actual cloud resources selected by the product, such as a Cloudflare Queue or Upstash Redis database. Choose and pin Terraform and provider versions when adding the first resource; commit the generated `.terraform.lock.hcl` files.
 - Use each Worker's `wrangler.jsonc` as the source of truth for Worker runtime configuration and bindings, and Wrangler plus its worker-specific workflow for deployment. Define resource and binding ownership before implementation: do not let Terraform and Wrangler manage the same setting or consumer relationship. Follow the [Worker guide](../apps/workers/README.md).
-- Keep web deployments on Vercel Git integration; follow the [deployment guide](../../../docs/deployment.md). Manage Vercel settings through Terraform only if a product explicitly adopts that ownership.
+- Keep web deployments on Vercel Git integration; follow the [deployment guide](../docs/deployment.md). Manage Vercel settings through Terraform only if a product explicitly adopts that ownership.
 
 ## State and secrets
 

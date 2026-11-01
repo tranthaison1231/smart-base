@@ -42,6 +42,17 @@ describe("createProject", () => {
     expect(await exists(path.join(project, "apps/web/package.json"))).toBe(web)
     expect(await exists(path.join(project, "apps/mobile/package.json"))).toBe(mobile)
     expect(await exists(path.join(project, "apps/api/package.json"))).toBe(api)
+    expect(await exists(path.join(project, ".env.example"))).toBe(web)
+    if (web) {
+      expect(
+        await exists(new URL("../../../templates/base/docs/architecture.md", import.meta.url)),
+      ).toBe(true)
+      expect(await exists(path.join(project, "docs/architecture.md"))).toBe(true)
+      expect(await exists(path.join(project, "docs/create-project.md"))).toBe(false)
+      expect(await readFile(path.join(project, ".env.example"), "utf8")).toBe(
+        await readFile(new URL("../../../templates/base/.env.example", import.meta.url), "utf8"),
+      )
+    }
     expect(await readFile(path.join(project, ".gitignore"), "utf8")).toContain(".env")
     expect(await exists(path.join(project, "infra/.gitignore"))).toBe(web)
     const manifest = JSON.parse(await readFile(path.join(project, "package.json"), "utf8"))
@@ -50,6 +61,22 @@ describe("createProject", () => {
     expect(manifest.scripts.dev).toContain(web ? "@smart-base/web" : "@smart-base/mobile")
     expect(await exists(path.join(project, "pnpm-lock.yaml"))).toBe(web && !mobile)
     if (web) {
+      expect(
+        await readFile(path.join(project, ".agents/skills/feature-development/SKILL.md"), "utf8"),
+      ).toBe(
+        await readFile(
+          new URL(
+            "../../../templates/base/.agents/skills/feature-development/SKILL.md",
+            import.meta.url,
+          ),
+          "utf8",
+        ),
+      )
+      for (const file of [".gitignore", ".prettierignore", "knip.jsonc", "pnpm-workspace.yaml"]) {
+        expect(await readFile(path.join(project, file), "utf8")).not.toContain(
+          "packages/create-smart-base/templates",
+        )
+      }
       expect(await exists(path.join(project, ".github/workflows/publish-cli.yml"))).toBe(false)
       expect(await readFile(path.join(project, "pnpm-workspace.yaml"), "utf8")).toContain("apps/*")
       expect(await readFile(path.join(project, "pnpm-workspace.yaml"), "utf8")).not.toContain(

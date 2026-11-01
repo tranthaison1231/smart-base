@@ -4,7 +4,7 @@ Create one independently deployable Cloudflare Worker package under `apps/worker
 
 The starter does not include a worker package or deploy a sample job. Use the examples below as a starting point only after the application has a real workload.
 
-For production CI and deployment, follow the [deployment guide](../../../../docs/deployment.md#deploy-a-real-worker-to-cloudflare). Add the path-scoped GitHub Actions workflow alongside the real worker package; do not configure a no-op deployment job in the starter.
+For production CI and deployment, follow the [deployment guide](../../docs/deployment.md#deploy-a-real-worker-to-cloudflare). Add the path-scoped GitHub Actions workflow alongside the real worker package; do not configure a no-op deployment job in the starter.
 
 ## Queued workloads
 
@@ -111,7 +111,7 @@ Wrangler-generated declarations provide the `ExportedHandler` type. Keep the han
    }
    ```
 
-   Add a package-local Vitest config that includes all runtime files under `src/`, excludes tests and generated files, and enforces 100% global lines, statements, functions, and branches. See the [testing guide](../../../../docs/testing.md), the [database TypeScript config](../../packages/database/tsconfig.json), and the [database Vitest config](../../packages/database/vitest.config.ts) for repository conventions.
+   Add a package-local Vitest config that includes all runtime files under `src/`, excludes tests and generated files, and enforces 100% global lines, statements, functions, and branches. See the [testing guide](../../docs/testing.md), the [database TypeScript config](../../packages/database/tsconfig.json), and the [database Vitest config](../../packages/database/vitest.config.ts) for repository conventions.
 
 5. Generate and commit the Worker runtime and binding declarations after creating or changing `wrangler.jsonc`:
 
@@ -196,7 +196,7 @@ For a workload with a defined schedule, add a `scheduled(controller, env, ctx)` 
 
 Every worker package that adds runtime code must expose a Turbo-visible `test` script that runs coverage. Keep external calls injected or mocked so worker tests are deterministic and offline. Configure Vitest to include every runtime TypeScript and TSX file under `src/`, excluding test/spec files, `src/test/**`, declarations, and generated files. Set global thresholds to 100% for lines, statements, functions, and branches.
 
-The root Turbo `test` task disables caching, so `pnpm test` runs the worker's coverage gate on every invocation. Follow the [testing guide](../../../../docs/testing.md) for the repository-wide contract.
+The root Turbo `test` task disables caching, so `pnpm test` runs the worker's coverage gate on every invocation. Follow the [testing guide](../../docs/testing.md) for the repository-wide contract.
 
 ## Boundaries
 

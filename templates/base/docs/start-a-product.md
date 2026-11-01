@@ -21,7 +21,7 @@ The CLI names the root package after the chosen project name. The web and databa
 
 - [ ] Keep `.env.example` as the list of non-secret names and placeholders. Database and AI values are optional for the starter; set real credentials locally and in the hosting provider only when the product uses those integrations. Never commit secrets.
 - [ ] Add the first real feature and its domain in the owning FSD layers. Use the [feature workflow](../.agents/skills/feature-development/SKILL.md) and existing UI and data helpers before introducing new dependencies.
-- [ ] Configure Vercel, Workers, queues, Redis, or Terraform only for real needs. Follow the [deployment guide](deployment.md), [Worker guide](../templates/base/apps/workers/README.md), and [infrastructure guide](../templates/base/infra/README.md).
+- [ ] Configure Vercel, Workers, queues, Redis, or Terraform only for real needs. Follow the [deployment guide](deployment.md), [Worker guide](../apps/workers/README.md), and [infrastructure guide](../infra/README.md).
 
 ## 4. Verify the new project
 

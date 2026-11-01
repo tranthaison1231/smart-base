@@ -1,0 +1,10 @@
+{
+  "workspaces": {
+    "apps/web": {
+      // Shared UI modules and entity barrels are intentionally public for future features.
+      "entry": ["src/_shared/ui/*.tsx", "src/_entities/*/index.server.ts"],
+      // These dependencies are documented for product features, but the starter has no such feature yet.
+      "ignoreDependencies": ["@tanstack/react-virtual", "zod"],
+    },
+  },
+}
