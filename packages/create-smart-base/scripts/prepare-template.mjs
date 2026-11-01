@@ -14,6 +14,7 @@ const paths = [
   ".prettierignore",
   ".prettierrc.json",
   "AGENTS.md",
+  "LICENSE",
   "README.md",
   "docs",
   "knip.jsonc",
@@ -40,7 +41,9 @@ for (const item of paths) {
   await mkdir(path.dirname(to), { recursive: true })
   await cp(from, to, {
     recursive: true,
-    filter: (entry) => includeTemplatePath(path.relative(repositoryRoot, entry)),
+    filter: (entry) =>
+      path.relative(repositoryRoot, entry) !== ".github/workflows/publish-cli.yml" &&
+      includeTemplatePath(path.relative(repositoryRoot, entry)),
   })
 }
 for (const item of templatePaths) {

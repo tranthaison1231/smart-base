@@ -2,6 +2,14 @@
   "name": "create-smart-base",
   "version": "0.1.0",
   "description": "Create a Smart Base application",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tranthaison1231/smart-base.git",
+    "directory": "packages/create-smart-base"
+  },
+  "homepage": "https://github.com/tranthaison1231/smart-base#readme",
+  "bugs": "https://github.com/tranthaison1231/smart-base/issues",
   "type": "module",
   "bin": {
     "create-smart-base": "./bin/create-smart-base.mjs"

@@ -50,6 +50,7 @@ describe("createProject", () => {
     expect(manifest.scripts.dev).toContain(web ? "@smart-base/web" : "@smart-base/mobile")
     expect(await exists(path.join(project, "pnpm-lock.yaml"))).toBe(web && !mobile)
     if (web) {
+      expect(await exists(path.join(project, ".github/workflows/publish-cli.yml"))).toBe(false)
       expect(await readFile(path.join(project, "pnpm-workspace.yaml"), "utf8")).toContain("apps/*")
       expect(await readFile(path.join(project, "pnpm-workspace.yaml"), "utf8")).not.toContain(
         "templates/base",

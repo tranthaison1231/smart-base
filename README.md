@@ -16,7 +16,15 @@ These diagrams illustrate possible product architectures and data flows, not dep
 
 ## Create a product
 
-Requires Node.js `>=22.22.2`, pnpm `10.32.1`, and network access to install dependencies. From this repository, run:
+Requires Node.js `>=22.22.2`, pnpm `10.32.1`, and network access to install dependencies. Run the published CLI from the directory where you want to create the project:
+
+Version `0.1.0` has been submitted to npm and is still being processed; the command becomes usable when npm makes that version available.
+
+```bash
+npx create-smart-base@latest
+```
+
+To run the CLI from this repository instead:
 
 ```bash
 pnpm install
@@ -59,7 +67,7 @@ pnpm --filter create-smart-base pack
 npx --yes --package=/absolute/path/to/create-smart-base-0.1.0.tgz create-smart-base
 ```
 
-The CLI has not been published to npm; `npx create-smart-base` will be available only after the package is published under that name.
+The published package is available at [npm: create-smart-base](https://www.npmjs.com/package/create-smart-base).
 
 ## Getting started
 
