@@ -20,7 +20,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@types/node": "20.19.43",
+    "@types/node": "26.6.6",
     "@vitest/coverage-v8": "4.1.11",
     "eslint": "^9.39.5",
     "typescript": "^5.9.3",
